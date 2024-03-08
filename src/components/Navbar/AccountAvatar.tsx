@@ -18,12 +18,12 @@ const AccountAvatar = () => {
           <IconButton
             onClick={handleClick}
             size="small"
-            sx={{ ml: 2 }}
+            sx={{ml: {mobile: 0, laptop: 1}}}
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>U</Avatar>
+            <Avatar sx={{ width: 32, height: 32, background: 'gray' }}>U</Avatar>
           </IconButton>
         </Tooltip>
       </Box>
