@@ -33,6 +33,11 @@ const theme = createTheme({
       laptop: 1024,
       desktop: 1200
     }
+  },
+  palette: {
+    primary: {
+      main: '#774eec'
+    }
   }
 });
 

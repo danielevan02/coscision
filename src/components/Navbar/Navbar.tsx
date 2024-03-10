@@ -64,7 +64,7 @@ const Navbar = () => {
 
 	return (
 		<>
-			<Box sx={{ position: 'sticky', top: 0, width: '100%', display: 'flex', background: 'rgba(246, 162, 162, 0.8)', py: 1, backdropFilter: 'blur(8px)' }}>
+			<Box sx={{ position: 'sticky', top: 0, width: '100%', display: 'flex', background: 'rgba(246, 162, 162, 0.8)', py: 1, backdropFilter: 'blur(8px)', zIndex: 99	 }}>
 				<Container sx={{ width: '95%', m: 'auto', display: 'flex', justifyContent: 'space-between' }}>
 					<Image src={'/assets/coscision-logo.png'} width={2000} height={2000} alt='logo' style={{ width: 80, height: 80 }} />
 					<Box width={'50%'} sx={{ display: { mobile: 'none', laptop: 'flex' }, justifyContent: 'space-between', alignItems: 'center' }}>
