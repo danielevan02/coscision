@@ -1,6 +1,7 @@
 import { Add } from '@mui/icons-material';
-import { Box, Button, FormControl, InputLabel, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, type SelectChangeEvent } from '@mui/material';
+import { Box, Button, FormControl, InputLabel, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography, type SelectChangeEvent } from '@mui/material';
 import Head from 'next/head';
+import Image from 'next/image';
 import React from 'react'
 
 interface Column {
@@ -51,8 +52,9 @@ function createData(
 }
 
 const rows = [
-	createData('Raiden Shogun', 'Genshin Impact', 'Game', '/assets/coscision-logo.png'),
-	createData('Zhong Li', 'Genshin Impact', 'Game', '/assets/coscision-logo.png'),
+	createData('Raiden Shogun', 'Genshin Impact', 'Game', '/assets/raiden.jpg'),
+	createData('Zhong Li', 'Genshin Impact', 'Game', '/assets/zhongli.jpg'),
+	createData('Power', 'Chainsaw Man', 'Anime', '/assets/power.jpg'),
 ];
 
 const Kostum = () => {
@@ -77,7 +79,7 @@ const Kostum = () => {
 			<Head>
 				<title>Coscision - Kostum</title>
 			</Head>
-			<Box sx={{ p: 5, display: 'flex', flexDirection: 'column', gap: 1 }}>
+			<Box sx={{ px: 5, py: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
 				<Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 					<FormControl sx={{ m: 1, minWidth: 120 }} size="small">
 						<InputLabel id="demo-select-small-label">Filter</InputLabel>
@@ -101,7 +103,7 @@ const Kostum = () => {
 				</Box>
 				<TextField fullWidth label='Search' size='small' sx={{ background: 'white', borderRadius: 1 }} />
 				<Paper sx={{ width: '100%', overflow: 'hidden' }}>
-					<TableContainer sx={{ maxHeight: 440 }}>
+					<TableContainer sx={{ maxHeight: {mobile: 350, laptop: 260, desktop: 450} }}>
 						<Table stickyHeader aria-label="sticky table">
 							<TableHead>
 								<TableRow>
@@ -128,16 +130,17 @@ const Kostum = () => {
 													const value = row[column.id];
 													return (
 														<>
-															{index === 0 ? <TableCell>{rowIndex+1}</TableCell> : undefined}
+															{index === 0 ? <TableCell>{rowIndex + 1}</TableCell> : undefined}
 															<TableCell key={column.id} align={column.align}>
-																{value}
+																{index === 3 ? <Image src={value} alt='gambar' width={1000} height={1000} style={{ width: 100, height: '50%', borderRadius: 10 }} /> : value}
 															</TableCell>
-																
 															{index === 3 ?
-																<TableCell align='right' sx={{ display: 'flex', gap: 1}}>
-																	<Button variant='contained' color='warning'>Edit</Button>
-																	<Button variant='contained' color='error'>Delete</Button>
-																</TableCell> 
+																<TableCell>
+																	<Box display={'flex'} gap={1} flexDirection={'column'}>
+																		<Button variant='contained' color='warning'>Edit</Button>
+																		<Button variant='contained' color='error'>Delete</Button>
+																	</Box>
+																</TableCell>
 																: undefined}
 														</>
 													);
