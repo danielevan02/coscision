@@ -1,5 +1,5 @@
 import { Add } from '@mui/icons-material';
-import { Box, Button, FormControl, InputLabel, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography, type SelectChangeEvent } from '@mui/material';
+import { Box, Button, FormControl, InputLabel, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, type SelectChangeEvent } from '@mui/material';
 import Head from 'next/head';
 import Image from 'next/image';
 import React from 'react'
