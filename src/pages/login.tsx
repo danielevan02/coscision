@@ -17,8 +17,10 @@ const Login = () => {
 			<Head>
 				<title>Coscision - Login</title>
 			</Head>
-			<Box sx={{ width: '40%', position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center' }} gap={3}>
-				<Image src={"/assets/coscision-logo.png"} width={2000} height={2000} style={{ width: '30%', height: '30%' }} alt='logo' />
+			<Box sx={{ width: {mobile: '90%', laptop: '40%'}, position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center' }} gap={3}>
+				<Box sx={{ width: {mobile: '50%', laptop: '30%'}}}>
+					<Image src={"/assets/coscision-logo.png"} width={2000} height={2000} style={{ width: '100%', height: '100%' }} alt='logo' />
+				</Box>
 				<Box width={'100%'} display={'flex'} flexDirection={'column'} gap={1}>
 					<TextField label='Username' sx={{ background: 'white', borderRadius: 3, '& .MuiInputBase-root': { borderRadius: 3 }, width: '80%', margin: 'auto' }} />
 					<FormControl sx={{ width: '80%', margin: 'auto' }} variant="outlined">

@@ -7,6 +7,7 @@ import AccountAvatar from './AccountAvatar'
 import { AppRegistration, AssignmentTurnedIn, Checkroom, Home, Info, Science, Score, Menu } from '@mui/icons-material'
 
 const Navbar = () => {
+	const router = useRouter()
 	const [state, setState] = React.useState({
 		left: false,
 	});
@@ -61,7 +62,6 @@ const Navbar = () => {
 		</Box>
 	);
 
-	const router = useRouter()
 	return (
 		<>
 			<Box sx={{ position: 'sticky', top: 0, width: '100%', display: 'flex', background: 'rgba(246, 162, 162, 0.8)', py: 1, backdropFilter: 'blur(8px)' }}>

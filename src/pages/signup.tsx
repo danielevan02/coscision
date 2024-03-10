@@ -17,9 +17,11 @@ const SignUp = () => {
 			<Head>
 				<title>Coscision - Sign Up</title>
 			</Head>
-			<Box sx={{ width: '40%', position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center' }} gap={1}>
-				<Image src={"/assets/logo-head.png"} width={2000} height={2000} style={{ width: '10%', height: '10%' }} alt='logo' />
-				<Typography sx={{ fontWeight: '700', mb: 3}} variant='h4'>Sign Up</Typography>
+			<Box sx={{ width: { mobile: '90%', laptop: '40%' }, position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center' }} gap={1}>
+				<Box sx={{ width: { mobile: '25%', laptop: '15%' } }}>
+					<Image src={"/assets/logo-head.png"} width={2000} height={2000} style={{ width: '100%', height: '100%' }} alt='logo' />
+				</Box>
+				<Typography sx={{ fontWeight: '700', mb: 3 }} variant='h4'>Sign Up</Typography>
 				<Box width={'100%'} display={'flex'} flexDirection={'column'} gap={1}>
 					<TextField label='Username' sx={{ background: 'white', borderRadius: 3, '& .MuiInputBase-root': { borderRadius: 3 }, width: '80%', margin: 'auto' }} />
 					<FormControl sx={{ width: '80%', margin: 'auto' }} variant="outlined">
@@ -65,7 +67,7 @@ const SignUp = () => {
 					<Link href={'/signup'} style={{ width: '80%', margin: 'auto' }}>
 						<Button variant='contained' sx={{ background: '#8156FA', ':hover': { background: '#3e297a' }, width: '100%', mt: 2 }}>Register</Button>
 					</Link>
-					<Typography sx={{width: '80%', margin: 'auto'}}>Already have account? <Link href={'/login'} style={{color: 'blue'}}>Login</Link></Typography>
+					<Typography sx={{ width: '80%', margin: 'auto' }}>Already have account? <Link href={'/login'} style={{ color: 'blue' }}>Login</Link></Typography>
 				</Box>
 			</Box>
 		</>
