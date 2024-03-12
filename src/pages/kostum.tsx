@@ -1,4 +1,4 @@
-import { Add, Cancel, Close, Info } from '@mui/icons-material';
+import { Add, Cancel, Info } from '@mui/icons-material';
 import { Backdrop, Box, Button, Fade, FormControl, IconButton, InputLabel, MenuItem, Modal, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography, type SelectChangeEvent } from '@mui/material';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -39,6 +39,8 @@ interface Data {
 	asal: string;
 	preferensi: string;
 	gambar: string;
+	info: string[];
+	link: string;
 }
 
 function createData(
@@ -46,25 +48,30 @@ function createData(
 	asal: string,
 	preferensi: string,
 	gambar: string,
+	info: string[],
+	link: string
 ): Data {
 
-	return { kostum, asal, preferensi, gambar };
+	return { kostum, asal, preferensi, gambar, info, link };
 }
 
 const rows = [
-	createData('Raiden Shogun', 'Genshin Impact', 'Game', '/assets/raiden.jpg'),
-	createData('Zhong Li', 'Genshin Impact', 'Game', '/assets/zhongli.jpg'),
-	createData('Power', 'Chainsaw Man', 'Anime', '/assets/power.jpg'),
+	createData('Raiden Shogun', 'Genshin Impact', 'Game', '/assets/raiden.jpg', ['Full Set Costume (S-XL)', 'Wig', 'Weapon (Engulfing Lightning)', 'Accessories (Eye Lens)'], 'https://shorturl.at/bgJN6'),
+	createData('Zhong Li', 'Genshin Impact', 'Game', '/assets/zhongli.jpg', ['Full Zhongli Costume (S-XL)', 'Wig', 'Weapon (Vortex Vanquisher)', 'Accessories (Eye Lens)'], 'https://shorturl.at/bgJN6'),
+	createData('Power', 'Chainsaw Man', 'Anime', '/assets/power.jpg', ['Full Set Power Costume (S-XL)', 'Wig', 'Weapon (Red Axe)', 'Accessories (Eye Lens, Red Horn)'], 'https://shorturl.at/bgJN6'),
 ];
 
 const Kostum = () => {
-	const author = 'a'
+	const author = 'admin'
 	const [filter, setAge] = React.useState('');
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 	const [open, setOpen] = React.useState(false);
 
-	const handleOpen = () => setOpen(true);
+	const handleOpen = (target: string) => {
+		console.log(target)
+		setOpen(true)
+	}
 	const handleClose = () => setOpen(false);
 
 	const handleChangePage = (event: unknown, newPage: number) => {
@@ -139,12 +146,12 @@ const Kostum = () => {
 													const value = row[column.id];
 													return (
 														<>
-															{index === 0 ? <TableCell>{rowIndex + 1}</TableCell> : undefined}
+															{index === 0 ? <TableCell key={index}>{rowIndex + 1}</TableCell> : undefined}
 															<TableCell key={column.id} align={column.align}>
 																{index === 3 ? <Image src={value} alt='gambar' width={1000} height={1000} style={{ width: 100, height: '50%', borderRadius: 10 }} /> : value}
 															</TableCell>
 															{index === 3 ?
-																<TableCell>
+																<TableCell key={index}>
 																	{/* Admin Button */}
 																	<Box display={author === 'admin' ? 'flex' : 'none'} gap={1} flexDirection={'column'}>
 																		<Button variant='contained' color='warning'>Edit</Button>
@@ -152,7 +159,7 @@ const Kostum = () => {
 																	</Box>
 																	{/* User Button */}
 																	<Box display={author === 'admin' ? 'none' : 'flex'} justifyContent={'center'}>
-																		<IconButton onClick={handleOpen}>
+																		<IconButton onClick={() => handleOpen(row.kostum)}>
 																			<Info />
 																		</IconButton>
 																		{/* Modal Info */}
@@ -170,32 +177,29 @@ const Kostum = () => {
 																			}}
 																		>
 																			<Fade in={open}>
-																				<Box sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: {mobile: '70%', tablet: '50%', laptop: '30%'}, height: '60%', background: 'linear-gradient(rgba(0, 0, 0, 0.5) 60%, rgba(0, 0, 0, 0.8) 70%), url(/assets/raiden.jpg)', backgroundSize: 'contain', backgroundPosition: 'center', border: '1px solid #000', boxShadow: 24, p: 4, color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'end'}}>
-																					<IconButton sx={{ position: 'absolute', right: 5, top: 5}} color='error' onClick={handleClose}>
-																						<Cancel fontSize='large'/>
+																				<Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: { mobile: '70%', tablet: '50%', laptop: '30%' }, height: '60%', background: `linear-gradient(rgba(0, 0, 0, 0.5) 60%, rgba(0, 0, 0, 0.8) 70%), url(${row.gambar})`, backgroundSize: 'contain', backgroundPosition: 'center', border: '1px solid #000', boxShadow: 24, p: 4, color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'end' }}>
+																					<IconButton sx={{ position: 'absolute', right: 5, top: 5 }} color='error' onClick={handleClose}>
+																						<Cancel fontSize='large' />
 																					</IconButton>
 																					<Typography id="transition-modal-title" variant="h6" component="h2" fontWeight={700}>
-																						Raiden Shogun
+																						{row.kostum}
 																					</Typography>
 																					<Typography id="transition-modal-description" sx={{ mt: 2 }}>
-																						Asal : Genshin Impact
+																						Asal : {value}
 																					</Typography>
 																					<Typography id="transition-modal-description">
-																						Preferensi : Game
+																						Preferensi : {row.preferensi}
 																					</Typography>
 																					<Typography id="transition-modal-description">
 																						Set :
 																					</Typography>
-																					<Typography id="transition-modal-description" sx={{ ml: 3 }}>
-																						<ul>
-																							<li>{`Full Set Costume (S-XL)`}</li>
-																							<li>{`Wig`}</li>
-																							<li>{`Weapon (Engulfing Lightning)`}</li>
-																							<li>{`Accessories (Eye Lens)`}</li>
-																						</ul>
+																					<Typography component={'ul'} id="transition-modal-description" sx={{ ml: 3 }}>
+																						{row.info.map((item, index) => (
+																							<li key={index}>{item}</li>
+																						))}
 																					</Typography>
 																					<Typography id="transition-modal-description">
-																						Link : <a href="#" style={{ color: 'rgba(66, 188, 245)' }}>https/link-olshop</a>
+																						Link : <a href={row.link} style={{ color: 'rgba(66, 188, 245)' }}>{row.link}</a>
 																					</Typography>
 																				</Box>
 																			</Fade>

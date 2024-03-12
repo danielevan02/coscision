@@ -7,6 +7,7 @@ import AccountAvatar from './AccountAvatar'
 import { AppRegistration, AssignmentTurnedIn, Checkroom, Home, Info, Science, Score, Menu } from '@mui/icons-material'
 
 const Navbar = () => {
+	const author = 'admin'
 	const router = useRouter()
 	const [state, setState] = React.useState({
 		left: false,
@@ -26,7 +27,7 @@ const Navbar = () => {
 				setState({ ...state, [anchor]: open });
 			};
 
-	const menu = [
+	const menuUser = [
 		{ name: 'HOME', logo: <Home /> },
 		{ name: 'ABOUT', logo: <Info /> },
 		{ name: 'KOSTUM', logo: <Checkroom /> },
@@ -34,6 +35,11 @@ const Navbar = () => {
 		{ name: 'NILAI', logo: <Score /> },
 		{ name: 'METODE', logo: <Science /> },
 		{ name: 'HASIL', logo: <AssignmentTurnedIn /> },
+	]
+	const menuAdmin = [
+		{ name: 'HOME', logo: <Home /> },
+		{ name: 'KOSTUM', logo: <Checkroom /> },
+		{ name: 'KRITERIA', logo: <AppRegistration /> },
 	]
 
 	const list = (anchor: 'left') => (
@@ -44,7 +50,7 @@ const Navbar = () => {
 			onKeyDown={toggleDrawer(anchor, false)}
 		>
 			<List>
-				{menu.map((item, index) => {
+				{(author === 'admin' ? menuAdmin:menuUser).map((item, index) => {
 					const href: string = item.name === 'HOME' ? '/' : `/${item.name.toLocaleLowerCase()}`
 					const active = router.route === href ? 'active' : 'nav-link'
 					return (
@@ -68,7 +74,7 @@ const Navbar = () => {
 				<Container sx={{ width: '95%', m: 'auto', display: 'flex', justifyContent: 'space-between' }}>
 					<Image src={'/assets/coscision-logo.png'} width={2000} height={2000} alt='logo' style={{ width: 80, height: 80 }} />
 					<Box width={'50%'} sx={{ display: { mobile: 'none', laptop: 'flex' }, justifyContent: 'space-between', alignItems: 'center' }}>
-						{menu.map((item, index) => {
+						{(author === 'admin' ? menuAdmin:menuUser).map((item, index) => {
 							const href = item.name === 'HOME' ? '/' : `/${item.name.toLocaleLowerCase()}`
 							const active = router.route === href ? 'active' : 'nav-link'
 							return (
