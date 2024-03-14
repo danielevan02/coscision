@@ -2,6 +2,7 @@ import { Add, Cancel, Info } from '@mui/icons-material';
 import { Backdrop, Box, Button, Fade, FormControl, IconButton, InputLabel, MenuItem, Modal, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography, type SelectChangeEvent } from '@mui/material';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react'
 
 interface Column {
@@ -51,7 +52,6 @@ function createData(
 	info: string[],
 	link: string
 ): Data {
-
 	return { kostum, asal, preferensi, gambar, info, link };
 }
 
@@ -94,7 +94,7 @@ const Kostum = () => {
 			<Box sx={{ px: 5, py: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
 				<Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 					{/* Filter Button */}
-					<FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+					<FormControl sx={{ minWidth: 120 }} size="small">
 						<InputLabel id="demo-select-small-label">Filter</InputLabel>
 						<Select
 							sx={{ background: 'white' }}
@@ -110,10 +110,12 @@ const Kostum = () => {
 						</Select>
 					</FormControl>
 					{/* Add Button */}
-					<Button variant='contained' sx={{ height: '80%', display: author === 'admin' ? 'flex' : 'none', gap: 1 }}>
-						<Add />
-						Add
-					</Button>
+					<Link href={'/kostum/crudKostum'} style={{ textDecoration: 'none'}}>
+						<Button variant='contained' sx={{ width: '100%', height: '80%', display: author === 'admin' ? 'flex' : 'none', gap: 1 }}>
+							<Add />
+							Add
+						</Button>
+					</Link>
 				</Box>
 				{/* Search Bar */}
 				<TextField fullWidth label='Search' size='small' sx={{ background: 'white', borderRadius: 1 }} />
@@ -123,7 +125,7 @@ const Kostum = () => {
 						<Table stickyHeader aria-label="sticky table">
 							<TableHead>
 								<TableRow>
-									<TableCell>No</TableCell>
+									<TableCell align='center'>No</TableCell>
 									{columns.map((column) => (
 										<TableCell
 											key={column.id}
@@ -146,7 +148,7 @@ const Kostum = () => {
 													const value = row[column.id];
 													return (
 														<>
-															{index === 0 ? <TableCell key={index}>{rowIndex + 1}</TableCell> : undefined}
+															{index === 0 ? <TableCell key={index} align='center'>{rowIndex + 1}</TableCell> : undefined}
 															<TableCell key={column.id} align={column.align}>
 																{index === 3 ? <Image src={value} alt='gambar' width={1000} height={1000} style={{ width: 100, height: '50%', borderRadius: 10 }} /> : value}
 															</TableCell>
@@ -154,7 +156,9 @@ const Kostum = () => {
 																<TableCell key={index}>
 																	{/* Admin Button */}
 																	<Box display={author === 'admin' ? 'flex' : 'none'} gap={1} flexDirection={'column'}>
-																		<Button variant='contained' color='warning'>Edit</Button>
+																		<Link href={'/kostum/crudKostum'}>
+																			<Button variant='contained' color='warning' sx={{ width: '100%' }}>Edit</Button>
+																		</Link>
 																		<Button variant='contained' color='error'>Delete</Button>
 																	</Box>
 																	{/* User Button */}

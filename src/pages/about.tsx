@@ -1,10 +1,14 @@
 import { Box, Typography } from '@mui/material'
+import Head from 'next/head'
 import Image from 'next/image'
 import React from 'react'
 
 const About = () => {
 	return (
 		<>
+		<Head>
+			<title>Coscision - About</title>
+		</Head>
 			<Box sx={{ px: 5, py: 2, display: 'flex', flexDirection: 'column', gap: 5 }}>
 				<Box sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: { mobile: 'column-reverse', laptop: 'row' } }}>
 					<Box sx={{ display: 'flex', flexDirection: 'column', width: { mobile: '100%', laptop: '70%' } }}>

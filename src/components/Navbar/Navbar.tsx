@@ -7,7 +7,7 @@ import AccountAvatar from './AccountAvatar'
 import { AppRegistration, AssignmentTurnedIn, Checkroom, Home, Info, Science, Score, Menu } from '@mui/icons-material'
 
 const Navbar = () => {
-	const author = 'admin'
+	const author = 'admn'
 	const router = useRouter()
 	const [state, setState] = React.useState({
 		left: false,
@@ -73,7 +73,7 @@ const Navbar = () => {
 			<Box sx={{ position: 'sticky', top: 0, width: '100%', display: 'flex', background: 'rgba(246, 162, 162, 0.8)', py: 1, backdropFilter: 'blur(8px)', zIndex: 99	 }}>
 				<Container sx={{ width: '95%', m: 'auto', display: 'flex', justifyContent: 'space-between' }}>
 					<Image src={'/assets/coscision-logo.png'} width={2000} height={2000} alt='logo' style={{ width: 80, height: 80 }} />
-					<Box width={'50%'} sx={{ display: { mobile: 'none', laptop: 'flex' }, justifyContent: 'space-between', alignItems: 'center' }}>
+					<Box width={'50%'} sx={{ display: { mobile: 'none', laptop: 'flex' }, justifyContent: author === 'admin' ? 'center': 'space-between', alignItems: 'center', gap: author === 'admin' ? 5: 0 }}>
 						{(author === 'admin' ? menuAdmin:menuUser).map((item, index) => {
 							const href = item.name === 'HOME' ? '/' : `/${item.name.toLocaleLowerCase()}`
 							const active = router.route === href ? 'active' : 'nav-link'
