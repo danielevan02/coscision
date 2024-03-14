@@ -5,7 +5,7 @@ import Link from 'next/link';
 import React from 'react'
 
 interface Column {
-  id: 'nama' | 'bobot' | 'tipe';
+  id: 'nama' | 'harga' | 'kualitas' | 'desain' | 'fleksibilitas' | 'popularitas';
   label: string;
   minWidth?: number;
   align?: 'center';
@@ -15,54 +15,69 @@ interface Column {
 const columns: readonly Column[] = [
   {
     id: 'nama',
-    label: 'Nama Kriteria',
+    label: 'Nama Kostum',
     minWidth: 100,
     align: 'center'
   },
   {
-    id: 'bobot',
-    label: 'Bobot',
-    minWidth: 170,
+    id: 'harga',
+    label: 'Harga Sewa',
+    minWidth: 100,
     align: 'center',
   },
   {
-    id: 'tipe',
-    label: 'Tipe',
-    minWidth: 170,
+    id: 'kualitas',
+    label: 'Kualitas Kostum',
+    minWidth: 100,
+    align: 'center',
+  },
+  {
+    id: 'desain',
+    label: 'Desain Kostum',
+    minWidth: 100,
+    align: 'center',
+  },
+  {
+    id: 'fleksibilitas',
+    label: 'Fleksibilitas Kostum',
+    minWidth: 100,
+    align: 'center',
+  },
+  {
+    id: 'popularitas',
+    label: 'Popularitas Karakter',
+    minWidth: 100,
     align: 'center',
   },
 ];
 
 interface Data {
   nama: string;
-  bobot: number;
-  tipe: string;
+  harga: string;
+  kualitas: string;
+  desain: string;
+  fleksibilitas: string;
+  popularitas: string;
 }
 
 function createData(
   nama: string,
-  bobot: number,
-  tipe: string
+  harga: string,
+  kualitas: string,
+  desain: string,
+  fleksibilitas: string,
+  popularitas: string
 ): Data {
-  return { nama, bobot, tipe };
+  return { nama, harga, kualitas, desain, fleksibilitas, popularitas };
 }
 
 const rows = [
-  createData('Harga Sewa', 35, 'Cost'),
-  createData('Kualitas Kostum', 20, 'Benefit'),
-  createData('Kualitas Kostum', 20, 'Benefit'),
-  createData('Kualitas Kostum', 20, 'Benefit'),
-  createData('Kualitas Kostum', 20, 'Benefit'),
-  createData('Kualitas Kostum', 20, 'Benefit'),
-  createData('Kualitas Kostum', 20, 'Benefit'),
-  createData('Kualitas Kostum', 20, 'Benefit'),
-  createData('Kualitas Kostum', 20, 'Benefit'),
-  createData('Kualitas Kostum', 20, 'Benefit'),
-  createData('Desain Kostum', 20, 'Benefit')
+  createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
+  createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
+  createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
 ];
 
-const Kriteria = () => {
-  const author = 'admin'
+const Nilai = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -83,8 +98,8 @@ const Kriteria = () => {
       <Box sx={{ px: 5, py: 3, display: 'flex', flexDirection: 'column', gap: 1 }}>
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           {/* Add Button */}
-          <Link href={'/kriteria/crudKriteria'} style={{ textDecoration: 'none', display: author === 'admin' ? undefined : 'none' }}>
-            <Button variant='contained' sx={{ height: '80%', display: author === 'admin' ? 'flex' : 'none', gap: 1 }}>
+          <Link href={'/nilai/crudNilai'} style={{ textDecoration: 'none' }}>
+            <Button variant='contained' sx={{ height: '80%', display: 'flex', gap: 1 }}>
               <Add />
               Add
             </Button>
@@ -96,7 +111,7 @@ const Kriteria = () => {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <TableCell>No</TableCell>
+                  <TableCell align='center'>No</TableCell>
                   {columns.map((column) => (
                     <TableCell
                       key={column.id}
@@ -106,8 +121,7 @@ const Kriteria = () => {
                       {column.label}
                     </TableCell>
                   ))}
-                  <TableCell width={150} align='center'>Subkriteria</TableCell>
-                  <TableCell width={150} align='center' sx={{ display: author === 'admin' ? undefined : 'none'}}>Opsi</TableCell>
+                  <TableCell width={150} align='center'>Opsi</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -120,20 +134,12 @@ const Kriteria = () => {
                           const value = row[column.id];
                           return (
                             <>
-                              {index === 0 ? <TableCell key={index}>{rowIndex + 1}</TableCell> : undefined}
+                              {index === 0 ? <TableCell key={index} align='center'>{rowIndex + 1}</TableCell> : undefined}
                               <TableCell align={column.align}>{value}</TableCell>
-                              {index === 2 ?
+                              {index === 5 ?
                                 <TableCell align={column.align}>
-                                  <Link href={'/kriteria/subkriteria'}>
-                                    <Button variant='contained'>LIHAT</Button>
-                                  </Link>
-                                </TableCell>
-                                : undefined
-                              }
-                              {index === 2 ?
-                                <TableCell align={column.align} sx={{ display: author === 'admin' ? undefined : 'none'}}>
                                   <Box sx={{ display: 'flex', gap: 1 }}>
-                                    <Link href={'/kriteria/crudKriteria'}>
+                                    <Link href={'/nilai/crudNilai'}>
                                       <Button variant='contained' color='warning'>UBAH</Button>
                                     </Link>
                                     <Button variant='contained' color='error'>HAPUS</Button>
@@ -165,4 +171,4 @@ const Kriteria = () => {
   )
 }
 
-export default Kriteria
+export default Nilai

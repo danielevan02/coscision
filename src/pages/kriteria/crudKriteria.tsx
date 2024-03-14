@@ -23,7 +23,6 @@ const CrudKriteria = () => {
 						id="demo-simple-select-autowidth"
 						value={tipe}
 						onChange={handleChange}
-						autoWidth
 						label="Tipe Kriteria"
 					>
 						<MenuItem value="">

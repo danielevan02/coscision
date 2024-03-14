@@ -39,6 +39,7 @@ body{
 
 .active{
   color: black;
+  font-weight: 700;
   text-decoration: none;
 }
 
