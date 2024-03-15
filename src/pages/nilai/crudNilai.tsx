@@ -1,65 +1,84 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, type SelectChangeEvent, TextField } from '@mui/material'
+import { Box, Button, MenuItem, TextField, Snackbar } from '@mui/material'
 import Head from 'next/head'
+import Link from 'next/link'
 import React from 'react'
+import { type FieldErrors, useForm } from 'react-hook-form'
+
+type  NilaiForm = {
+	nama: string
+	harga: string
+	kualitas: string
+	desain: string
+	fleksibilitas: string
+	popularitas: string
+}
 
 const CrudNilai = () => {
-	const [nama, setNama] = React.useState('nama');
-	const [harga, setHarga] = React.useState('');
-	const [kualitas, setKualitas] = React.useState('');
-	const [desain, setDesain] = React.useState('');
-	const [fleksibilitas, setFleksibilitas] = React.useState('');
-	const [popularitas, setPopularitas] = React.useState('');
+	const [open, setOpen] = React.useState(false)
+  const { 
+    register, 
+    handleSubmit,
+  } = useForm< NilaiForm>()
 
-	const list: { label: string, value?: string, option: string[] }[] = [
-		{ label: 'Nama Kostum', value: Object.keys({nama})[0], option: ['Raiden Shogun', 'Zhongli', 'Power', 'Childe'] },
-		{ label: 'Harga Sewa', value: Object.keys({harga})[0], option: ['> 500.000', '400.001 - 500.000', '300.001 - 400.000', '200.001 - 300.000', '100.001 - 200.000'] },
-		{ label: 'Kualitas Kostum', value: Object.keys({kualitas})[0], option: ['Sangat Baik', 'Baik', 'Cukup', 'Buruk'] },
-		{ label: 'Desain Kostum', value: Object.keys({desain})[0], option: ['Sangat Menarik', 'Menarik', 'Biasa Saja', 'Kurang Menarik', 'Tidak Menarik'] },
-		{ label: 'Fleksibilitas Kostum', value: Object.keys({fleksibilitas})[0], option: ['Sangat Nyaman Dipakai', 'Nyaman Dipakai', 'Netral', 'Kurang Nyaman Dipakai', 'Tidak Nyaman Dipakai'] },
-		{ label: 'Popularitas Karakter', value: Object.keys({popularitas})[0], option: ['Sangat Terkenal', 'Terkenal', 'Biasa Saja', 'Kurang Terkenal', 'Tidak Terkenal'] },
+	const list: { label: string, option: string[], regist: typeof register}[] = [
+		{ label: 'Nama Kostum', option: ['Raiden Shogun', 'Zhongli', 'Power', 'Childe'], regist: register('nama') },
+		{ label: 'Harga Sewa', option: ['> 500.000', '400.001 - 500.000', '300.001 - 400.000', '200.001 - 300.000', '100.001 - 200.000'], regist: register('harga') },
+		{ label: 'Kualitas Kostum', option: ['Sangat Baik', 'Baik', 'Cukup', 'Buruk'], regist: register('kualitas') },
+		{ label: 'Desain Kostum', option: ['Sangat Menarik', 'Menarik', 'Biasa Saja', 'Kurang Menarik', 'Tidak Menarik'], regist: register('desain') },
+		{ label: 'Fleksibilitas Kostum', option: ['Sangat Nyaman Dipakai', 'Nyaman Dipakai', 'Netral', 'Kurang Nyaman Dipakai', 'Tidak Nyaman Dipakai'], regist: register('fleksibilitas') },
+		{ label: 'Popularitas Karakter', option: ['Sangat Terkenal', 'Terkenal', 'Biasa Saja', 'Kurang Terkenal', 'Tidak Terkenal'], regist: register('popularitas') },
 	]
 
-	const handleChange = (event: SelectChangeEvent, type: string) => {
-		if (type === 'nama') {
-			setNama(event.target.value);
-		} else if (type === 'harga') {
-			setHarga(event.target.value);
-		} else if (type === 'kualitas') {
-			setKualitas(event.target.value);
-		} else if (type === 'desain') {
-			setDesain(event.target.value);
-		} else if (type === 'fleksibilitas') {
-			setFleksibilitas(event.target.value);
-		} else if (type === 'popularitas') {
-			setPopularitas(event.target.value);
-		}
-	};
+  const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const onError = (errors: FieldErrors< NilaiForm>) => {
+    if(errors){
+      alert("Harap isi semua data dengan benar")
+    }
+  }
+
+  const onSubmit = (data:  NilaiForm) => {
+    console.log(data)
+    setOpen(true)
+  }
+
 	return (
 		<>
 			<Head>
 				<title>Coscision - Nilai</title>
 			</Head>
-			<Box sx={{ px: 5, py: 3, display: 'flex', flexDirection: 'column', gap: 1 }}>
-				{list.map((item, index) => {
-					return (
-						<FormControl key={index} sx={{ background: 'white', borderRadius: 1 }} size="small">
-							<InputLabel id="demo-select-small-label">{item.label}</InputLabel>
-							<Select
-								labelId="demo-select-small-label"
-								id="demo-select-small"
-								value={item.value}
-								onChange={(event) => { handleChange(event, item.value!)}}
-							>
-								<MenuItem value="">
-									<em>None</em>
-								</MenuItem>
-								{item.option.map((list, index) => (
-									<MenuItem key={index} value={list.toLocaleLowerCase()}>{list}</MenuItem>
+			<Box sx={{ px: 5, py: 3 }}>
+				<form style={{ display: 'flex', flexDirection: 'column', gap: 5 }} onSubmit={handleSubmit(onSubmit, onError)}>
+					{list.map((item, index) => {
+						return (
+							<TextField fullWidth key={index} select label={item.label}>
+								<MenuItem value=""><em>None</em></MenuItem>
+								{item.option.map((listOption, index) => (
+									<MenuItem key={index} value={listOption.toLowerCase()}>{listOption}</MenuItem>
 								))}
-							</Select>
-						</FormControl>
-					)
-				})}
+							</TextField>
+						)
+					})}
+					<Box display={'flex'} gap={1} justifyContent={'end'} mt={3}>
+						<Link href={'/nilai'}>
+							<Button variant='contained' color='error'>Cancel</Button>
+						</Link>
+						<Button variant='contained' color='primary' type='submit'>Submit</Button>
+						<Snackbar
+							open={open}
+							autoHideDuration={6000}
+							onClose={handleClose}
+							message="Submit Success"
+							sx={{ width: '20%' }}
+						/>
+					</Box>
+				</form>
 			</Box>
 		</>
 	)

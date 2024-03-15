@@ -93,7 +93,7 @@ const Nilai = () => {
   return (
     <>
       <Head>
-        <title>Coscision - Kostum</title>
+        <title>Coscision - Nilai</title>
       </Head>
       <Box sx={{ px: 5, py: 3, display: 'flex', flexDirection: 'column', gap: 1 }}>
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

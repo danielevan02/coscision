@@ -1,41 +1,70 @@
-import { Box, Button, type SelectChangeEvent, TextField, InputLabel, FormControl, Select, MenuItem } from '@mui/material'
+import { Box, Button, TextField, MenuItem, Snackbar } from '@mui/material'
 import Head from 'next/head'
+import Link from 'next/link';
 import React from 'react'
+import { type FieldErrors, useForm } from 'react-hook-form';
+
+type KriteriaForm = {
+	nama: string
+	bobot: number
+	tipe: string
+}
 
 const CrudKriteria = () => {
-	const [tipe, setTipe] = React.useState('');
+	const [open, setOpen] = React.useState(false)
+	const {
+		register,
+		handleSubmit,
+	} = useForm<KriteriaForm>()
 
-	const handleChange = (event: SelectChangeEvent) => {
-		setTipe(event.target.value);
+	const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+
+		setOpen(false);
 	};
+
+	const onError = (errors: FieldErrors<KriteriaForm>) => {
+		if (errors) {
+			alert("Harap isi semua data dengan benar")
+		}
+	}
+
+	const onSubmit = (data: KriteriaForm) => {
+		console.log(data)
+		setOpen(true)
+	}
 	return (
 		<>
 			<Head>
 				<title>Coscision - Kostum</title>
 			</Head>
-			<Box sx={{ px: 5, py: 3, display: 'flex', flexDirection: 'column', gap: 1 }}>
-				<TextField fullWidth label="Nama Kriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} />
-				<TextField fullWidth label="Bobot Kriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} />
-				<FormControl sx={{ background: 'white', borderRadius: 1 }}>
-					<InputLabel id="demo-simple-select-autowidth-label">Tipe Kriteria</InputLabel>
-					<Select
-						labelId="demo-simple-select-autowidth-label"
-						id="demo-simple-select-autowidth"
-						value={tipe}
-						onChange={handleChange}
-						label="Tipe Kriteria"
-					>
+			<Box sx={{ px: 5, py: 3 }}>
+				<form style={{ display: 'flex', flexDirection: 'column', gap: 5 }} onSubmit={handleSubmit(onSubmit, onError)}>
+					<TextField fullWidth label="Nama Kriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('nama', { required: true })} />
+					<TextField type='number' fullWidth label="Bobot Kriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('bobot', { required: true })} />
+					<TextField fullWidth label="Bobot Kriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} select {...register('tipe', { required: true })}>
 						<MenuItem value="">
 							<em>None</em>
 						</MenuItem>
 						<MenuItem value={'cost'}>Cost</MenuItem>
 						<MenuItem value={'benefit'}>Benefit</MenuItem>
-					</Select>
-				</FormControl>
-				<Box display={'flex'} gap={1} justifyContent={'end'} mt={3}>
-					<Button variant='contained' color='error'>Cancel</Button>
-					<Button variant='contained' color='primary'>Save</Button>
-				</Box>
+					</TextField>
+					<Box display={'flex'} gap={1} justifyContent={'end'} mt={3}>
+						<Link href={'/kriteria'}>
+							<Button variant='contained' color='error'>Cancel</Button>
+						</Link>
+						<Button variant='contained' color='primary' type='submit'>Submit</Button>
+						<Snackbar
+							open={open}
+							autoHideDuration={6000}
+							onClose={handleClose}
+							message="Submit Success"
+							sx={{ width: '20%' }}
+						/>
+					</Box>
+				</form>
 			</Box>
 		</>
 	)
