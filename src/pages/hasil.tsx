@@ -1,5 +1,6 @@
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
 import Head from 'next/head'
+import Image from 'next/image';
 import React from 'react'
 
 interface Column {
@@ -34,19 +35,19 @@ const columns: readonly Column[] = [
 interface Data {
   nama: string;
   nilai: number;
-  rank: number;
+  rank: number | string;
 }
 
 function createData(
   nama: string,
   nilai: number,
-  rank: number
+  rank: number | string
 ): Data {
   return { nama, nilai, rank };
 }
 
 const rows = [
-  createData('Harga Sewa', 0.0643, 1),
+  createData('Harga Sewa', 0.0643, 'rank1.png'),
   createData('Harga Sewa', 0.0643, 2),
   createData('Harga Sewa', 0.0643, 3),
   createData('Harga Sewa', 0.0643, 4),
@@ -103,13 +104,13 @@ const Hasil = () => {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, rowIndex) => {
                     return (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={rowIndex}>
+                      <TableRow hover={rowIndex === 0 ? false:true} role="checkbox" tabIndex={-1} key={rowIndex} sx={{ background: rowIndex === 0 ? '#dcaf53':undefined, height: rowIndex === 0 ? 100:undefined }}>
                         {columns.map((column, index) => {
                           const value = row[column.id];
                           return (
                             <>
                               {index === 0 ? <TableCell key={index}>{rowIndex + 1}</TableCell> : undefined}
-                              <TableCell align={column.align}>{value}</TableCell>
+                              <TableCell align={column.align} sx={rowIndex === 0 ? {fontSize: 30, fontWeight: 600}:undefined}>{index === 2 && rowIndex === 0 ? <Image src={`/assets/${value}`} alt='rank1' width={1000} height={1000} style={{width: '20%', height: 'auto'}}/>:value}</TableCell>
                             </>
                           );
                         })}
