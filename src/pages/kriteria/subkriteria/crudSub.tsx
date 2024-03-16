@@ -1,6 +1,7 @@
 import { Box, Button, Snackbar, TextField } from '@mui/material'
 import Head from 'next/head'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React from 'react'
 import { type FieldErrors, useForm } from 'react-hook-form'
 
@@ -10,6 +11,7 @@ type SubkriteriaForm = {
 }
 
 const CrudKriteria = () => {
+	const router = useRouter()
 	const [open, setOpen] = React.useState(false)
 	const {
 		register,
@@ -30,10 +32,12 @@ const CrudKriteria = () => {
 		}
 	}
 
-	const onSubmit = (data: SubkriteriaForm) => {
+	const onSubmit = async (data: SubkriteriaForm) => {
 		console.log(data)
 		setOpen(true)
+		await router.push('/kriteria/subkriteria')
 	}
+	
 	return (
 		<>
 			<Head>
