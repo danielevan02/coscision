@@ -41,12 +41,17 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum UserLevel {
+  Admin
+  User
+}
+
 model User {
   id       Int       @id @default(autoincrement())
   name     String
   username String    @unique
   password String
-  level    String
+  level    UserLevel @default(User)
   image    String?
   accounts Account[]
   sessions Session[]
