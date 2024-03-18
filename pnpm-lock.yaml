@@ -17,6 +17,7 @@ specifiers:
   '@trpc/server': ^10.45.1
   '@types/bcrypt': ^5.0.2
   '@types/eslint': ^8.56.2
+  '@types/formidable': ^3.4.5
   '@types/jsonwebtoken': ^9.0.6
   '@types/node': ^20.11.20
   '@types/react': ^18.2.57
@@ -26,6 +27,7 @@ specifiers:
   bcrypt: ^5.1.1
   eslint: ^8.56.0
   eslint-config-next: ^14.1.0
+  formidable: ^3.5.1
   jsonwebtoken: ^9.0.2
   next: ^14.1.0
   next-auth: ^4.24.6
@@ -53,6 +55,7 @@ dependencies:
   '@trpc/server': 10.45.2
   '@types/bcrypt': 5.0.2
   bcrypt: 5.1.1
+  formidable: 3.5.1
   jsonwebtoken: 9.0.2
   next: 14.1.3_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.24.7_6tqp36bm4r3alwpsonbjjpjz7y
@@ -65,6 +68,7 @@ dependencies:
 devDependencies:
   '@hookform/resolvers': 3.3.4_react-hook-form@7.51.0
   '@types/eslint': 8.56.5
+  '@types/formidable': 3.4.5
   '@types/jsonwebtoken': 9.0.6
   '@types/node': 20.11.28
   '@types/react': 18.2.66
@@ -884,6 +888,12 @@ packages:
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
     dev: true
 
+  /@types/formidable/3.4.5:
+    resolution: {integrity: sha512-s7YPsNVfnsng5L8sKnG/Gbb2tiwwJTY1conOkJzTMRvJAlLFW1nEua+ADsJQu8N1c0oTHx9+d5nqg10WuT9gHQ==}
+    dependencies:
+      '@types/node': 20.11.28
+    dev: true
+
   /@types/json-schema/7.0.15:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
     dev: true
@@ -1332,6 +1342,10 @@ packages:
       is-shared-array-buffer: 1.0.3
     dev: true
 
+  /asap/2.0.6:
+    resolution: {integrity: sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA==}
+    dev: false
+
   /ast-types-flow/0.0.8:
     resolution: {integrity: sha512-OH/2E5Fg20h2aPrbe+QL8JZQFko0YZaF+j4mnQ7BGhfavO7OpSLa8a0y9sBwomHdSbkhTS8TQNayBfnW5DwbvQ==}
     dev: true
@@ -1601,6 +1615,13 @@ packages:
   /detect-libc/2.0.2:
     resolution: {integrity: sha512-UX6sGumvvqSaXgdKGUsgZWqcUyIXZ/vZTrlRT/iobiKhGL0zL4d3osHj3uqllWJK+i+sixDS/3COVEOFbupFyw==}
     engines: {node: '>=8'}
+    dev: false
+
+  /dezalgo/1.0.4:
+    resolution: {integrity: sha512-rXSP0bf+5n0Qonsb+SVVfNfIsimO4HEtmnIpPHY8Q1UCzKlQrDMfdobr8nJOOsRgWCyMRqeSBQzmWUMq7zvVig==}
+    dependencies:
+      asap: 2.0.6
+      wrappy: 1.0.2
     dev: false
 
   /dir-glob/3.0.1:
@@ -2138,6 +2159,14 @@ packages:
       signal-exit: 4.1.0
     dev: true
 
+  /formidable/3.5.1:
+    resolution: {integrity: sha512-WJWKelbRHN41m5dumb0/k8TeAx7Id/y3a+Z7QfhxP/htI9Js5zYaEDtG8uMgG0vM0lOlqnmjE99/kfpOYi/0Og==}
+    dependencies:
+      dezalgo: 1.0.4
+      hexoid: 1.0.0
+      once: 1.4.0
+    dev: false
+
   /fs-minipass/2.1.0:
     resolution: {integrity: sha512-V/JgOLFCS+R6Vcq0slCuaeWEdNC3ouDlJMNIsacH2VtALiu9mV4LPrHc5cDl8k5aw6J8jwgWWpiTo5RYhmIzvg==}
     engines: {node: '>= 8'}
@@ -2327,6 +2356,11 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       function-bind: 1.1.2
+
+  /hexoid/1.0.0:
+    resolution: {integrity: sha512-QFLV0taWQOZtvIRIAdBChesmogZrtuXvVWsFHZTk2SU+anspqZ2vMnoLg7IE1+Uk16N19APic1BuF8bC8c2m5g==}
+    engines: {node: '>=8'}
+    dev: false
 
   /hoist-non-react-statics/3.3.2:
     resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}

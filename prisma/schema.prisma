@@ -68,16 +68,22 @@ model VerificationToken {
 
 // APPLICATION SCHEMA
 
+enum KostumPreference {
+  Game
+  Anime
+  Vtuber
+}
+
 model kostum {
-  id       Int        @id @default(autoincrement())
-  name     String
-  image    String
-  link     String
-  origin   String
-  ktype    String
-  kset     String
-  rank_saw rank_saw[]
-  rvalues  rvalues[]
+  id         Int              @id @default(autoincrement())
+  name       String
+  image      String
+  link       String
+  origin     String
+  preference KostumPreference
+  kset       Json
+  rank_saw   rank_saw[]
+  rvalues    rvalues[]
 }
 
 model rank_saw {

@@ -28,6 +28,7 @@
     "@trpc/server": "^10.45.1",
     "@types/bcrypt": "^5.0.2",
     "bcrypt": "^5.1.1",
+    "formidable": "^3.5.1",
     "jsonwebtoken": "^9.0.2",
     "next": "^14.1.0",
     "next-auth": "^4.24.6",
@@ -40,6 +41,7 @@
   "devDependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@types/eslint": "^8.56.2",
+    "@types/formidable": "^3.4.5",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.11.20",
     "@types/react": "^18.2.57",

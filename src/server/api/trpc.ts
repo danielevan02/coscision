@@ -126,3 +126,13 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
     },
   });
 });
+
+export const adminProcedure = protectedProcedure.use(({ ctx: { session, }, next }) => {
+  if (session.user.level != "Admin") throw new TRPCError({ code: "FORBIDDEN" });
+  return next({
+    ctx: {
+      // infers the `session` as non-nullable
+      session: { ...session, user: session.user },
+    },
+  });
+});
