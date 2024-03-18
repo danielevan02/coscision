@@ -17,7 +17,7 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
 
     const newName = `${new Date().getTime() + (3 * 60 * 60)}-${crypto.randomInt(1000, 9999)}_${file.originalFilename}`;
     if (env.UPLOAD_STORAGE.startsWith("local-")) 
-        renameSync(file.filepath, join(process.cwd(), `public/upload/${newName}`));
+        renameSync(file.filepath, join(process.cwd(), `public/upload/temp`, newName));
 
     res.json({ name: newName });
 }
