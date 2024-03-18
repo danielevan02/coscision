@@ -47,14 +47,15 @@ enum UserLevel {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
+  id       Int        @id @default(autoincrement())
   name     String
-  username String    @unique
+  username String     @unique
   password String
-  level    UserLevel @default(User)
+  level    UserLevel  @default(User)
   image    String?
   accounts Account[]
   sessions Session[]
+  rank_saw rank_saw[]
 }
 
 model VerificationToken {
@@ -67,30 +68,57 @@ model VerificationToken {
 
 // APPLICATION SCHEMA
 
-model tbl_kostum {
-  id_kostum   Int     @id @default(autoincrement())
-  nama_kostum String
-  nilai_saw   Decimal
-  rangking    Int
+model kostum {
+  id       Int        @id @default(autoincrement())
+  name     String
+  image    String
+  link     String
+  origin   String
+  ktype    String
+  kset     String
+  rank_saw rank_saw[]
+  rvalues  rvalues[]
 }
 
-model tbl_kriteria {
-  id_kriteria    Int    @id @default(autoincrement())
-  nama_kriteria  String
-  bobot_kriteria Float
-  tipe_kriteria  String
+model rank_saw {
+  user_id   Int
+  kostum_id Int
+  saw       Decimal
+  rank      Int
+  user      User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  kostum    kostum  @relation(fields: [kostum_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, kostum_id])
 }
 
-model tbl_nilai {
-  id_nilai       Int @id @default(autoincrement())
-  id_kostum      Int
-  id_kriteria    Int
-  id_subkriteria Int
+model rvalues {
+  kostum_id      Int
+  subkriteria_id Int
+  kostum         kostum      @relation(fields: [kostum_id], references: [id], onDelete: Cascade)
+  subkriteria    subkriteria @relation(fields: [subkriteria_id], references: [id], onDelete: Cascade)
+
+  @@unique([kostum_id, subkriteria_id])
 }
 
-model tbl_subkriteria {
-  id_subkriteria    Int    @id @default(autoincrement())
-  id_kriteria       Int
-  nama_subkriteria  String
-  nilai_subkriteria Int
+enum KriteriaTipe {
+  Cost
+  Benefit
+}
+
+model kriteria {
+  id          Int           @id @default(autoincrement())
+  name        String
+  weight      Decimal
+  ktype       KriteriaTipe
+  subkriteria subkriteria[]
+}
+
+model subkriteria {
+  id          Int    @id @default(autoincrement())
+  kriteria_id Int
+  name        String
+  skvalue     Int
+
+  kriteria kriteria  @relation(fields: [kriteria_id], references: [id], onDelete: Cascade)
+  rvalues  rvalues[]
 }
