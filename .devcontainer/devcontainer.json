@@ -1,0 +1,6 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+  },
+  "postStartCommand": ["/bin/bash", "-c", "chmod 777 .devcontainer/postStart.sh && .devcontainer/postStart.sh"]
+}
