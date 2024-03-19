@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { db } from "~/server/db";
-import bcrypt from "bcrypt";
-
-const hash = async (password: string) => bcrypt.hash(password, await bcrypt.genSalt(10));
+import { hash } from "~/server/utils";
 
 async function upsert() {
     await db.user.createMany({

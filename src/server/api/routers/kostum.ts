@@ -5,8 +5,6 @@ import { rename, stat, } from "fs/promises";
 import { join } from "path";
 import { env } from "~/env";
 
-const x = Object.keys(KostumPreference);
-
 export const kostumRouter = createTRPCRouter({
     addKostum: adminProcedure.input(z.object({
             name: z.string(),
@@ -76,10 +74,12 @@ export const kostumRouter = createTRPCRouter({
             where: { id: input, },
         })),
     getKostum: publicProcedure.input(z.number())
-        .mutation(({ ctx: { db }, input }) => db.kostum.findFirstOrThrow({
+        .query(({ ctx: { db }, input }) => db.kostum.findFirstOrThrow({
             where: { id: input, },
         })),
     getKostums: publicProcedure.input(z.object({
             //
-        })).mutation(() => null),
+        })).query(({ ctx: { db }, input }) => db.kostum.findMany({
+            //
+        })),
 });

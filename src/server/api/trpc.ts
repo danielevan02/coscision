@@ -107,6 +107,13 @@ export const createTRPCRouter = t.router;
  */
 export const publicProcedure = t.procedure;
 
+export const guestProcedure = t.procedure.use(({ ctx, next }) => {
+  if (ctx.session && ctx.session.user) {
+    throw new TRPCError({ code: "FORBIDDEN" });
+  }
+  return next();
+});
+
 /**
  * Protected (authenticated) procedure
  *
