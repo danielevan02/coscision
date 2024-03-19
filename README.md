@@ -20,3 +20,45 @@ Ranks customs perfect-preferencely by using Simple Additive Weighting (SAW) algo
 
 All commands already scripted and implemented in `.devcontainer/postStart.sh`. You could just open 
 a new Codespace and wait for terminal finishing the build. After that, run `npm run dev`.
+
+## Development Notes
+
+### Search by function
+
+```ts
+({
+    getKostums: publicProcedure.input(z.object({
+            rank: z.boolean().default(false),
+            name: z.string().optional(),
+            link: z.string().optional(),
+            origin: z.string().optional(),
+        }).default({}))
+        .query(({ ctx: { db }, }) => db.kostum.findMany({
+            //
+        })),
+})
+```
+
+Such searching features has default value. Whether developer input `undefined` it would use the default. For every query 
+is a wildcard, which would not care of cAsE and incomp...(lete) words even if it is at the ...start, end..., or mid..dle.
+
+### Search by Omnibox
+
+A omnibox like Google Search Bar or Github Repository Search usually using additional parameters that can be used. E.g.
+
+```
+sort:name,desc origin:Game param2:Long param but between params param1:"Long Params" A usual normal search
+```
+
+This could be breakdowns to
+```ts
+const x = {
+    sort: ["name", "desc"],
+    origin: "Game",
+    // notice by "param2:Lomg" and "params "
+    // In regex should be `:\w+\s`
+    param2: "Long param but between params",
+    param1: "Long Params",
+    q: "A usual normal search"
+}
+```
