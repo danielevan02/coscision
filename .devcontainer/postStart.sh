@@ -23,7 +23,7 @@ source .env
 ./.env
 
 npm run postinstall
-npm exec prisma db push
+npm run db:push
 npm exec -y tsx -- prisma/insert.ts
 # npm run build
 # npm run dev

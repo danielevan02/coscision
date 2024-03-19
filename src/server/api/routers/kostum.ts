@@ -77,8 +77,11 @@ export const kostumRouter = createTRPCRouter({
             where: { id: input, },
         })),
     getKostums: publicProcedure.input(z.object({
-            //
-        }).nullish().or(z.void()))
+            rank: z.boolean().default(false),
+            name: z.string().optional(),
+            link: z.string().optional(),
+            origin: z.string().optional(),
+        }).default({}))
         .query(({ ctx: { db }, }) => db.kostum.findMany({
             //
         })),

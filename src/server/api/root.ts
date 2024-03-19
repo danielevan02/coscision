@@ -1,4 +1,6 @@
 import { kostumRouter } from "~/server/api/routers/kostum";
+import { kriteriaRouter } from "~/server/api/routers/kriteria";
+import { userRouter } from "~/server/api/routers/user";
 import { createTRPCRouter } from "~/server/api/trpc";
 
 /**
@@ -8,6 +10,8 @@ import { createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
     kostum: kostumRouter,
+    kriteria: kriteriaRouter,
+    user: userRouter,
 });
 
 // export type definition of API
