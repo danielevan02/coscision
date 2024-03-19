@@ -1,6 +1,7 @@
 import { Box, Button, TextField, MenuItem, Snackbar } from '@mui/material'
 import Head from 'next/head'
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react'
 import { type FieldErrors, useForm } from 'react-hook-form';
 
@@ -11,6 +12,7 @@ type KriteriaForm = {
 }
 
 const CrudKriteria = () => {
+	const router = useRouter()
 	const [open, setOpen] = React.useState(false)
 	const {
 		register,
@@ -31,10 +33,12 @@ const CrudKriteria = () => {
 		}
 	}
 
-	const onSubmit = (data: KriteriaForm) => {
+	const onSubmit = async (data: KriteriaForm) => {
 		console.log(data)
 		setOpen(true)
+		await router.push('/kriteria')
 	}
+	
 	return (
 		<>
 			<Head>

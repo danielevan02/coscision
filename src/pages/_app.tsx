@@ -4,6 +4,8 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { type AppType } from "next/app";
 import '@fontsource-variable/outfit';
 import { api } from "~/utils/api";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import "~/styles/globals.css";
 import Navbar from "~/components/Navbar/Navbar";
 import { useRouter } from "next/router";

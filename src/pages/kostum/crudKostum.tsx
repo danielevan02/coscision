@@ -1,6 +1,7 @@
 import { Box, Button, MenuItem, Snackbar, TextField } from '@mui/material'
 import Head from 'next/head'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { type FieldErrors, useForm } from 'react-hook-form'
 
@@ -13,6 +14,7 @@ type KostumForm = {
 }
 
 const CrudKostum = () => {
+  const router = useRouter()
   const [open, setOpen] = useState(false)
   const { 
     register, 
@@ -33,10 +35,12 @@ const CrudKostum = () => {
     }
   }
 
-  const onSubmit = (data: KostumForm) => {
+  const onSubmit = async (data: KostumForm) => {
     console.log(data)
     setOpen(true)
+    await router.push('/kostum')
   }
+  
   return (
     <>
       <Head>
