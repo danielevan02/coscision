@@ -7,7 +7,6 @@ async function upsert() {
     await db.user.createMany({
         data: [
             {
-                id: 1,
                 name: "Administrator",
                 username: "Admin",
                 password: await hash("12345"),

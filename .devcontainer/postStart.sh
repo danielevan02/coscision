@@ -17,8 +17,10 @@ chmod 777 .env
 
 set -a
 source .env
+./.env
 
 npm run postinstall
+npm exec prisma db push
 npm exec -y tsx -- prisma/insert.ts
 # npm run build
-npm run serve
+# npm run dev
