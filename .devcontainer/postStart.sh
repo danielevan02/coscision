@@ -15,6 +15,9 @@ chmod 777 .env
 
 /bin/bash -c ./start-database.sh
 
+sleep 6s
+echo START DATABASE DEPLOYMENT
+
 set -a
 source .env
 ./.env
