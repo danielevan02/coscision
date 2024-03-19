@@ -1,8 +1,10 @@
 import { Logout } from '@mui/icons-material';
 import { Avatar, Box, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from '@mui/material';
+import { useSession } from 'next-auth/react';
 import React from 'react'
 
 const AccountAvatar = () => {
+  const { data } = useSession()
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -23,7 +25,7 @@ const AccountAvatar = () => {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32, background: 'gray' }}>U</Avatar>
+            <Avatar sx={{ width: 32, height: 32, background: 'gray' }} src={`/assets/${data?.user.image}`} />
           </IconButton>
         </Tooltip>
       </Box>

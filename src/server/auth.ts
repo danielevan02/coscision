@@ -10,7 +10,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-import { env } from "~/env";
 import { db } from "~/server/db";
 import { type User as $User, type UserLevel } from "@prisma/client";
 
@@ -66,9 +65,8 @@ export const authOptions: NextAuthOptions = {
         expiresIn: maxAge,
       });
 
-      let session;
       if (token != null && typeof token.sub == "string" && adapter.createSession != undefined) {
-        session = await adapter.createSession({
+        await adapter.createSession({
           userId: token.sub,
           sessionToken: newToken,
           expires: new Date(new Date().getTime() + ((maxAge ?? 0) * 1000)),
@@ -85,7 +83,7 @@ export const authOptions: NextAuthOptions = {
         username: { label: "Username", type: "text", },
         password: { label: "Password", type: "password", },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const user = await db.user.findFirst({
           where: {
             username: credentials!.username,

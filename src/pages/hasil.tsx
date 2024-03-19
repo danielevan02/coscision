@@ -47,7 +47,7 @@ function createData(
 }
 
 const rows = [
-  createData('Harga Sewa', 0.0643, 'rank1.png'),
+  createData('Harga Sewa', 0.0643, 1),
   createData('Harga Sewa', 0.0643, 2),
   createData('Harga Sewa', 0.0643, 3),
   createData('Harga Sewa', 0.0643, 4),
@@ -87,7 +87,7 @@ const Hasil = () => {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <TableCell>No</TableCell>
+                  <TableCell align='center'>No</TableCell>
                   {columns.map((column) => (
                     <TableCell
                       key={column.id}
@@ -104,13 +104,42 @@ const Hasil = () => {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, rowIndex) => {
                     return (
-                      <TableRow hover={rowIndex === 0 ? false:true} role="checkbox" tabIndex={-1} key={rowIndex} sx={{ background: rowIndex === 0 ? '#dcaf53':undefined, height: rowIndex === 0 ? 100:undefined }}>
+                      <TableRow 
+                        hover={rowIndex >= 0 && rowIndex <= 2 ? false : true} 
+                        key={rowIndex}
+                        sx={rowIndex === 0 ? 
+                          {background: '#dcaf53', height: 80}:
+                          rowIndex === 1 ?
+                          {background: '#b8b8b8', height: 70}:
+                          rowIndex === 2 ?
+                          {background: '#805334', height: 60}:undefined
+                        }
+                      >
                         {columns.map((column, index) => {
                           const value = row[column.id];
                           return (
                             <>
-                              {index === 0 ? <TableCell key={index}>{rowIndex + 1}</TableCell> : undefined}
-                              <TableCell align={column.align} sx={rowIndex === 0 ? {fontSize: 30, fontWeight: 600}:undefined}>{index === 2 && rowIndex === 0 ? <Image src={`/assets/${value}`} alt='rank1' width={1000} height={1000} style={{width: '20%', height: 'auto'}}/>:value}</TableCell>
+                              {index === 0 ? <TableCell key={index} align='center'>{rowIndex + 1}</TableCell> : undefined}
+                              <TableCell 
+                                align={column.align} 
+                                sx={rowIndex === 0 ? 
+                                  { fontSize: 30, fontWeight: 700, p: 0 } : 
+                                  rowIndex === 1 ? 
+                                  { fontSize: 25, fontWeight: 600, p: 0 } :
+                                  rowIndex === 2 ?
+                                  { fontSize: 20, fontWeight: 500, p: 0} : undefined
+                                }
+                              >
+                                { index === 2 && rowIndex === 0 ? 
+                                  <Image src={`/assets/rank${value}.png`} alt='rank' width={1000} height={1000} style={{ width: '15%', height: 'auto' }} /> : 
+                                  index === 2 && rowIndex === 1 ?
+                                  <Image src={`/assets/rank${value}.png`} alt='rank' width={1000} height={1000} style={{ width: '12%', height: 'auto' }} /> : 
+                                  index === 2 && rowIndex === 2 ?
+                                  <Image src={`/assets/rank${value}.png`} alt='rank' width={1000} height={1000} style={{ width: '10%', height: 'auto' }} /> : 
+
+                                  value
+                                  }
+                              </TableCell>
                             </>
                           );
                         })}

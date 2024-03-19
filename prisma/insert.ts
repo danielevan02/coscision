@@ -12,6 +12,7 @@ async function upsert() {
                 username: "Admin",
                 password: await hash("12345"),
                 level: "Admin",
+                image: "admin.png"
             },
         ],
     });

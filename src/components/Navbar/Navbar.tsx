@@ -5,9 +5,14 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import AccountAvatar from './AccountAvatar'
 import { AppRegistration, AssignmentTurnedIn, Checkroom, Home, Info, Science, Score, Menu } from '@mui/icons-material'
+import { useSession } from 'next-auth/react'
 
 const Navbar = () => {
-	const author = 'admin'
+	const { data } = useSession()
+	const [ author, setAuthor] = React.useState('')
+	if(data?.user.level === 'Admin'){
+		setAuthor('admin')
+	}
 	const router = useRouter()
 	const [state, setState] = React.useState({
 		left: false,
@@ -100,7 +105,7 @@ const Navbar = () => {
 					<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0cfcf', height: '30%', my: 'auto', py: 1, px: 2, borderRadius: 10 }}>
 						<Box sx={{ display: { mobile: 'none', tablet: 'flex' }, flexDirection: 'column' }}>
 							<Typography sx={{ fontSize: '12px' }}>Welcome back,</Typography>
-							<Typography sx={{ fontSize: '12px' }}>User1</Typography>
+							<Typography sx={{ fontSize: '12px' }}>{data?.user.name}</Typography>
 						</Box>
 						<AccountAvatar />
 					</Box>
