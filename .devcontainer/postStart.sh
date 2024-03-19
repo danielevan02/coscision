@@ -8,11 +8,12 @@ echo "Script location: ${BASEDIR}"
 cd $BASEDIR/..
 echo CURRENT DIRECTORY IS $PWD
 
-chmod 777 .env.example
 chmod 777 start-database.sh
 
 cp .env.example .env
-/bin/bash -c start-database.sh
+chmod 777 .env
+
+/bin/bash -c ./start-database.sh
 
 set -a
 source .env
