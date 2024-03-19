@@ -107,6 +107,13 @@ export const createTRPCRouter = t.router;
  */
 export const publicProcedure = t.procedure;
 
+export const guestProcedure = t.procedure.use(({ ctx, next }) => {
+  if (ctx.session && ctx.session.user) {
+    throw new TRPCError({ code: "FORBIDDEN" });
+  }
+  return next();
+});
+
 /**
  * Protected (authenticated) procedure
  *
@@ -123,6 +130,16 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
     ctx: {
       // infers the `session` as non-nullable
       session: { ...ctx.session, user: ctx.session.user },
+    },
+  });
+});
+
+export const adminProcedure = protectedProcedure.use(({ ctx: { session, }, next }) => {
+  if (session.user.level != "Admin") throw new TRPCError({ code: "FORBIDDEN" });
+  return next({
+    ctx: {
+      // infers the `session` as non-nullable
+      session: { ...session, user: session.user },
     },
   });
 });

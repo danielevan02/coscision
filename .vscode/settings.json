@@ -1,0 +1,6 @@
+{
+    "javascript.preferences.importModuleSpecifier": "non-relative",
+    "debug.allowBreakpointsEverywhere": true,
+    "debug.showBreakpointsInOverviewRuler": true,
+    "typescript.preferences.importModuleSpecifier": "non-relative"
+}
