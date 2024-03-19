@@ -5,8 +5,16 @@ echo "Script executed from: ${PWD}"
 BASEDIR=$(dirname $0)
 echo "Script location: ${BASEDIR}"
 
-chmod 777 $BASEDIR/../.env.example
-chmod 777 $BASEDIR/../start-database.sh
+cd $BASEDIR/..
+echo CURRENT DIRECTORY IS $PWD
 
-cp $BASEDIR/../.env.example $BASEDIR/../.env
-/bin/bash -c "$BASEDIR/../start-database.sh"
+chmod 777 .env.example
+chmod 777 start-database.sh
+
+cp .env.example .env
+/bin/bash -c start-database.sh
+
+npm run postinstall
+npm exec -y tsx -- prisma/insert.ts
+# npm run build
+npm run serve
