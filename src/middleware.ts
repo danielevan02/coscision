@@ -12,3 +12,5 @@ export default withAuth({
     signIn: '/login'
   }
 });
+
+export const config = { matcher: ["/", "/kostum/:path*", "/kriteria/:path*", "/nilai/:path*", "/hasil/", "/metode/", "/about/"] };

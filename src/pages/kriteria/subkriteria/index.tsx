@@ -1,5 +1,6 @@
 import { Add, ArrowBack } from '@mui/icons-material';
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
 import React from 'react'
@@ -48,7 +49,8 @@ const rows = [
 ];
 
 const Subkriteria = () => {
-  const author = 'admin'
+  const { data: session} = useSession()
+  const author = session?.user.level === "Admin" ? 'admin':'user'
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 

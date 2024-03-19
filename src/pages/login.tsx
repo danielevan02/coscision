@@ -39,8 +39,8 @@ const Login = () => {
 		console.log(data)
 		try {
 			const result = await signIn('credentials', { username: data.user, password: data.password, redirect: false })
-			console.log(result)
 			if (result?.status === 401) {
+				console.log(result)
 				setOpen(!open)
 			} else {
 				await router.push('/')
@@ -97,7 +97,7 @@ const Login = () => {
 				open={open}
 				autoHideDuration={4000}
 				onClose={handleClose}
-				sx={{width: '30%', }}
+				sx={{width: '30%' }}
 			>
 				<Alert onClose={handleClose} severity='error' variant='filled'>
 					Harap isi username dan password dengan benar

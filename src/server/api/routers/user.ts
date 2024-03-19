@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, guestProcedure, protectedProcedure, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, guestProcedure } from "~/server/api/trpc";
 import { hash } from "~/server/utils";
 
 export const userRouter = createTRPCRouter({
