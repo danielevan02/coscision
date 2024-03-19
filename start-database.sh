@@ -39,6 +39,6 @@ DB_PASSWORD=$(echo $DATABASE_URL | awk -F':' '{print $3}' | awk -F'@' '{print $1
 #   sed -i -e "s#:password@#:$DB_PASSWORD@#" .env
 # fi
 
-docker run --name $DB_CONTAINER_NAME -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_DB=coscision -d -p 5433:5433 docker.io/postgres
+docker run --name $DB_CONTAINER_NAME -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_DB=coscision -d -p 5432:5432 -p 5433:5432 docker.io/postgres
 
 echo "Database container was succesfuly created"

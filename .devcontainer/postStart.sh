@@ -14,6 +14,9 @@ chmod 777 start-database.sh
 cp .env.example .env
 /bin/bash -c start-database.sh
 
+set -a
+source .env
+
 npm run postinstall
 npm exec -y tsx -- prisma/insert.ts
 # npm run build
