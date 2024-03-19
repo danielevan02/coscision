@@ -4,6 +4,7 @@ import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
+  Awaitable,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -67,7 +68,7 @@ export const authOptions: NextAuthOptions = {
 
       if (token != null && typeof token.sub == "string" && adapter.createSession != undefined) {
         await adapter.createSession({
-          userId: token.sub,
+          userId: Number(token.sub) as unknown as string,
           sessionToken: newToken,
           expires: new Date(new Date().getTime() + ((maxAge ?? 0) * 1000)),
         });
@@ -90,8 +91,11 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
+        console.log("here 93", credentials, await db.user.findMany());
         if (!user) return null;
+        console.log("here 95")
         if (! await bcrypt.compare(credentials!.password, user.password) ) return null;
+        console.log("here 97")
 
         return {
           id: user.id,
