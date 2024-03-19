@@ -25,7 +25,7 @@ export const kostumRouter = createTRPCRouter({
             origin: z.string(),
             preference: z.enum(["Game", "Anime", "Vtuber"]),
             kset: z.string().array(),
-        })).mutation(async ({ ctx: { db }, input }) => {
+        })).mutation(async ({ ctx: { db }, input: { kset, ...input } }) => {
             if (env.UPLOAD_STORAGE.startsWith("local-")) {
                 await rename(join(process.cwd(), "public/upload/temp", input.image), join(process.cwd(), "public/upload", input.image))
             }
@@ -33,7 +33,7 @@ export const kostumRouter = createTRPCRouter({
             return await db.kostum.create({
                 data: {
                     ...input,
-                    kset: JSON.stringify(input.kset),
+                    kset: JSON.stringify(kset),
                 },
             });
         }),
@@ -55,17 +55,16 @@ export const kostumRouter = createTRPCRouter({
             origin: z.string().optional(),
             preference: z.enum(["Game", "Anime", "Vtuber"]).optional(),
             kset: z.string().array().optional(),
-        })).mutation(async ({ ctx: { db }, input }) => {
+        })).mutation(async ({ ctx: { db }, input: { id, kset, ...input } }) => {
             if (input.image && env.UPLOAD_STORAGE.startsWith("local-")) {
                 await rename(join(process.cwd(), "public/upload/temp", input.image), join(process.cwd(), "public/upload", input.image))
             }
 
             return await db.kostum.update({
-                where: { id: input.id, },
+                where: { id, },
                 data: {
                     ...input,
-                    id: undefined,
-                    kset: input.kset ? JSON.stringify(input.kset) : undefined,
+                    kset: kset ? JSON.stringify(kset) : undefined,
                 },
             })
         }),
@@ -79,7 +78,8 @@ export const kostumRouter = createTRPCRouter({
         })),
     getKostums: publicProcedure.input(z.object({
             //
-        })).query(({ ctx: { db }, input }) => db.kostum.findMany({
+        }).nullish().or(z.void()))
+        .query(({ ctx: { db }, }) => db.kostum.findMany({
             //
         })),
 });
