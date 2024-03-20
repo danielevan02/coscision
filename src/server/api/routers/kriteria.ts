@@ -64,7 +64,6 @@ export const kriteriaRouter = createTRPCRouter({
     getKriteria: publicProcedure.input(z.number())
         .query(({ ctx: { db }, input }) => db.kriteria.findFirstOrThrow({
             where: { id: input, },
-            include: { subkriteria: true, },
         })),
     getSubkriterias: publicProcedure.input(z.number())
         .query(({ ctx: { db }, input }) => db.subkriteria.findMany({
