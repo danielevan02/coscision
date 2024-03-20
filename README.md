@@ -62,3 +62,9 @@ const x = {
     q: "A usual normal search"
 }
 ```
+
+### Upload File
+
+1. First upload file to `POST /api/upload` as `multipart/form-data` to a field named `file`
+2. Get the filename by response `name`
+3. Pass the `name` to other service on tRPC.
