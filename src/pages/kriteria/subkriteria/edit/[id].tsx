@@ -20,7 +20,13 @@ const CrudKriteria = () => {
     register,
     handleSubmit,
     getValues,
+    setValue
   } = useForm<SubkriteriaForm>()
+  
+  if(data){
+    setValue('nama', data.name)
+    setValue('nilai', data.skvalue)
+  }
   const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -55,8 +61,8 @@ const CrudKriteria = () => {
       </Head>
       <Box sx={{ px: 5, py: 3 }}>
         <form style={{ display: 'flex', flexDirection: 'column', gap: 6 }} onSubmit={handleSubmit(onSubmit, onError)}>
-          <TextField fullWidth value={data?.name} label="Nama Subkriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('nama', { required: true })} />
-          <TextField fullWidth value={data?.skvalue} type='number' label="Nilai" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('nilai', { required: true })} />
+          <TextField fullWidth label="Nama Subkriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('nama', { required: true })} />
+          <TextField fullWidth type='number' label="Nilai" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('nilai', { required: true })} />
           <Box display={'flex'} gap={1} justifyContent={'end'} mt={3}>
             <Button variant='contained' color='error' onClick={() => router.back()}>Cancel</Button>
             <Button variant='contained' color='primary' type='submit'>Submit</Button>

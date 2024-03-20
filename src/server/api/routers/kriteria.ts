@@ -58,22 +58,9 @@ export const kriteriaRouter = createTRPCRouter({
         .mutation(({ ctx: { db }, input }) => db.subkriteria.delete({
             where: { id: input, },
         })),
-
     getKriterias: publicProcedure.input(z.object({
-            name: z.string().optional(),
-            weight: z.tuple([z.enum(["<", "<=", "=", "=>", ">"]), z.number()]).optional(),
-            ktype: z.enum(["Cost", "Benefit"]).optional(),
-        }).default({}))
-        .query(({ ctx: { db }, }) => db.kriteria.findMany({
-            include: { subkriteria: true, },
-        })),
-    getSubkriterias: publicProcedure.input(z.object({
-            name: z.string().optional(),
-            skvalue: z.tuple([z.enum(["<", "<=", "=", "=>", ">"]), z.number()]).optional(),
-        }).default({})).query(({ ctx: { db }, input }) => db.subkriteria.findMany({
-            include: { kriteria: true, },
-        })),
-
+        }).nullish().or(z.void()))
+        .query(({ ctx: { db }, }) => db.kriteria.findMany()),
     getKriteria: publicProcedure.input(z.number())
         .query(({ ctx: { db }, input }) => db.kriteria.findFirstOrThrow({
             where: { id: input, },
@@ -89,6 +76,5 @@ export const kriteriaRouter = createTRPCRouter({
     getSubkriteria: publicProcedure.input(z.number())
         .query(({ ctx: { db }, input }) => db.subkriteria.findFirstOrThrow({
             where: { id: input, }
-        })),
-    
+        })), 
 });
