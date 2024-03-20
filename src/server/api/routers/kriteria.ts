@@ -55,11 +55,20 @@ export const kriteriaRouter = createTRPCRouter({
         })),
 
     getKriterias: publicProcedure.input(z.object({
-            //
-        }).nullish().or(z.void()))
+            name: z.string().optional(),
+            weight: z.tuple([z.enum(["<", "<=", "=", "=>", ">"]), z.number()]).optional(),
+            ktype: z.enum(["Cost", "Benefit"]).optional(),
+        }).default({}))
         .query(({ ctx: { db }, }) => db.kriteria.findMany({
             include: { subkriteria: true, },
         })),
+    getSubkriterias: publicProcedure.input(z.object({
+            name: z.string().optional(),
+            skvalue: z.tuple([z.enum(["<", "<=", "=", "=>", ">"]), z.number()]).optional(),
+        }).default({})).query(({ ctx: { db }, input }) => db.subkriteria.findMany({
+            include: { kriteria: true, },
+        })),
+
     getKriteria: publicProcedure.input(z.number())
         .query(({ ctx: { db }, input }) => db.kriteria.findFirstOrThrow({
             where: { id: input, },
