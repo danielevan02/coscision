@@ -59,26 +59,29 @@ export const kostumRouter = createTRPCRouter({
 			await rename(join(process.cwd(), "public/upload/temp", input.image), join(process.cwd(), "public/upload", input.image))
 		}
 
-		return await db.kostum.update({
-			where: { id, },
-			data: {
-				...input,
-				kset: kset ? JSON.stringify(kset) : undefined,
-			},
-		})
-	}),
-	deleteKostum: adminProcedure.input(z.number())
-		.mutation(({ ctx: { db }, input }) => db.kostum.delete({
-			where: { id: input, },
-		})),
-	getKostum: publicProcedure.input(z.number())
-		.query(({ ctx: { db }, input }) => db.kostum.findFirstOrThrow({
-			where: { id: input, },
-		})),
-	getKostums: publicProcedure.input(z.object({
-		//
-	}).nullish().or(z.void()))
-		.query(({ ctx: { db }, }) => db.kostum.findMany({
-			//
-		})),
+            return await db.kostum.update({
+                where: { id, },
+                data: {
+                    ...input,
+                    kset: kset ? JSON.stringify(kset) : undefined,
+                },
+            })
+        }),
+    deleteKostum: adminProcedure.input(z.number())
+        .mutation(({ ctx: { db }, input }) => db.kostum.delete({
+            where: { id: input, },
+        })),
+    getKostum: publicProcedure.input(z.number())
+        .query(({ ctx: { db }, input }) => db.kostum.findFirstOrThrow({
+            where: { id: input, },
+        })),
+    getKostums: publicProcedure.input(z.object({
+            rank: z.boolean().default(false),
+            name: z.string().optional(),
+            link: z.string().optional(),
+            origin: z.string().optional(),
+        }).default({}))
+        .query(({ ctx: { db }, }) => db.kostum.findMany({
+            //
+        })),
 });

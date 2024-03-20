@@ -7,6 +7,8 @@
     "build": "next build",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
+    "db:insert-linux": "./.env && pnpm dlx -y tsx ./prisma/insert.ts",
+    "db:insert-win": "pnpm dlx -y env-cmd pnpm dlx -y tsx ./prisma/insert.ts",
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",

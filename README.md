@@ -1,29 +1,70 @@
-# Create T3 App
+# Coscision
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Ranks customs perfect-preferencely by using Simple Additive Weighting (SAW) algorithm.
 
-## What's next? How do I make an app with this?
+## Development
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+### Local
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+1. Run your postgreSQL. You could mock your database by using docker in `start-database.sh`
+2. Copy `.env.example` to `.env`
+3. Set `DATABASE_URL`
+4. If you never push the database schema, just run: `npm run db:push`
+5. Try to run `npm run postinstall`
+6. If you are on linux: `./.env && npm exec -y tsx -- ./prisma/insert.ts` \
+   If you are on windows: `npm exec -y env-cmd -- npm exec -y tsx -- ./prisma/insert.ts` \
+   or you could just use `npm run db:insert-linux` or `npm run db:insert-win`
+7. Last, run `npm run dev`
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+### Codespace
 
-## Learn More
+All commands already scripted and implemented in `.devcontainer/postStart.sh`. You could just open 
+a new Codespace and wait for terminal finishing the build. After that, run `npm run dev`.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Development Notes
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### Search by function
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+```ts
+({
+    getKostums: publicProcedure.input(z.object({
+            rank: z.boolean().default(false),
+            name: z.string().optional(),
+            link: z.string().optional(),
+            origin: z.string().optional(),
+        }).default({}))
+        .query(({ ctx: { db }, }) => db.kostum.findMany({
+            //
+        })),
+})
+```
 
-## How do I deploy this?
+Such searching features has default value. Whether developer input `undefined` it would use the default. For every query 
+is a wildcard, which would not care of cAsE and incomp...(lete) words even if it is at the ...start, end..., or mid..dle.
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+### Search by Omnibox
+
+A omnibox like Google Search Bar or Github Repository Search usually using additional parameters that can be used. E.g.
+
+```
+sort:name,desc origin:Game param2:Long param but between params param1:"Long Params" A usual normal search
+```
+
+This could be breakdowns to
+```ts
+const x = {
+    sort: ["name", "desc"],
+    origin: "Game",
+    // notice by "param2:Lomg" and "params "
+    // In regex should be `:\w+\s`
+    param2: "Long param but between params",
+    param1: "Long Params",
+    q: "A usual normal search"
+}
+```
+
+### Upload File
+
+1. First upload file to `POST /api/upload` as `multipart/form-data` to a field named `file`
+2. Get the filename by response `name`
+3. Pass the `name` to other service on tRPC.
