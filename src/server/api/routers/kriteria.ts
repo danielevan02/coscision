@@ -16,12 +16,14 @@ export const kriteriaRouter = createTRPCRouter({
     updateKriteria: adminProcedure.input(z.object({
             id: z.number(),
             name: z.string().optional(),
-            weight: z.number().optional(),
+            weight: z.string().optional(),
             ktype: z.enum(["Cost", "Benefit"]).optional(),
         })).mutation(({ ctx: { db, }, input: { id, ...input } }) => db.kriteria.update({
             where: { id, },
             data: {
-                ...input,
+                ktype: input.ktype,
+                name: input.name,
+                weight: parseInt(input.weight!)
             }
         })),
     deleteKriteria: adminProcedure.input(z.number())

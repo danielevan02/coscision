@@ -14,13 +14,22 @@ type KriteriaForm = {
 
 const CrudKriteria = () => {
 	const router = useRouter()
+  const id = router.query.id as unknown as string
 	const [open, setOpen] = React.useState(false)
-	const { mutate } = api.kriteria.addKriteria.useMutation()
+  const { data } = api.kriteria.getKriteria.useQuery(parseInt(id))
+	const { mutate } = api.kriteria.updateKriteria.useMutation()
 	const {
 		register,
 		handleSubmit,
-		getValues
+		getValues,
+    setValue
 	} = useForm<KriteriaForm>()
+
+  if(data){
+    setValue('nama', data.name)
+    setValue('bobot', data.weight)
+    setValue('tipe', data.ktype)
+  }
 
 	const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
 		if (reason === 'clickaway') {
@@ -41,7 +50,8 @@ const CrudKriteria = () => {
 			mutate({
 				name: getValues('nama'),
 				weight: getValues('bobot').toString(),
-				ktype: getValues('tipe')
+				ktype: getValues('tipe'),
+        id: parseInt(id)
 			})
 			setOpen(true)
 			await router.push('/kriteria')
@@ -59,7 +69,7 @@ const CrudKriteria = () => {
 				<form style={{ display: 'flex', flexDirection: 'column', gap: 5 }} onSubmit={handleSubmit(onSubmit, onError)}>
 					<TextField fullWidth label="Nama Kriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('nama', { required: true })} />
 					<TextField type='number' fullWidth label="Bobot Kriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('bobot', { required: true })} />
-					<TextField fullWidth label="Bobot Kriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} select {...register('tipe', { required: true })}>
+					<TextField fullWidth value={data?.ktype === 'Cost' ? 'Cost':'Benefit'} label="Bobot Kriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} select {...register('tipe', { required: true })}>
 						<MenuItem value="">
 							<em>None</em>
 						</MenuItem>

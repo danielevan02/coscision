@@ -59,7 +59,7 @@ const Kriteria = () => {
       <Box sx={{ px: 5, py: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           {/* Add Button */}
-          <Link href={'/kriteria/crudKriteria'} style={{ textDecoration: 'none', display: author === 'admin' ? undefined : 'none' }}>
+          <Link href={'/kriteria/add'} style={{ textDecoration: 'none', display: author === 'admin' ? undefined : 'none' }}>
             <Button variant='contained' sx={{ height: '80%', display: author === 'admin' ? 'flex' : 'none', gap: 1 }}>
               <Add />
               Add
@@ -107,7 +107,7 @@ const Kriteria = () => {
                             {index === 3 ?
                               <TableCell align='center' sx={{ display: author === 'admin' ? undefined : 'none' }}>
                                 <Box sx={{ display: 'flex', gap: 1 }}>
-                                  <Link href={'/kriteria/crudKriteria'}>
+                                  <Link href={`/kriteria/edit/${result[0]}`}> 
                                     <Button variant='contained' color='warning'>UBAH</Button>
                                   </Link>
                                   <Button variant='contained' color='error'>HAPUS</Button>
