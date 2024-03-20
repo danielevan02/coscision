@@ -1,5 +1,5 @@
 import { Add, ArrowBack } from '@mui/icons-material';
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -32,10 +32,11 @@ const columns: readonly Column[] = [
 
 const Subkriteria = () => {
   const router = useRouter()
-  const id = router.query.id as unknown as string
-  const { data, refetch: refreshSubkriteria } = api.kriteria.getSubkriterias.useQuery(parseInt(id))
-  const { data: session } = useSession()
+  const id = parseInt(router.query.id as string)
+  const { data, refetch: refreshSubkriteria } = api.kriteria.getSubkriterias.useQuery(id)
   const { mutateAsync: deleteSubkriteria } = api.kriteria.deleteSubkriteria.useMutation()
+  const { data: kriteria } = api.kriteria.getKriteria.useQuery(id)
+  const { data: session } = useSession()
   const author = session?.user.level === "Admin" ? 'admin' : 'user'
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -63,6 +64,7 @@ const Subkriteria = () => {
               Add
             </Button>
           </Link>
+          <Typography variant='h5' fontWeight={600} color={'rgba(0, 0, 0, 0.6)'}>SUBKRITERIA {kriteria?.name.toUpperCase()}</Typography>
           <Link href={'/kriteria'} style={{ textDecoration: 'none' }}>
             <Button variant='contained' color='info' sx={{ display: 'flex', gap: 1 }}>
               <ArrowBack />
@@ -105,7 +107,7 @@ const Subkriteria = () => {
                                   <Link href={`/kriteria/subkriteria/edit/${result[0]}`}>
                                     <Button variant='contained' color='warning'>UBAH</Button>
                                   </Link>
-                                  <Button variant='contained' color='error' onClick={() => deleteSubkriteria(result[0]).then(() => refreshSubkriteria())}>HAPUS</Button>
+                                  <Button variant='contained' color='error' onClick={() => deleteSubkriteria(result[0] as number).then(() => refreshSubkriteria())}>HAPUS</Button>
                                 </Box>
                               </TableCell>
                               : undefined

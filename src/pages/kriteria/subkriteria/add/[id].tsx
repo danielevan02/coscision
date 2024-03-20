@@ -10,9 +10,9 @@ type SubkriteriaForm = {
 	nilai: number
 }
 
-const CrudKriteria = () => {
+const AddSubkriteria = () => {
 	const router = useRouter()
-	const id = router.query.id as unknown as string
+	const id = parseInt(router.query.id as string)
 	const { mutate } = api.kriteria.addSubkriteria.useMutation()
 	const [open, setOpen] = React.useState(false)
 	const {
@@ -39,7 +39,7 @@ const CrudKriteria = () => {
 		try {
 			mutate({
 				name: getValues('nama'),
-				skvalue: getValues('nilai').toString(),
+				skvalue: parseInt(getValues('nilai').toString()),
 				kriteria_id: id
 			})
 			setOpen(true)
@@ -75,4 +75,4 @@ const CrudKriteria = () => {
 	)
 }
 
-export default CrudKriteria
+export default AddSubkriteria

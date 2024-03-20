@@ -36,8 +36,9 @@ const columns: readonly Column[] = [
 ];
 
 const Kriteria = () => {
-  const { data } = api.kriteria.getKriterias.useQuery()
   const { data: session } = useSession()
+  const { data, refetch: refreshKriteria } = api.kriteria.getKriterias.useQuery()
+  const { mutateAsync: deleteKriteria } = api.kriteria.deleteKriteria.useMutation()
   const author = session?.user.level === "Admin" ? 'admin' : 'user'
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -95,10 +96,14 @@ const Kriteria = () => {
                       <TableRow key={rowIndex}>
                         {result.slice(0, 4).map((column, index) => (
                           <>
-                            {index === 0 ? <TableCell align='center'>{rowsPerPage*page+rowIndex+1}</TableCell>:<TableCell align='center'>{column}</TableCell>}
+                            {index === 0 ?
+                              <TableCell align='center'>{rowsPerPage * page + rowIndex + 1}</TableCell>
+                              :
+                              <TableCell align='center'>{column as string | number}</TableCell>
+                            }
                             {index === 3 ?
                               <TableCell align='center'>
-                                <Link href={`/kriteria/subkriteria/view/${result[0]}`}>
+                                <Link href={`/kriteria/subkriteria/view/${result[0] as string | number}`}>
                                   <Button variant='contained'>LIHAT</Button>
                                 </Link>
                               </TableCell>
@@ -107,10 +112,15 @@ const Kriteria = () => {
                             {index === 3 ?
                               <TableCell align='center' sx={{ display: author === 'admin' ? undefined : 'none' }}>
                                 <Box sx={{ display: 'flex', gap: 1 }}>
-                                  <Link href={`/kriteria/edit/${result[0]}`}> 
+                                  <Link href={`/kriteria/edit/${result[0] as string | number}`}>
                                     <Button variant='contained' color='warning'>UBAH</Button>
                                   </Link>
-                                  <Button variant='contained' color='error'>HAPUS</Button>
+                                  <Button
+                                    variant='contained'
+                                    color='error'
+                                    onClick={() => deleteKriteria(result[0] as number).then(() => refreshKriteria())}>
+                                    HAPUS
+                                  </Button>
                                 </Box>
                               </TableCell>
                               : undefined
@@ -140,42 +150,3 @@ const Kriteria = () => {
 }
 
 export default Kriteria
-
-{/*
-{data!
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, rowIndex) => {
-                    return (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={rowIndex}>
-                        {columns.map((column, index) => {
-                          const value = row[column.id];
-                          return (
-                            <>
-                              {index === 0 ? <TableCell key={index}>{rowIndex + 1}</TableCell> : undefined}
-                              <TableCell align={column.align}>{value}</TableCell>
-                              {index === 2 ?
-                                <TableCell align={column.align}>
-                                  <Link href={'/kriteria/subkriteria'}>
-                                    <Button variant='contained'>LIHAT</Button>
-                                  </Link>
-                                </TableCell>
-                                : undefined
-                              }
-                              {index === 2 ?
-                                <TableCell align={column.align} sx={{ display: author === 'admin' ? undefined : 'none'}}>
-                                  <Box sx={{ display: 'flex', gap: 1 }}>
-                                    <Link href={'/kriteria/crudKriteria'}>
-                                      <Button variant='contained' color='warning'>UBAH</Button>
-                                    </Link>
-                                    <Button variant='contained' color='error'>HAPUS</Button>
-                                  </Box>
-                                </TableCell>
-                                : undefined
-                              }
-                            </>
-                          );
-                        })}
-                      </TableRow>
-                    );
-                  })}
-*/}

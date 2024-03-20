@@ -10,11 +10,11 @@ type SubkriteriaForm = {
   nilai: number
 }
 
-const CrudKriteria = () => {
+const EditSubkriteria = () => {
   const router = useRouter()
-  const id = router.query.id as unknown as string
+  const id = parseInt(router.query.id as string)
   const { mutate } = api.kriteria.updateSubkriteria.useMutation()
-  const { data } = api.kriteria.getSubkriteria.useQuery(parseInt(id))
+  const { data } = api.kriteria.getSubkriteria.useQuery(id)
   const [open, setOpen] = React.useState(false)
   const {
     register,
@@ -44,8 +44,8 @@ const CrudKriteria = () => {
     try {
       mutate({
         name: getValues('nama'),
-        skvalue: getValues('nilai').toString(),
-        id: parseInt(id)
+        skvalue: parseInt(getValues('nilai').toString()),
+        id: id
       })
       setOpen(true)
       router.back()
@@ -61,8 +61,8 @@ const CrudKriteria = () => {
       </Head>
       <Box sx={{ px: 5, py: 3 }}>
         <form style={{ display: 'flex', flexDirection: 'column', gap: 6 }} onSubmit={handleSubmit(onSubmit, onError)}>
-          <TextField fullWidth label="Nama Subkriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('nama', { required: true })} />
-          <TextField fullWidth type='number' label="Nilai" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('nilai', { required: true })} />
+          <TextField fullWidth InputLabelProps={{shrink: true}} label="Nama Subkriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('nama', { required: true })} />
+          <TextField fullWidth InputLabelProps={{shrink: true}} type='number' label="Nilai" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('nilai', { required: true })} />
           <Box display={'flex'} gap={1} justifyContent={'end'} mt={3}>
             <Button variant='contained' color='error' onClick={() => router.back()}>Cancel</Button>
             <Button variant='contained' color='primary' type='submit'>Submit</Button>
@@ -80,4 +80,4 @@ const CrudKriteria = () => {
   )
 }
 
-export default CrudKriteria
+export default EditSubkriteria
