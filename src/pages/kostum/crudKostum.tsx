@@ -73,7 +73,6 @@ const CrudKostum = () => {
           <TextField fullWidth label="Set" rows={3} multiline sx={{ background: 'white', borderRadius: 1 }} {...register('set', {required: true})} />
           <TextField fullWidth size='small' label="Link" sx={{ background: 'white', borderRadius: 1 }} {...register('link', {required: true})} />
           <label style={{color: 'rgba(0, 0, 0, 0.8)', fontWeight: 600}}>Gambar Kostum</label>
-          <input type="file" accept='image/*' {...register('gambar', {required: true})} />
           <Box display={'flex'} gap={1} justifyContent={'end'}>
             <Link href={'/kostum'}>
               <Button variant='contained' color='error'>Cancel</Button>
@@ -88,6 +87,7 @@ const CrudKostum = () => {
             />
           </Box>
         </form>
+      <input type="file" accept='image/*' {...register('gambar', {required: true})} />
       </Box>
     </>
   )

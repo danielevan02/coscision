@@ -14,9 +14,10 @@ type KriteriaForm = {
 
 const CrudKriteria = () => {
 	const router = useRouter()
-  const id = router.query.id as unknown as string
+  const id = parseInt(router.query.id as unknown as string)
+  console.log(router.query.id)
 	const [open, setOpen] = React.useState(false)
-  const { data } = api.kriteria.getKriteria.useQuery(parseInt(id))
+  const { data } = api.kriteria.getKriteria.useQuery(parseInt(id), {enabled: !!router.query.id})
 	const { mutate } = api.kriteria.updateKriteria.useMutation()
 	const {
 		register,
@@ -51,7 +52,7 @@ const CrudKriteria = () => {
 				name: getValues('nama'),
 				weight: getValues('bobot').toString(),
 				ktype: getValues('tipe'),
-        id: parseInt(id)
+        id: id
 			})
 			setOpen(true)
 			await router.push('/kriteria')

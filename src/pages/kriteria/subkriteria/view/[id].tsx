@@ -33,9 +33,9 @@ const columns: readonly Column[] = [
 const Subkriteria = () => {
   const router = useRouter()
   const id = router.query.id as unknown as string
-  const { data } = api.kriteria.getSubkriterias.useQuery(parseInt(id))
+  const { data, refetch: refreshSubkriteria } = api.kriteria.getSubkriterias.useQuery(parseInt(id))
   const { data: session } = useSession()
-  const { mutate } = api.kriteria.deleteSubkriteria.useMutation()
+  const { mutateAsync: deleteSubkriteria } = api.kriteria.deleteSubkriteria.useMutation()
   const author = session?.user.level === "Admin" ? 'admin' : 'user'
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -49,10 +49,6 @@ const Subkriteria = () => {
     setPage(0);
   };
 
-  const handleDelete = (id: number) => {
-    mutate(id)
-    
-  }
   return (
     <>
       <Head>
@@ -109,7 +105,7 @@ const Subkriteria = () => {
                                   <Link href={`/kriteria/subkriteria/edit/${result[0]}`}>
                                     <Button variant='contained' color='warning'>UBAH</Button>
                                   </Link>
-                                  <Button variant='contained' color='error' onClick={() => handleDelete(result[0] as number)}>HAPUS</Button>
+                                  <Button variant='contained' color='error' onClick={() => deleteSubkriteria(result[0]).then(() => refreshSubkriteria())}>HAPUS</Button>
                                 </Box>
                               </TableCell>
                               : undefined

@@ -22,7 +22,7 @@ const CrudKriteria = () => {
     getValues,
     setValue
   } = useForm<SubkriteriaForm>()
-  
+
   if(data){
     setValue('nama', data.name)
     setValue('nilai', data.skvalue)
