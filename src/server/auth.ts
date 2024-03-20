@@ -4,7 +4,6 @@ import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
-  Awaitable,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -61,7 +60,7 @@ export const authOptions: NextAuthOptions = {
   },
   jwt: {
     async encode({ secret, token, maxAge }) {
-      const newToken = jwt.sign(token as object, secret, { 
+      const newToken = jwt.sign(token as object, secret, {
         algorithm: "HS256",
         expiresIn: maxAge,
       });
@@ -94,7 +93,7 @@ export const authOptions: NextAuthOptions = {
         console.log("here 93", credentials, await db.user.findMany());
         if (!user) return null;
         console.log("here 95")
-        if (! await bcrypt.compare(credentials!.password, user.password) ) return null;
+        if (! await bcrypt.compare(credentials!.password, user.password)) return null;
         console.log("here 97")
 
         return {

@@ -3,5 +3,4 @@
     "debug.allowBreakpointsEverywhere": true,
     "debug.showBreakpointsInOverviewRuler": true,
     "typescript.preferences.importModuleSpecifier": "non-relative",
-    "files.autoSave": "off"
 }

@@ -1,5 +1,6 @@
 import { Add, Cancel, Info } from '@mui/icons-material';
 import { Backdrop, Box, Button, Fade, FormControl, IconButton, InputLabel, MenuItem, Modal, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography, type SelectChangeEvent } from '@mui/material';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -62,7 +63,8 @@ const rows = [
 ];
 
 const Kostum = () => {
-	const author = 'admin'
+	const { data: session } = useSession()
+	const author = session?.user.level === "Admin" ? 'admin':'user'
 	const [filter, setAge] = React.useState('');
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
