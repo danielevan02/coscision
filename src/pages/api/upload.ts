@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse, PageConfig } from "next";
+import { type NextApiRequest, type NextApiResponse, type PageConfig } from "next";
 import formidable from "formidable";
 import crypto from "crypto";
-import { dirname, join } from "path";
+import { join } from "path";
 import { renameSync } from "fs";
 import { env } from "~/env";
 

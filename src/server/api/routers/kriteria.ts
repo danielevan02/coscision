@@ -4,11 +4,13 @@ import { adminProcedure, createTRPCRouter, publicProcedure } from "~/server/api/
 export const kriteriaRouter = createTRPCRouter({
     addKriteria: adminProcedure.input(z.object({
             name: z.string(),
-            weight: z.number(),
+            weight: z.string(),
             ktype: z.enum(["Cost", "Benefit"]),
         })).mutation(({ ctx: { db, }, input }) => db.kriteria.create({
             data: {
-                ...input,
+                name: input.name,
+                weight: parseInt(input.weight),
+                ktype: input.ktype,
             }
         })),
     updateKriteria: adminProcedure.input(z.object({
@@ -28,12 +30,14 @@ export const kriteriaRouter = createTRPCRouter({
         })),
 
     addSubkriteria: adminProcedure.input(z.object({
-            kriteria_id: z.number(),
+            kriteria_id: z.string(),
             name: z.string(),
-            skvalue: z.number(),
+            skvalue: z.string(),
         })).mutation(({ ctx: { db }, input }) => db.subkriteria.create({
             data: {
-                ...input,
+                name: input.name,
+                skvalue: parseInt(input.skvalue),
+                kriteria_id: parseInt(input.kriteria_id)
             },
         })),
     /**
@@ -42,11 +46,12 @@ export const kriteriaRouter = createTRPCRouter({
     updateSubkriteria: adminProcedure.input(z.object({
             id: z.number(),
             name: z.string().optional(),
-            skvalue: z.number().optional(),
+            skvalue: z.string().optional(),
         })).mutation(({ ctx: { db, }, input: { id, ...input } }) => db.subkriteria.update({
             where: { id, },
             data: {
-                ...input,
+                name: input.name,
+                skvalue: parseInt(input.skvalue!)
             },
         })),
     deleteSubkriteria: adminProcedure.input(z.number())
@@ -57,17 +62,22 @@ export const kriteriaRouter = createTRPCRouter({
     getKriterias: publicProcedure.input(z.object({
             //
         }).nullish().or(z.void()))
-        .query(({ ctx: { db }, }) => db.kriteria.findMany({
-            include: { subkriteria: true, },
-        })),
+        .query(({ ctx: { db }, }) => db.kriteria.findMany()),
     getKriteria: publicProcedure.input(z.number())
         .query(({ ctx: { db }, input }) => db.kriteria.findFirstOrThrow({
             where: { id: input, },
             include: { subkriteria: true, },
         })),
+    getSubkriterias: publicProcedure.input(z.number())
+        .query(({ ctx: { db }, input }) => db.subkriteria.findMany({
+            where: { kriteria_id: input, },
+            orderBy: {
+                skvalue: "asc"
+            }
+        })),
     getSubkriteria: publicProcedure.input(z.number())
         .query(({ ctx: { db }, input }) => db.subkriteria.findFirstOrThrow({
-            where: { id: input, },
-            include: { kriteria: true, },
+            where: { id: input, }
         })),
+    
 });

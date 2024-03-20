@@ -1,9 +1,9 @@
 import { Box, Button, Snackbar, TextField } from '@mui/material'
 import Head from 'next/head'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { type FieldErrors, useForm } from 'react-hook-form'
+import { api } from '~/utils/api'
 
 type SubkriteriaForm = {
 	nama: string
@@ -12,10 +12,13 @@ type SubkriteriaForm = {
 
 const CrudKriteria = () => {
 	const router = useRouter()
+	const id = router.query.id as unknown as string
+	const { mutate } = api.kriteria.addSubkriteria.useMutation()
 	const [open, setOpen] = React.useState(false)
 	const {
 		register,
 		handleSubmit,
+		getValues
 	} = useForm<SubkriteriaForm>()
 
 	const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
@@ -32,10 +35,18 @@ const CrudKriteria = () => {
 		}
 	}
 
-	const onSubmit = async (data: SubkriteriaForm) => {
-		console.log(data)
-		setOpen(true)
-		await router.push('/kriteria/subkriteria')
+	const onSubmit = async () => {
+		try {
+			mutate({
+				name: getValues('nama'),
+				skvalue: getValues('nilai').toString(),
+				kriteria_id: id
+			})
+			setOpen(true)
+			await router.push(`/kriteria/subkriteria/view/${id}`)
+		} catch (error) {
+			console.log(error)
+		}
 	}
 	
 	return (
@@ -48,9 +59,7 @@ const CrudKriteria = () => {
 					<TextField fullWidth label="Nama Subkriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('nama', {required: true})} />
 					<TextField fullWidth type='number' label="Nilai" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('nilai', {required: true})} />
 					<Box display={'flex'} gap={1} justifyContent={'end'} mt={3}>
-						<Link href={'/kriteria/subkriteria'}>
-							<Button variant='contained' color='error'>Cancel</Button>
-						</Link>
+						<Button variant='contained' color='error' onClick={() => router.back()}>Cancel</Button>
 						<Button variant='contained' color='primary' type='submit'>Submit</Button>
 						<Snackbar
 							open={open}

@@ -114,7 +114,7 @@ enum KriteriaTipe {
 model kriteria {
   id          Int           @id @default(autoincrement())
   name        String
-  weight      Decimal
+  weight      Int
   ktype       KriteriaTipe
   subkriteria subkriteria[]
 }

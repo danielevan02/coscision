@@ -4,19 +4,22 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react'
 import { type FieldErrors, useForm } from 'react-hook-form';
+import { api } from '~/utils/api';
 
 type KriteriaForm = {
 	nama: string
 	bobot: number
-	tipe: string
+	tipe: 'Cost' | 'Benefit'
 }
 
 const CrudKriteria = () => {
 	const router = useRouter()
 	const [open, setOpen] = React.useState(false)
+	const { mutate } = api.kriteria.addKriteria.useMutation()
 	const {
 		register,
 		handleSubmit,
+		getValues
 	} = useForm<KriteriaForm>()
 
 	const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
@@ -33,10 +36,18 @@ const CrudKriteria = () => {
 		}
 	}
 
-	const onSubmit = async (data: KriteriaForm) => {
-		console.log(data)
-		setOpen(true)
-		await router.push('/kriteria')
+	const onSubmit = async () => {
+		try {
+			mutate({
+				name: getValues('nama'),
+				weight: getValues('bobot').toString(),
+				ktype: getValues('tipe')
+			})
+			setOpen(true)
+			await router.push('/kriteria')
+		} catch (error) {
+			console.log(error)
+		}
 	}
 	
 	return (
@@ -52,8 +63,8 @@ const CrudKriteria = () => {
 						<MenuItem value="">
 							<em>None</em>
 						</MenuItem>
-						<MenuItem value={'cost'}>Cost</MenuItem>
-						<MenuItem value={'benefit'}>Benefit</MenuItem>
+						<MenuItem value={'Cost'}>Cost</MenuItem>
+						<MenuItem value={'Benefit'}>Benefit</MenuItem>
 					</TextField>
 					<Box display={'flex'} gap={1} justifyContent={'end'} mt={3}>
 						<Link href={'/kriteria'}>
