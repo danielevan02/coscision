@@ -2,7 +2,7 @@ import { Box, Button, MenuItem, Snackbar, TextField } from '@mui/material'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { ChangeEvent, useState } from 'react'
+import React, { type ChangeEvent, useState } from 'react'
 import { type FieldErrors, useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 
@@ -44,8 +44,8 @@ const CrudKostum = () => {
     await fetch('/api/upload', {
       method: 'POST',
       body: formData,
-    }).then((res) => console.log(res))
-      .then((data) => console.log(data))
+    }).then((res) => res.json())
+      .then((data: string) => setFileName(data.name as string))
       .then((err) => console.log(err))
   }
 
@@ -65,15 +65,16 @@ const CrudKostum = () => {
 
   const onSubmit = async (data: KostumForm) => {
     try {
-      // mutate({
-      //   name: getValues('nama'),
-      //   kset: getValues('set'),
-      //   link: getValues('link'),
-      //   origin: getValues('asal'),
-      //   preference: getValues('preferensi'),
-      //   image: filename
-      // })
-      console.log(data)
+      await handleUpload()
+      console.log(filename)
+      mutate({
+        name: getValues('nama'),
+        kset: getValues('set'),
+        link: getValues('link'),
+        origin: getValues('asal'),
+        preference: getValues('preferensi'),
+        image: filename
+      })
     } catch (error) {
       console.log(error)
     }
@@ -106,7 +107,7 @@ const CrudKostum = () => {
           <Link href={'/kostum'}>
             <Button variant='contained' color='error'>Cancel</Button>
           </Link>
-          <Button variant='contained' form='formKostum' color='primary' type='submit' onClick={handleUpload}>Submit</Button>
+          <Button variant='contained' form='formKostum' color='primary' type='submit'>Submit</Button>
           <Snackbar
             open={open}
             autoHideDuration={6000}
