@@ -10,7 +10,7 @@ export const kostumRouter = createTRPCRouter({
 		image: z.string().refine(async (name) => {
 			try {
 				if (env.UPLOAD_STORAGE.startsWith("local-")) {
-					const file = await stat(join(process.cwd(), `public/upload/${name}`));
+					const file = await stat(join(process.cwd(), `public/upload/temp`, name));
 					if (file.isFile()) return true;
 					else return false;
 				}
@@ -41,7 +41,7 @@ export const kostumRouter = createTRPCRouter({
 		name: z.string().optional(),
 		image: z.string().refine(async (name) => {
 			try {
-				const file = await stat(join(process.cwd(), `public/upload/${name}`));
+				const file = await stat(join(process.cwd(), `public/upload/temp`, name));
 				if (file.isFile()) return true;
 				else return false;
 			} catch (e) {
