@@ -15,7 +15,7 @@ type KostumForm = {
   nama: string
 }
 
-const CrudKostum = () => {
+const UpdateKostum = () => {
   const router = useRouter()
   const [file, setFile] = useState('')
   const [preview, setPreview] = useState('')
@@ -133,4 +133,4 @@ const CrudKostum = () => {
   )
 }
 
-export default CrudKostum
+export default UpdateKostum
