@@ -11,7 +11,9 @@ import { env } from "~/env";
 export default async function handler (req: NextApiRequest, res: NextApiResponse) {
     if (req.method != "POST") return res.status(405);
 
-    const form = formidable({});
+    const form = formidable({
+        uploadDir: join(process.cwd(), `public/upload/temp`)
+    });
     const [, files] = await form.parse(req);
 
     const file = files.file?.[0];

@@ -12,7 +12,7 @@ type KriteriaForm = {
 	tipe: 'Cost' | 'Benefit'
 }
 
-const CrudKriteria = () => {
+const AddKriteria = () => {
 	const router = useRouter()
 	const [open, setOpen] = React.useState(false)
 	const { mutate } = api.kriteria.addKriteria.useMutation()
@@ -40,11 +40,11 @@ const CrudKriteria = () => {
 		try {
 			mutate({
 				name: getValues('nama'),
-				weight: getValues('bobot').toString(),
+				weight: parseInt(getValues('bobot').toString()),
 				ktype: getValues('tipe')
 			})
 			setOpen(true)
-			// await router.push('/kriteria')
+			await router.push('/kriteria')
 		} catch (error) {
 			console.log(error)
 		}
@@ -85,4 +85,4 @@ const CrudKriteria = () => {
 	)
 }
 
-export default CrudKriteria
+export default AddKriteria
