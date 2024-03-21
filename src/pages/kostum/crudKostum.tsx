@@ -1,5 +1,6 @@
 import { Box, Button, MenuItem, Snackbar, TextField } from '@mui/material'
 import Head from 'next/head'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { type ChangeEvent, useState } from 'react'
@@ -16,7 +17,8 @@ type KostumForm = {
 
 const CrudKostum = () => {
   const router = useRouter()
-  const [file, setFile] = useState<File>()
+  const [file, setFile] = useState('')
+  const [preview, setPreview] = useState('')
   const [filename, setFileName] = useState('')
   const { mutate } = api.kostum.addKostum.useMutation()
   const [open, setOpen] = useState(false)
@@ -28,7 +30,9 @@ const CrudKostum = () => {
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFile(e.target.files[0])
+      const image = e.target.files[0]
+      setFile(image as unknown as string)
+      setPreview(URL.createObjectURL(image!))
     }
   }
 
@@ -44,8 +48,11 @@ const CrudKostum = () => {
     await fetch('/api/upload', {
       method: 'POST',
       body: formData,
+      headers: {
+        'Content-type': 'multipart/form-data'
+      }
     }).then((res) => res.json())
-      .then((data: string) => setFileName(data.name as string))
+      .then((data: string) => setFileName(String(data.name)))
       .then((err) => console.log(err))
   }
 
@@ -63,7 +70,7 @@ const CrudKostum = () => {
     }
   }
 
-  const onSubmit = async (data: KostumForm) => {
+  const onSubmit = async () => {
     try {
       await handleUpload()
       console.log(filename)
@@ -88,22 +95,30 @@ const CrudKostum = () => {
       </Head>
       <Box sx={{ px: 5, py: 3 }}>
         <form id='formKostum' onSubmit={handleSubmit(onSubmit, onError)} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <TextField fullWidth size='small' label="Nama Kostum" sx={{ background: 'white', borderRadius: 1 }} {...register('nama', { required: true })} />
-          <TextField fullWidth size='small' label="Asal" sx={{ background: 'white', borderRadius: 1 }} {...register('asal', { required: true })} />
-          <TextField fullWidth size='small' label="Preferensi" sx={{ background: 'white', borderRadius: 1 }} {...register('preferensi', { required: true })} select>
+          <TextField fullWidth label="Nama Kostum" sx={{ background: 'white', borderRadius: 1 }} {...register('nama', { required: true })} />
+          <TextField fullWidth label="Asal" sx={{ background: 'white', borderRadius: 1 }} {...register('asal', { required: true })} />
+          <TextField fullWidth label="Preferensi" sx={{ background: 'white', borderRadius: 1 }} {...register('preferensi', { required: true })} select>
             <MenuItem value={""}><em>None</em></MenuItem>
             <MenuItem value={"Game"}>Game</MenuItem>
             <MenuItem value={"Anime"}>Anime</MenuItem>
             <MenuItem value={"Vtuber"}>Vtuber</MenuItem>
           </TextField>
           <TextField fullWidth label="Set" rows={3} multiline sx={{ background: 'white', borderRadius: 1 }} {...register('set', { required: true })} />
-          <TextField fullWidth size='small' label="Link" sx={{ background: 'white', borderRadius: 1 }} {...register('link', { required: true })} />
+          <TextField fullWidth label="Link" sx={{ background: 'white', borderRadius: 1 }} {...register('link', { required: true })} />
         </form>
         <Box display={'flex'} flexDirection={'column'}>
           <label style={{ color: 'rgba(0, 0, 0, 0.8)', fontWeight: 600, marginTop: 10, marginBottom: 5 }}>Gambar Kostum</label>
-          <input type="file" accept='image/*' onChange={handleFileChange} />
+          <Box sx={{ display: 'flex', flexDirection: {mobile: 'column', laptop: 'row'}}}>
+            <input type="file" accept='image/*' style={{ width: '15%'}} onChange={handleFileChange} />
+            {preview ?
+              <Box sx={{width: {mobile: '40%', laptop: '20%'}}}>
+                <Image src={preview} alt='gambar' width={800} height={800} style={{ width: '100%', height: 'auto', borderRadius: 20 }} />
+              </Box>
+              : undefined
+            }
+          </Box>
         </Box>
-        <Box display={'flex'} gap={1} justifyContent={'end'}>
+        <Box display={'flex'} gap={1} mt={5} justifyContent={'end'}>
           <Link href={'/kostum'}>
             <Button variant='contained' color='error'>Cancel</Button>
           </Link>
