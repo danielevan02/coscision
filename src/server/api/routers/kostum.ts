@@ -10,7 +10,7 @@ export const kostumRouter = createTRPCRouter({
 		image: z.string().refine(async (name) => {
 			try {
 				if (env.UPLOAD_STORAGE.startsWith("local-")) {
-					const file = await stat(join(process.cwd(), `public/upload/${name}`));
+					const file = await stat(join(process.cwd(), `public/upload/temp`, name));
 					if (file.isFile()) return true;
 					else return false;
 				}
@@ -41,7 +41,7 @@ export const kostumRouter = createTRPCRouter({
 		name: z.string().optional(),
 		image: z.string().refine(async (name) => {
 			try {
-				const file = await stat(join(process.cwd(), `public/upload/${name}`));
+				const file = await stat(join(process.cwd(), `public/upload/temp`, name));
 				if (file.isFile()) return true;
 				else return false;
 			} catch (e) {
@@ -55,8 +55,8 @@ export const kostumRouter = createTRPCRouter({
 		preference: z.enum(["Game", "Anime", "Vtuber"]).optional(),
 		kset: z.string().optional(),
 	})).mutation(async ({ ctx: { db }, input: { id, kset, ...input } }) => {
-		if (input.image && env.UPLOAD_STORAGE.startsWith("local-")) {
-			await rename(join(process.cwd(), "public/upload/temp", input.image), join(process.cwd(), "public/upload", input.image))
+			if (input.image && env.UPLOAD_STORAGE.startsWith("local-")) {
+				await rename(join(process.cwd(), "public/upload/temp", input.image), join(process.cwd(), "public/upload", input.image))
 		}
 
             return await db.kostum.update({

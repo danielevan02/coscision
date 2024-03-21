@@ -21,6 +21,8 @@ Ranks customs perfect-preferencely by using Simple Additive Weighting (SAW) algo
 All commands already scripted and implemented in `.devcontainer/postStart.sh`. You could just open 
 a new Codespace and wait for terminal finishing the build. After that, run `npm run dev`.
 
+To manage DB, you could do `npm run db:studio`.
+
 ## Development Notes
 
 ### Search by function
