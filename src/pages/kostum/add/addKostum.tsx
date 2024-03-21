@@ -19,7 +19,6 @@ const AddKostum = () => {
   const router = useRouter()
   const [file, setFile] = useState('')
   const [preview, setPreview] = useState('')
-  const [filename, setFileName] = useState('')
   const { mutate } = api.kostum.addKostum.useMutation()
   const [open, setOpen] = useState(false)
   const {
@@ -34,23 +33,6 @@ const AddKostum = () => {
       setFile(image as unknown as string)
       setPreview(URL.createObjectURL(image!))
     }
-  }
-
-  const handleUpload = async () => {
-    if (!file) {
-      alert("File is not exist")
-      return
-    }
-
-    const formData = new FormData()
-    formData.append('file', file)
-
-    await fetch('/api/upload', {
-      method: 'POST',
-      body: formData,
-    }).then((res) => res.json())
-      .then((data: string) => setFileName(data.name as string))
-      .then((err) => console.log(err))
   }
 
   const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
@@ -69,20 +51,32 @@ const AddKostum = () => {
 
   const onSubmit = async () => {
     try {
-      await handleUpload()
-      console.log(filename)
-      mutate({
-        name: getValues('nama'),
-        kset: getValues('set'),
-        link: getValues('link'),
-        origin: getValues('asal'),
-        preference: getValues('preferensi'),
-        image: filename
-      })
+      if (!file) {
+        alert("File is not exist")
+        return
+      }
+      const formData = new FormData()
+      formData.append('file', file)
+
+      await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      }).then((res) => res.json())
+        .then((data) => {
+          mutate({
+            name: getValues('nama'),
+            kset: getValues('set'),
+            link: getValues('link'),
+            origin: getValues('asal'),
+            preference: getValues('preferensi'),
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            image: data.name as string
+          })
+        })
+      // await router.push('/kostum')
     } catch (error) {
       console.log(error)
     }
-    // await router.push('/kostum')
   }
 
   return (
@@ -103,12 +97,12 @@ const AddKostum = () => {
           <TextField fullWidth label="Set" rows={3} multiline sx={{ background: 'white', borderRadius: 1 }} {...register('set', { required: true })} />
           <TextField fullWidth label="Link" sx={{ background: 'white', borderRadius: 1 }} {...register('link', { required: true })} />
         </form>
-        <Box display={'flex'} flexDirection={'column'}>
+        <Box display={'flex'} flexDirection={'column'} gap={1}>
           <label style={{ color: 'rgba(0, 0, 0, 0.8)', fontWeight: 600, marginTop: 10, marginBottom: 5 }}>Gambar Kostum</label>
-          <Box sx={{ display: 'flex', flexDirection: {mobile: 'column', laptop: 'row'}}}>
-            <input type="file" accept='image/*' style={{ width: '15%'}} onChange={handleFileChange} />
+          <Box sx={{ display: 'flex', flexDirection: { mobile: 'column', laptop: 'row' } }}>
+            <input type="file" accept='image/*' style={{ width: '15%' }} onChange={handleFileChange} />
             {preview ?
-              <Box sx={{width: {mobile: '40%', laptop: '20%'}}}>
+              <Box sx={{ width: { mobile: '40%', laptop: '20%' } }}>
                 <Image src={preview} alt='gambar' width={800} height={800} style={{ width: '100%', height: 'auto', borderRadius: 20 }} />
               </Box>
               : undefined
