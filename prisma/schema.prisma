@@ -56,6 +56,7 @@ model User {
   accounts Account[]
   sessions Session[]
   rank_saw rank_saw[]
+  rvalues  rvalues[]
 }
 
 model VerificationToken {
@@ -98,12 +99,14 @@ model rank_saw {
 }
 
 model rvalues {
+  user_id        Int
   kostum_id      Int
   subkriteria_id Int
+  user           User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
   kostum         kostum      @relation(fields: [kostum_id], references: [id], onDelete: Cascade)
   subkriteria    subkriteria @relation(fields: [subkriteria_id], references: [id], onDelete: Cascade)
 
-  @@unique([kostum_id, subkriteria_id])
+  @@unique([user_id, kostum_id, subkriteria_id])
 }
 
 enum KriteriaTipe {
