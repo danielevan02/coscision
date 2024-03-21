@@ -112,7 +112,7 @@ const Kostum = () => {
 						</Select>
 					</FormControl>
 					{/* Add Button */}
-					<Link href={'/kostum/crudKostum'} style={{ textDecoration: 'none'}}>
+					<Link href={'/kostum/add/addKostum'} style={{ textDecoration: 'none'}}>
 						<Button variant='contained' sx={{ width: '100%', height: '80%', display: author === 'admin' ? 'flex' : 'none', gap: 1 }}>
 							<Add />
 							Add

@@ -57,6 +57,7 @@ const rows = [
   createData('Harga Sewa', 0.0643, 8),
   createData('Harga Sewa', 0.0643, 9),
   createData('Harga Sewa', 0.0643, 10),
+  createData('Harga Sewa', 0.0643, 10),
 ];
 
 const Hasil = () => {
@@ -107,11 +108,11 @@ const Hasil = () => {
                       <TableRow 
                         hover={rowIndex >= 0 && rowIndex <= 2 ? false : true} 
                         key={rowIndex}
-                        sx={rowIndex === 0 ? 
+                        sx={rowIndex === 0 && rowsPerPage*page+rowIndex+1 === 1 ? 
                           {background: '#dcaf53', height: 80}:
-                          rowIndex === 1 ?
+                          rowIndex === 1 && rowsPerPage*page+rowIndex+1 === 2 ?
                           {background: '#b8b8b8', height: 70}:
-                          rowIndex === 2 ?
+                          rowIndex === 2 && rowsPerPage*page+rowIndex+1 === 3 ?
                           {background: '#805334', height: 60}:undefined
                         }
                       >
@@ -119,26 +120,25 @@ const Hasil = () => {
                           const value = row[column.id];
                           return (
                             <>
-                              {index === 0 ? <TableCell key={index} align='center'>{rowIndex + 1}</TableCell> : undefined}
+                              {index === 0 ? <TableCell key={index} align='center'>{rowsPerPage*page+rowIndex+1}</TableCell> : undefined}
                               <TableCell 
                                 align={column.align} 
-                                sx={rowIndex === 0 ? 
+                                sx={rowIndex === 0 && rowsPerPage*page+rowIndex+1 === 1 ? 
                                   { fontSize: 30, fontWeight: 700, p: 0 } : 
-                                  rowIndex === 1 ? 
+                                  rowIndex === 1 && rowsPerPage*page+rowIndex+1 === 2 ? 
                                   { fontSize: 25, fontWeight: 600, p: 0 } :
-                                  rowIndex === 2 ?
+                                  rowIndex === 2 && rowsPerPage*page+rowIndex+1 === 3 ?
                                   { fontSize: 20, fontWeight: 500, p: 0} : undefined
                                 }
                               >
-                                { index === 2 && rowIndex === 0 ? 
+                                { index === 2 && rowIndex === 0 && rowsPerPage*page+rowIndex+1 === 1? 
                                   <Image src={`/assets/rank${value}.png`} alt='rank' width={1000} height={1000} style={{ width: '15%', height: 'auto' }} /> : 
-                                  index === 2 && rowIndex === 1 ?
+                                  index === 2 && rowIndex === 1 && rowsPerPage*page+rowIndex+1 === 2?
                                   <Image src={`/assets/rank${value}.png`} alt='rank' width={1000} height={1000} style={{ width: '12%', height: 'auto' }} /> : 
-                                  index === 2 && rowIndex === 2 ?
+                                  index === 2 && rowIndex === 2 && rowsPerPage*page+rowIndex+1 === 3?
                                   <Image src={`/assets/rank${value}.png`} alt='rank' width={1000} height={1000} style={{ width: '10%', height: 'auto' }} /> : 
-
                                   value
-                                  }
+                                }
                               </TableCell>
                             </>
                           );
