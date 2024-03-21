@@ -48,9 +48,6 @@ const CrudKostum = () => {
     await fetch('/api/upload', {
       method: 'POST',
       body: formData,
-      headers: {
-        'Content-type': 'multipart/form-data'
-      }
     }).then((res) => res.json())
       .then((data: string) => setFileName(String(data.name)))
       .then((err) => console.log(err))
