@@ -81,7 +81,7 @@ model kostum {
   link       String
   origin     String
   preference KostumPreference
-  kset       Json
+  kset       String
   rank_saw   rank_saw[]
   rvalues    rvalues[]
 }
