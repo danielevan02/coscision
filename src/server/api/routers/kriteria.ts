@@ -60,6 +60,16 @@ export const kriteriaRouter = createTRPCRouter({
                 weight: 'desc'
             }
         })),
+    getKriteriasIncludeSub: publicProcedure.input(z.object({
+    }).nullish().or(z.void()))
+        .query(({ ctx: { db }, }) => db.kriteria.findMany({
+            orderBy: {
+                weight: 'desc'
+            },
+            include: {
+                subkriteria: true,
+            }
+        })),
     getKriteria: publicProcedure.input(z.number())
         .query(({ ctx: { db }, input }) => db.kriteria.findFirstOrThrow({
             where: { id: input, },

@@ -98,7 +98,7 @@ const Nilai = () => {
       <Box sx={{ px: 5, py: 3, display: 'flex', flexDirection: 'column', gap: 1 }}>
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           {/* Add Button */}
-          <Link href={'/nilai/crudNilai'} style={{ textDecoration: 'none' }}>
+          <Link href={'/nilai/add/addNilai'} style={{ textDecoration: 'none' }}>
             <Button variant='contained' sx={{ height: '80%', display: 'flex', gap: 1 }}>
               <Add />
               Add

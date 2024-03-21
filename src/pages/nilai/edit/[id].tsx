@@ -14,7 +14,7 @@ type  NilaiForm = {
 	popularitas: string
 }
 
-const CrudNilai = () => {
+const UpdateNilai = () => {
 	const router = useRouter()
 	const [open, setOpen] = React.useState(false)
   const { 
@@ -87,4 +87,4 @@ const CrudNilai = () => {
 	)
 }
 
-export default CrudNilai
+export default UpdateNilai
