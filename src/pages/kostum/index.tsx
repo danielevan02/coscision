@@ -230,12 +230,12 @@ const Kostum = () => {
 								Set :
 							</Typography>
 							<Typography component={'ul'} id="transition-modal-description" sx={{ ml: 3 }}>
-								{list.split(", ").map((item, index) => (
+								{list.split("\n").map((item, index) => (
 									<li key={index}>{item}</li>
 								))}
 							</Typography>
 							<Typography id="transition-modal-description">
-								Link : <a href={link} style={{ color: 'rgba(66, 188, 245)' }}>{link}</a>
+								Link : <a href={link} target='_blank' style={{ color: 'rgba(66, 188, 245)' }}>{link}</a>
 							</Typography>
 						</Box>
 					</Fade>

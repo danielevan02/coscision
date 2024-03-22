@@ -79,6 +79,8 @@ export const kostumRouter = createTRPCRouter({
             origin: z.string().optional(),
         }).default({}))
         .query(({ ctx: { db }, }) => db.kostum.findMany({
-            //
+						orderBy: {
+							id: "asc"
+						}
         })),
 });
