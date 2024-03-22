@@ -38,6 +38,8 @@ const columns: readonly Column[] = [
 const Kriteria = () => {
   const { data: session } = useSession()
   const { data, refetch: refreshKriteria } = api.kriteria.getKriterias.useQuery()
+  const { data: kostum } = api.kostum.getKostums.useQuery()
+  console.log(data, kostum)
   const { mutateAsync: deleteKriteria } = api.kriteria.deleteKriteria.useMutation()
   const author = session?.user.level === "Admin" ? 'admin' : 'user'
   const [page, setPage] = React.useState(0);
@@ -91,7 +93,6 @@ const Kriteria = () => {
                 {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, rowIndex) => {
                     const result = Object.values(row)
-                    console.log(result)
                     return (
                       <TableRow key={rowIndex}>
                         {result.slice(0, 4).map((column, index) => (

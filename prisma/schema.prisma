@@ -78,10 +78,10 @@ enum KostumPreference {
 model kostum {
   id         Int              @id @default(autoincrement())
   name       String
-  image      String
-  link       String
   origin     String
   preference KostumPreference
+  image      String
+  link       String
   kset       String
   rank_saw   rank_saw[]
   rvalues    rvalues[]

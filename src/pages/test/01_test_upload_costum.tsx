@@ -35,7 +35,7 @@ export default function TestUploadCostum() {
                 method: "POST",
                 body: data,
             });
-            const json = await fe.json();
+            const json = await fe.json() as string;
             const name = json.name as string;
             console.log(name, json);
             setValue("image", name, { shouldDirty: true, shouldTouch: true });
