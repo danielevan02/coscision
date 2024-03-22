@@ -20,7 +20,8 @@ type KostumForm = {
 const AddKostum = () => {
   const router = useRouter()
   const id = parseInt(router.query.id as string)
-  const { data } = api.kostum.getKostum.useQuery(id)
+  const { data, ...k } = api.kostum.getKostum.useQuery(id)
+  console.log(k)
   const { mutate } = api.kostum.updateKostum.useMutation()
   const [file, setFile] = useState('')
   const [preview, setPreview] = useState('')
@@ -42,12 +43,18 @@ const AddKostum = () => {
     setValue('preferensi', data.preference)
     setValue('set', data.kset)
   }
+
+
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
     if (e.target.files) {
       const image = e.target.files[0]
       setFile(image as unknown as string)
       setPreview(URL.createObjectURL(image!))
+      setValue('nama', getValues('nama'))
     }
+
     setCounter(true)
   }
 
@@ -75,24 +82,29 @@ const AddKostum = () => {
         const formData = new FormData()
         formData.append('file', file)
 
+        console.log(getValues('gambar'))
+
         await fetch('/api/upload', {
           method: 'POST',
           body: formData,
         }).then((res) => res.json())
           .then((data) => {
+            console.log(getValues('nama'))
+            console.log(getValues('asal'))
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            setValue('gambar', data.nama as string)
+            setValue('gambar', data.name as string)
             mutate({
               name: getValues('nama'),
               kset: getValues('set'),
               link: getValues('link'),
               origin: getValues('asal'),
               preference: getValues('preferensi'),
-              image: getValues('gambar'),
+              image: getValues('gambar'), 
               id: id
             })
           })
       } else {
+        console.log(getValues('gambar'))
         mutate({
           name: getValues('nama'),
           kset: getValues('set'),

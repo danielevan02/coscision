@@ -41,7 +41,7 @@ const columns: readonly Column[] = [
 const Kostum = () => {
 	const { data: session } = useSession()
 	const author = session?.user.level === "Admin" ? 'admin' : 'user'
-	const [id, setId] = useState(0)
+	const [id, setId] = useState(1)
 	const { data } = api.kostum.getKostum.useQuery(id)
 	const { data: kostum, refetch } = api.kostum.getKostums.useQuery()
 	const { mutateAsync: deleteKostum } = api.kostum.deleteKostum.useMutation()
