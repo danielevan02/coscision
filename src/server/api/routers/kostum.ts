@@ -24,7 +24,7 @@ export const kostumRouter = createTRPCRouter({
 		origin: z.string(),
 		preference: z.enum(["Game", "Anime", "Vtuber"]),
 		kset: z.string(),
-	})).mutation(async ({ ctx: { db }, input: { kset, ...input } }) => {
+	})).mutation(async ({ ctx: { db }, input: { ...input } }) => {
 		if (env.UPLOAD_STORAGE.startsWith("local-")) {
 			await rename(join(process.cwd(), "public/upload/temp", input.image), join(process.cwd(), "public/upload", input.image))
 		}
@@ -32,7 +32,6 @@ export const kostumRouter = createTRPCRouter({
 		return await db.kostum.create({
 			data: {
 				...input,
-				kset: JSON.stringify(kset),
 			},
 		});
 	}),
@@ -58,7 +57,6 @@ export const kostumRouter = createTRPCRouter({
 			if (input.image && env.UPLOAD_STORAGE.startsWith("local-")) {
 				await rename(join(process.cwd(), "public/upload/temp", input.image), join(process.cwd(), "public/upload", input.image))
 		}
-
             return await db.kostum.update({
                 where: { id, },
                 data: {

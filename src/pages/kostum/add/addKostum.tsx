@@ -52,7 +52,7 @@ const AddKostum = () => {
   const onSubmit = async () => {
     try {
       if (!file) {
-        alert("File is not exist")
+        alert("File gambar tidak ada  ")
         return
       }
       const formData = new FormData()
@@ -73,7 +73,7 @@ const AddKostum = () => {
             image: data.name as string
           })
         })
-      // await router.push('/kostum')
+      await router.push('/kostum')
     } catch (error) {
       console.log(error)
     }
