@@ -28,5 +28,14 @@ export const sawRouter = createTRPCRouter({
             }
         }),
     ),
+    getSelected: protectedProcedure.input(z.object({
+        kostum_id: z.number().optional(),
+        kriteria_id: z.number().optional(),
+    }).default({})).query(({ ctx: { db, session: { user } }, }) => {
+        // kostum -> kriteria -> subkriteria
+        // kostum: kriteria -> subkriteria
+        // kriteria: kostum, subkriteria
+        return null;
+    }),
     getCurrentSaw: protectedProcedure.query(({ ctx: { db, session: { user } }, }) => 0),
 });
