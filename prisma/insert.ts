@@ -4,17 +4,17 @@ import { db } from "~/server/db";
 import { hash } from "~/server/utils";
 
 async function upsert() {
-    await db.user.createMany({
-        data: [
-            {
-                name: "Administrator",
-                username: "Admin",
-                password: await hash("12345"),
-                level: "Admin",
-                image: "admin.png"
-            },
-        ],
-    });
+    // await db.user.createMany({
+    //     data: [
+    //         {
+    //             name: "Administrator",
+    //             username: "Admin",
+    //             password: await hash("12345"),
+    //             level: "Admin",
+    //             image: "admin.png"
+    //         },
+    //     ],
+    // });
 
     await db.kriteria.createMany({
         data: [
