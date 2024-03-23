@@ -41,7 +41,7 @@ const columns: readonly Column[] = [
 const Kostum = () => {
 	const { data: session } = useSession()
 	const author = session?.user.level === "Admin" ? 'admin' : 'user'
-	const [id, setId] = useState(0)
+	const [id, setId] = useState(1)
 	const { data } = api.kostum.getKostum.useQuery(id)
 	const { data: kostum, refetch } = api.kostum.getKostums.useQuery()
 	const { mutateAsync: deleteKostum } = api.kostum.deleteKostum.useMutation()
@@ -230,12 +230,12 @@ const Kostum = () => {
 								Set :
 							</Typography>
 							<Typography component={'ul'} id="transition-modal-description" sx={{ ml: 3 }}>
-								{list.split(", ").map((item, index) => (
+								{list.split("\n").map((item, index) => (
 									<li key={index}>{item}</li>
 								))}
 							</Typography>
 							<Typography id="transition-modal-description">
-								Link : <a href={link} style={{ color: 'rgba(66, 188, 245)' }}>{link}</a>
+								Link : <a href={link} target='_blank' style={{ color: 'rgba(66, 188, 245)' }}>{link}</a>
 							</Typography>
 						</Box>
 					</Fade>
