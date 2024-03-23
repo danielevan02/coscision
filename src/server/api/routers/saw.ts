@@ -72,7 +72,8 @@ export const sawRouter = createTRPCRouter({
                     },
                 },
             },
-            include: {
+            select: {
+                id: true,
                 rvalues: {
                     select: {
                         subkriteria: {
@@ -82,9 +83,6 @@ export const sawRouter = createTRPCRouter({
                                 skvalue: true,
                             },
                         },
-                    },
-                    include: {
-                        subkriteria: true,
                     },
                 },
             },
@@ -96,7 +94,7 @@ export const sawRouter = createTRPCRouter({
         type DictSK = { kid: number; kweight: number; skmin: number; skmax: number; ktype: kriteria["ktype"] };
         let dictSK: DictSK[] | Record<number, DictSK> = (await db.$queryRaw`SELECT k.id AS kid,
             k.weight AS kweight,
-            k.ktype AS ktype
+            k.ktype AS ktype,
             MIN(sk.skvalue) as skmin,
             MAX(sk.skvalue) as skmax
         FROM kriteria k
