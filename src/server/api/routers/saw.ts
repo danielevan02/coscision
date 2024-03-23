@@ -36,42 +36,35 @@ export const sawRouter = createTRPCRouter({
     getSelected: protectedProcedure.input(z.object({
         kostum_id: z.number().optional(),
         kriteria_id: z.number().optional(),
-    }).default({})).query(async ({ ctx: { db, session: { user: { id: user_id } } }, }) => {
+    }).default({})).query(async ({ ctx: { db, session: { user: { id: user_id } } }, input: { kostum_id, kriteria_id } }) => (
         // kostum -> kriteria -> subkriteria
         // kostum: kriteria -> subkriteria
         // kriteria: kostum, subkriteria
 
-        const groups = (await db.rvalues.groupBy({
-            by: "kostum_id",
-            where: { user_id },
-        })).map(x => x.kostum_id);
-
-        const kostums = await db.kostum.findMany({
-            where: {
-                id: {
-                    in: groups,
-                },
-            },
-            include: {
-                rvalues: {
-                    include: {
-                        // subkriteria
-                    }
-                }
-            },
-        });
-
-        const _kostums = await db.kostum.findMany({
+        db.kostum.findMany({
             where: {
                 rvalues: {
-                    every: {
+                    some: {
+                        kostum_id,
+                        subkriteria: {
+                            kriteria_id,
+                        },
                         user_id,
                     }
                 }
             },
-        });
-
-        return null;
-    }),
+            include: {
+                rvalues: {
+                    include: {
+                        subkriteria: {
+                            include: {
+                                kriteria: true,
+                            }
+                        }
+                    }
+                },
+            },
+        })
+    )),
     getCurrentSaw: protectedProcedure.query(({ ctx: { db, session: { user } }, }) => 0),
 });
