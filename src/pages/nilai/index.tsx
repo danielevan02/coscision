@@ -3,6 +3,7 @@ import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableH
 import Head from 'next/head';
 import Link from 'next/link';
 import React from 'react'
+import { api } from '~/utils/api';
 
 interface Column {
   id: 'nama' | 'harga' | 'kualitas' | 'desain' | 'fleksibilitas' | 'popularitas';
@@ -51,36 +52,10 @@ const columns: readonly Column[] = [
   },
 ];
 
-interface Data {
-  nama: string;
-  harga: string;
-  kualitas: string;
-  desain: string;
-  fleksibilitas: string;
-  popularitas: string;
-}
-
-function createData(
-  nama: string,
-  harga: string,
-  kualitas: string,
-  desain: string,
-  fleksibilitas: string,
-  popularitas: string
-): Data {
-  return { nama, harga, kualitas, desain, fleksibilitas, popularitas };
-}
-
-const rows = [
-  createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
-  createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
-  createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
-];
-
 const Nilai = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+  const { data: listNilai } = api.saw.getSelected.useQuery()
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -95,7 +70,7 @@ const Nilai = () => {
       <Head>
         <title>Coscision - Nilai</title>
       </Head>
-      <Box sx={{ px: 5, py: 3, display: 'flex', flexDirection: 'column', gap: 1 }}>
+      <Box sx={{ px: 5, py: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           {/* Add Button */}
           <Link href={'/nilai/add/addNilai'} style={{ textDecoration: 'none' }}>
@@ -125,31 +100,31 @@ const Nilai = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                {listNilai?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, rowIndex) => {
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={rowIndex}>
-                        {columns.map((column, index) => {
-                          const value = row[column.id];
+                        <TableCell align='center'>{rowsPerPage * page + rowIndex + 1}</TableCell>
+                        <TableCell align='center'>{row.name}</TableCell>
+                        {row.rvalues.map((list, index) => {
                           return (
-                            <>
-                              {index === 0 ? <TableCell key={index} align='center'>{rowIndex + 1}</TableCell> : undefined}
-                              <TableCell align={column.align}>{value}</TableCell>
-                              {index === 5 ?
-                                <TableCell align={column.align}>
-                                  <Box sx={{ display: 'flex', gap: 1 }}>
-                                    <Link href={'/nilai/crudNilai'}>
-                                      <Button variant='contained' color='warning'>UBAH</Button>
-                                    </Link>
-                                    <Button variant='contained' color='error'>HAPUS</Button>
-                                  </Box>
-                                </TableCell>
-                                : undefined
-                              }
-                            </>
-                          );
+                            <TableCell key={index} align='center'>{list.subkriteria.name}</TableCell>
+                          )
                         })}
+                        <TableCell align='center'>
+                          <Box sx={{ display: 'flex', gap: 1 }}>
+                            <Link href={`/kostum/edit/${row.id}`}>
+                              <Button variant='contained' color='warning'>UBAH</Button>
+                            </Link>
+                            <Button
+                              variant='contained'
+                              color='error'
+
+                            >
+                              HAPUS
+                            </Button>
+                          </Box>
+                        </TableCell>
                       </TableRow>
                     );
                   })}
@@ -159,7 +134,7 @@ const Nilai = () => {
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={rows.length}
+            count={ listNilai ? listNilai.length : 10}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
