@@ -25,5 +25,6 @@ source .env
 npm run postinstall
 npm run db:push
 npm exec -y tsx -- prisma/insert.ts
+npm exec -y tsx -- prisma/mock.ts
 # npm run build
 # npm run dev
