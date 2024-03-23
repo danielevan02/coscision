@@ -12,12 +12,12 @@ async function upsert() {
     };
     await db.user.createMany({
         data: [
-            {
-                id: 2,
-                name: "A User",
-                username: "AUser",
+            ...(Array(4).fill(null).map((_, i) => ({
+                id: i + 2, // i=0 + 2 -> 2++
+                name: `User ${i + 2}`,
+                username: `${i + 2}User`,
                 ...puser,
-            },
+            }))),
         ],
     });
 
@@ -28,16 +28,27 @@ async function upsert() {
         origin: "anywhere",
         preference: "Anime",
     };
-
     await db.kostum.createMany({
         data: [
-            {
-                id: 1,
-                name: "A Kostum A",
+            ...([
+                [1, 'Raiden Shogun'],
+                [5, 'Zhongli'],
+                [6, 'Childe'],
+                [7, 'Power'],
+                [8, 'Chainsaw Man'],
+                [9, 'Ai Hoshino'],
+                [10, 'Vestia Zeta'],
+                [11, 'Gawr Gura'],
+                [12, 'Kobo Kanaeru'],
+                [13, 'Kizuna AI'],
+                [14, 'Kostum A'],
+            ].map((x) => ({
+                id: x[0] as number,
+                name: x[1] as string,
                 ...pkostum,
-            },
+            }))),
         ],
-    }),
+    });
 }
 
 void upsert();
