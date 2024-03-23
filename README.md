@@ -14,7 +14,8 @@ Ranks customs perfect-preferencely by using Simple Additive Weighting (SAW) algo
 6. If you are on linux: `./.env && npm exec -y tsx -- ./prisma/insert.ts` \
    If you are on windows: `npm exec -y env-cmd -- npm exec -y tsx -- ./prisma/insert.ts` \
    or you could just use `npm run db:insert-linux` or `npm run db:insert-win`
-7. Last, run `npm run dev`
+7. You may want to redo the step 6 for mock. E.g. Linux `npm exec -y tsx -- ./prisma/insert.ts`
+8. Last, run `npm run dev`
 
 ### Codespace
 
@@ -70,3 +71,8 @@ const x = {
 1. First upload file to `POST /api/upload` as `multipart/form-data` to a field named `file`
 2. Get the filename by response `name`
 3. Pass the `name` to other service on tRPC.
+
+### Testing the Find RValues
+
+1. Ensure you have run mocks upsertion.
+2. Run `npm exec -y tsx -- ./src/server/test/04-findMany-selected.ts`
