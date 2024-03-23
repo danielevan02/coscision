@@ -10,7 +10,7 @@ echo CURRENT DIRECTORY IS $PWD
 
 chmod 777 start-database.sh
 
-cp .env.example .env
+cp .env.dev.example .env
 chmod 777 .env
 
 /bin/bash -c ./start-database.sh
