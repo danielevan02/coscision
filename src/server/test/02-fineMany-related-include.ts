@@ -25,6 +25,7 @@ async function testFindManyRelatedInclude() {
             },
         },
     });
+    console.log(kostums);
 }
 
 void testFindManyRelatedInclude();
