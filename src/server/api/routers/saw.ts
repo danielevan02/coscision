@@ -40,21 +40,24 @@ export const sawRouter = createTRPCRouter({
         // kostum -> kriteria -> subkriteria
         // kostum: kriteria -> subkriteria
         // kriteria: kostum, subkriteria
+        // With mock, test `pnpx tsx ./src/server/test/04-findMany-selected.ts`
 
         db.kostum.findMany({
             where: {
+                id: kostum_id,
                 rvalues: {
                     some: {
-                        kostum_id,
-                        subkriteria: {
-                            kriteria_id,
-                        },
                         user_id,
                     }
                 }
             },
             include: {
                 rvalues: {
+                    where: kriteria_id ? {
+                        subkriteria: {
+                            kriteria_id,
+                        },
+                    } : undefined,
                     include: {
                         subkriteria: {
                             include: {
