@@ -1,5 +1,5 @@
 import { type Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, useSession } from "next-auth/react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { type AppType } from "next/app";
 import '@fontsource-variable/outfit';
@@ -43,14 +43,24 @@ const theme = createTheme({
   }
 });
 
+const SubManager = () => {
+  const session = useSession();
+  console.log(48, session);
+  return <></>;
+};
+
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
   const router = useRouter()
+
+  console.log(58, [session, session?.expires, session?.user]);
+
   return (
     <ThemeProvider theme={theme}>
       <SessionProvider session={session}>
+        <SubManager />
         {!(router.route === '/login' || router.route === '/signup') && <Navbar/>}
         {router.route === '/' && (
           <style jsx global>
