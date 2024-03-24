@@ -30,13 +30,17 @@ export const sawRouter = createTRPCRouter({
     getSelected: protectedProcedure.input(z.object({
         kostum_id: z.number().optional(),
         kriteria_id: z.number().optional(),
-    }).default({})).query(({ ctx: { db, session: { user: { id: user_id } } }, input: { kostum_id, kriteria_id } }) => (
+    }).default({})).query(async ({ ctx: { db, session: { user: { id: user_id } } }, input: { kostum_id, kriteria_id } }) => {
         // kostum -> kriteria -> subkriteria
         // kostum: kriteria -> subkriteria
         // kriteria: kostum, subkriteria
         // With mock, test `pnpx tsx ./src/server/test/04-findMany-selected.ts`
 
-        db.kostum.findMany({
+        const pos: Record<number, number> = {};
+        const sort = [];
+        const unkn = [];
+
+        const kostums = await db.kostum.findMany({
             where: {
                 id: kostum_id,
                 rvalues: {
@@ -61,8 +65,29 @@ export const sawRouter = createTRPCRouter({
                     }
                 },
             },
-        })
-    )),
+        });
+
+
+        if ( kostum_id ) return kostums;
+
+        const rsaw = await db.rank_saw.findMany({
+            where: { user_id, },
+            orderBy: {
+                saw: "desc"
+            },
+        });
+
+        // eslint-disable-next-line @typescript-eslint/no-for-in-array
+        for ( const i in rsaw )
+            pos[rsaw[i]!.kostum_id] = parseInt(i);
+
+        for (const kostum of kostums) {
+            if ( (pos[kostum.id] ?? -1) >= 0 ) sort[pos[kostum.id]!] = kostum;
+            else unkn.push(kostum);
+        }
+        
+        return [...sort, ...unkn];
+    }),
     processSaw: protectedProcedure.query(async ({ ctx: { db, session: { user: { id: user_id } } }, }) => {
         const kostums = await db.kostum.findMany({
             where: {
