@@ -90,11 +90,8 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
-        console.log("here 93", credentials, await db.user.findMany());
         if (!user) return null;
-        console.log("here 95")
         if (! await bcrypt.compare(credentials!.password, user.password)) return null;
-        console.log("here 97")
 
         return {
           id: user.id,

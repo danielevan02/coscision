@@ -45,7 +45,7 @@ const theme = createTheme({
 
 const SubManager = () => {
   const session = useSession();
-  console.log(48, session);
+  // console.log(48, session);
   return <></>;
 };
 
@@ -54,8 +54,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   const router = useRouter()
-
-  console.log(58, [session, session?.expires, session?.user]);
 
   return (
     <ThemeProvider theme={theme}>
