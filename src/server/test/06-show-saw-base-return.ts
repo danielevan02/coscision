@@ -5,11 +5,13 @@ const longDiv = () => console.log("===== ========== ========== ========== ======
 const shortDiv = () => console.log("===== ==========");
 
 async function testShowBase() {
+    const user_id = 3;
+    
     const kostums = await db.kostum.findMany({
         where: {
             rvalues: {
                 some: {
-                    user_id: 3,
+                    user_id,
                 },
             },
         },
@@ -58,6 +60,6 @@ async function testReducer() {
 
 (async () => {
     await testShowBase();
-    longDiv();
-    await testReducer();
+    // longDiv();
+    // await testReducer();
 })();
