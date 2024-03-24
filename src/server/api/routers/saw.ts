@@ -1,4 +1,4 @@
-import { kriteria } from "@prisma/client";
+import { kriteria, rank_saw } from "@prisma/client";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
@@ -36,7 +36,7 @@ export const sawRouter = createTRPCRouter({
         // kriteria: kostum, subkriteria
         // With mock, test `pnpx tsx ./src/server/test/04-findMany-selected.ts`
 
-        const pos: Record<number, number> = {};
+        const pos: Record<number, [number, rank_saw]> = {};
         const sort = [];
         const unkn = [];
 
@@ -79,11 +79,12 @@ export const sawRouter = createTRPCRouter({
 
         // eslint-disable-next-line @typescript-eslint/no-for-in-array
         for ( const i in rsaw )
-            pos[rsaw[i]!.kostum_id] = parseInt(i);
+            pos[rsaw[i]!.kostum_id] = [parseInt(i), rsaw[i]!];
 
         for (const kostum of kostums) {
-            if ( (pos[kostum.id] ?? -1) >= 0 ) sort[pos[kostum.id]!] = kostum;
-            else unkn.push(kostum);
+            if ( (pos[kostum.id]?.[0] ?? -1) >= 0 ) {
+                sort[pos[kostum.id]![0]] = {...kostum, saw: pos[kostum.id]![1].saw};
+            } else unkn.push(kostum);
         }
         
         return [...sort, ...unkn];
