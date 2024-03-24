@@ -3,6 +3,7 @@ import { adminProcedure, createTRPCRouter, publicProcedure } from "~/server/api/
 import { rename, stat, } from "fs/promises";
 import { join } from "path";
 import { env } from "~/env";
+import { copy, del, head } from '@vercel/blob';
 
 export const kostumRouter = createTRPCRouter({
 	addKostum: adminProcedure.input(z.object({
@@ -13,6 +14,8 @@ export const kostumRouter = createTRPCRouter({
 					const file = await stat(join(process.cwd(), `public/upload/temp`, name));
 					if (file.isFile()) return true;
 					else return false;
+				} else if (env.UPLOAD_STORAGE == "vercel-storage") {
+					//
 				}
 			} catch (e) {
 				return false;
