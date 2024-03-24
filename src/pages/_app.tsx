@@ -86,5 +86,5 @@ const MyApp: AppType<{ session: Session | null }> = ({
 // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
 // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
 export const dynamic = 'force-dynamic';
-export const revalidate = false
+export const revalidate = 0
 export default api.withTRPC(MyApp);
