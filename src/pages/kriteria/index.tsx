@@ -1,5 +1,5 @@
 import { Add } from '@mui/icons-material';
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -71,7 +71,7 @@ const Kriteria = () => {
         </Box>
         {/* Table Kostum */}
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-          <TableContainer sx={{ maxHeight: { mobile: 400, laptop: 310, desktop: 500 } }}>
+          <TableContainer sx={{ maxHeight: { mobile: 400, laptop: 310, desktop: 500 }, height: { mobile: 400, laptop: 310, desktop: 500 } }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
@@ -90,6 +90,22 @@ const Kriteria = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
+                {data!.length === 0 ?
+                  <Typography
+                    sx={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      fontWeight: 600, color: 'rgba(0, 0, 0, 0.5)',
+                      fontSize: 30
+                    }}
+                  >
+                    Tidak ada kriteria, silahkan tambahkan kriteria baru
+                  </Typography>
+                  :
+                  undefined
+                }
                 {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, rowIndex) => {
                     const result = Object.values(row)

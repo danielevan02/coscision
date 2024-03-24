@@ -115,7 +115,7 @@ const Metode = () => {
 								</Box>
 								{/* Table Kostum */}
 								<Paper sx={{ width: '100%', overflow: 'hidden' }}>
-									<TableContainer sx={{ maxHeight: { mobile: 400, laptop: 310, desktop: 500 } }}>
+									<TableContainer sx={{ maxHeight: { mobile: 400, laptop: 310, desktop: 500 }, height: {mobile: 400, laptop: 310, desktop: 500} }}>
 										<Table stickyHeader aria-label="sticky table">
 											<TableHead>
 												<TableRow>

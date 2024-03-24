@@ -1,5 +1,5 @@
 import { Add } from '@mui/icons-material';
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
 import Head from 'next/head';
 import Link from 'next/link';
 import React from 'react'
@@ -55,7 +55,8 @@ const columns: readonly Column[] = [
 const Nilai = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const { data: listNilai } = api.saw.getSelected.useQuery()
+  const { mutateAsync: deleteTable } = api.saw.deleteSelection.useMutation()
+  const { data: listNilai, refetch } = api.saw.getSelected.useQuery()
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -82,7 +83,12 @@ const Nilai = () => {
         </Box>
         {/* Table Kostum */}
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-          <TableContainer sx={{ maxHeight: { mobile: 400, laptop: 310, desktop: 500 } }}>
+          <TableContainer
+            sx={{
+              maxHeight: { mobile: 400, laptop: 310, desktop: 500 },
+              height: { mobile: 400, laptop: 310, desktop: 500 }
+            }}
+          >
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
@@ -100,6 +106,22 @@ const Nilai = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
+                {listNilai!.length === 0 ?
+                  <Typography
+                    sx={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      fontWeight: 600, color: 'rgba(0, 0, 0, 0.5)',
+                      fontSize: 30
+                    }}
+                  >
+                    Tidak ada nilai, silahkan tambahkan nilai baru
+                  </Typography>
+                  :
+                  undefined
+                }
                 {listNilai?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, rowIndex) => {
                     return (
@@ -113,13 +135,13 @@ const Nilai = () => {
                         })}
                         <TableCell align='center'>
                           <Box sx={{ display: 'flex', gap: 1 }}>
-                            <Link href={`/kostum/edit/${row.id}`}>
+                            <Link href={`/nilai/edit/${row.id}`}>
                               <Button variant='contained' color='warning'>UBAH</Button>
                             </Link>
                             <Button
                               variant='contained'
                               color='error'
-
+                              onClick={() => deleteTable({ kostum_id: row.id }).then(() => refetch())}
                             >
                               HAPUS
                             </Button>
@@ -134,7 +156,7 @@ const Nilai = () => {
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={ listNilai ? listNilai.length : 10}
+            count={listNilai ? listNilai.length : 10}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

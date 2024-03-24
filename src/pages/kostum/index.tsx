@@ -116,7 +116,7 @@ const Kostum = () => {
 				<TextField fullWidth label='Search' size='small' sx={{ background: 'white', borderRadius: 1 }} />
 				{/* Table Kostum */}
 				<Paper sx={{ width: '100%', overflow: 'hidden' }}>
-					<TableContainer sx={{ maxHeight: { mobile: 400, laptop: 280, desktop: 500 } }}>
+					<TableContainer sx={{ maxHeight: { mobile: 400, laptop: 280, desktop: 500 }, height: { mobile: 400, laptop: 310, desktop: 500 } }}>
 						<Table stickyHeader aria-label="sticky table">
 							<TableHead>
 								<TableRow>
@@ -138,6 +138,22 @@ const Kostum = () => {
 								</TableRow>
 							</TableHead>
 							<TableBody>
+								{kostum!.length === 0 ?
+									<Typography
+										sx={{
+											position: 'absolute',
+											top: '50%',
+											left: '50%',
+											transform: 'translate(-50%, -50%)',
+											fontWeight: 600, color: 'rgba(0, 0, 0, 0.5)',
+											fontSize: 30
+										}}
+									>
+										Tidak ada kostum, silahkan tambahkan kostum baru
+									</Typography>
+									:
+									undefined
+								}
 								{kostum?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 									.map((row, rowIndex) => {
 										const result = Object.values(row)
@@ -166,14 +182,14 @@ const Kostum = () => {
 																		<Button
 																			variant='contained'
 																			color='error'
-																			onClick={()=> deleteKostum(result[0] as number).then(()=> refetch())}
+																			onClick={() => deleteKostum(result[0] as number).then(() => refetch())}
 																		>
 																			HAPUS
 																		</Button>
 																	</Box>
 																</TableCell>
 																<TableCell align='center' sx={{ display: author === 'user' ? undefined : 'none' }}>
-																	<IconButton onClick={handleOpen} onMouseEnter={()=>setId(result[0] as number)}>
+																	<IconButton onClick={handleOpen} onMouseEnter={() => setId(result[0] as number)}>
 																		<Info />
 																	</IconButton>
 																</TableCell>
