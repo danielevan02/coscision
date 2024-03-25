@@ -124,6 +124,19 @@ export const sawRouter = createTRPCRouter({
             if (with_norm) {
                 const kostum_norm = {...kostum};
 
+                for (const rval of kostum_norm.rvalues) {
+                    const tdict = dictSK![rval.subkriteria.kriteria_id]!;
+                    const skval = rval.subkriteria.skvalue;
+
+                    rval.subkriteria.kriteria = {
+                        ...rval.subkriteria.kriteria, 
+                        skmin: tdict.skmin, 
+                        skmax: tdict.skmax,
+                        norm_weight: null,
+                        norm_max: null,
+                    };
+                }
+
                 if ( (pos[kostum.id]?.[0] ?? -1) >= 0 ) sort[pos[kostum.id]![0]] = kostum_norm;
                 else unkn.push(kostum_norm);
             } else if ( (pos[kostum.id]?.[0] ?? -1) >= 0 ) {
