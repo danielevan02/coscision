@@ -91,7 +91,7 @@ export const sawRouter = createTRPCRouter({
         
         return [...sort, ...unkn];
     }),
-    processSaw: protectedProcedure.query(async ({ ctx: { db, session: { user: { id: user_id } } }, }) => {
+    processSaw: protectedProcedure.mutation(async ({ ctx: { db, session: { user: { id: user_id } } }, }) => {
         const kostums = await db.kostum.findMany({
             where: {
                 rvalues: {

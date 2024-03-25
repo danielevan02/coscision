@@ -29,6 +29,7 @@ export const env = createEnv({
       process.env.VERCEL ? z.string() : z.string().url()
     ),
     UPLOAD_STORAGE: z.enum(["vercel-storage", "local-dev", "local-prod"]),
+    BLOB_READ_WRITE_TOKEN: z.string(),
   },
 
   /**
@@ -51,6 +52,7 @@ export const env = createEnv({
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     UPLOAD_STORAGE: process.env.UPLOAD_STORAGE,
     NEXT_PUBLIC_UPLOAD_BASE: process.env.NEXT_PUBLIC_UPLOAD_BASE,
+    BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
