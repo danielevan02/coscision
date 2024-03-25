@@ -43,7 +43,7 @@ const Kostum = () => {
 	const author = session?.user.level === "Admin" ? 'admin' : 'user'
 	const [id, setId] = useState(1)
 	const { data } = api.kostum.getKostum.useQuery(id)
-	const { data: kostum, refetch } = api.kostum.getKostums.useQuery()
+	const { data: kostum, refetch, isFetched } = api.kostum.getKostums.useQuery()
 	const { mutateAsync: deleteKostum } = api.kostum.deleteKostum.useMutation()
 
 	const [nama, setNama] = useState('')
@@ -138,21 +138,22 @@ const Kostum = () => {
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{kostum!.length === 0 ?
-									<Typography
-										sx={{
-											position: 'absolute',
-											top: '50%',
-											left: '50%',
-											transform: 'translate(-50%, -50%)',
-											fontWeight: 600, color: 'rgba(0, 0, 0, 0.5)',
-											fontSize: 30
-										}}
-									>
-										Tidak ada kostum, silahkan tambahkan kostum baru
-									</Typography>
-									:
-									undefined
+								{isFetched ?
+									kostum!.length === 0 ?
+										<Typography
+											sx={{
+												position: 'absolute',
+												top: '50%',
+												left: '50%',
+												transform: 'translate(-50%, -50%)',
+												fontWeight: 600, color: 'rgba(0, 0, 0, 0.5)',
+												fontSize: 30
+											}}
+										>
+											Tidak ada kostum, silahkan tambahkan kostum baru
+										</Typography>
+										: undefined
+									: undefined
 								}
 								{kostum?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 									.map((row, rowIndex) => {

@@ -12,6 +12,7 @@ export const userRouter = createTRPCRouter({
 			name,
 			username,
 			password: await hash(password),
+			image: 'user.png'
 		}
 	})),
 });

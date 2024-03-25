@@ -1,8 +1,8 @@
 import { Add } from '@mui/icons-material';
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
+import { Box, Button, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
 import Head from 'next/head';
 import Link from 'next/link';
-import React from 'react'
+import React, { useState } from 'react'
 import { api } from '~/utils/api';
 
 interface Column {
@@ -53,14 +53,18 @@ const columns: readonly Column[] = [
 ];
 
 const Nilai = () => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [open, setOpen] = useState(false)
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const { mutateAsync: deleteTable } = api.saw.deleteSelection.useMutation()
-  const { data: listNilai, refetch } = api.saw.getSelected.useQuery()
+  const { data: listNilai, refetch, isFetched } = api.saw.getSelected.useQuery()
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-
+  const deleteAll = async ()=>{
+    await deleteTable().then(()=> refetch())
+    setOpen(false)
+  }
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -80,6 +84,30 @@ const Nilai = () => {
               Add
             </Button>
           </Link>
+          <Button variant='contained' color='success'>process data</Button>
+          <Button variant='contained' color='error' onClick={()=>setOpen(true)}>delete all</Button>
+          <Modal open={open} onClose={()=>setOpen(false)}>
+            <Box 
+              sx={{
+                position: 'absolute', 
+                top: '50%',
+                left: '50%', 
+                transform: 'translate(-50%, -50%)', 
+                width: 200,
+                textAlign: 'center', 
+                bgcolor: 'background.paper', 
+                boxShadow: 24, 
+                borderRadius: 5,
+                p: 4
+              }}
+            >
+              Apakah anda ingin menghapus semua nilai?
+              <Box width={'100%'} display={'flex'} justifyContent={'space-between'} mt={3}>
+                <Button variant='contained' color='success' onClick={deleteAll}>ya</Button>
+                <Button variant='contained' color='error' onClick={()=>setOpen(false)}>tidak</Button>
+              </Box>
+            </Box>
+          </Modal>
         </Box>
         {/* Table Kostum */}
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -89,6 +117,23 @@ const Nilai = () => {
               height: { mobile: 400, laptop: 310, desktop: 500 }
             }}
           >
+            {isFetched ?
+              listNilai!.length === 0 || listNilai!.length === undefined ?
+                <Typography
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    fontWeight: 600, color: 'rgba(0, 0, 0, 0.5)',
+                    fontSize: 30
+                  }}
+                >
+                  Tidak ada nilai, silahkan tambahkan nilai baru
+                </Typography>
+                : undefined
+              : undefined
+            }
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
@@ -106,22 +151,6 @@ const Nilai = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {listNilai!.length === 0 ?
-                  <Typography
-                    sx={{
-                      position: 'absolute',
-                      top: '50%',
-                      left: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      fontWeight: 600, color: 'rgba(0, 0, 0, 0.5)',
-                      fontSize: 30
-                    }}
-                  >
-                    Tidak ada nilai, silahkan tambahkan nilai baru
-                  </Typography>
-                  :
-                  undefined
-                }
                 {listNilai?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, rowIndex) => {
                     return (

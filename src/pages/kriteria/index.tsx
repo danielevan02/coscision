@@ -37,7 +37,7 @@ const columns: readonly Column[] = [
 
 const Kriteria = () => {
   const { data: session } = useSession()
-  const { data, refetch: refreshKriteria } = api.kriteria.getKriterias.useQuery()
+  const { data, refetch: refreshKriteria, isFetched } = api.kriteria.getKriterias.useQuery()
   const { data: kostum } = api.kostum.getKostums.useQuery()
   console.log(data, kostum)
   const { mutateAsync: deleteKriteria } = api.kriteria.deleteKriteria.useMutation()
@@ -90,21 +90,22 @@ const Kriteria = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data!.length === 0 ?
-                  <Typography
-                    sx={{
-                      position: 'absolute',
-                      top: '50%',
-                      left: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      fontWeight: 600, color: 'rgba(0, 0, 0, 0.5)',
-                      fontSize: 30
-                    }}
-                  >
-                    Tidak ada kriteria, silahkan tambahkan kriteria baru
-                  </Typography>
-                  :
-                  undefined
+                {isFetched ?
+                  data!.length === 0 ?
+                    <Typography
+                      sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        fontWeight: 600, color: 'rgba(0, 0, 0, 0.5)',
+                        fontSize: 30
+                      }}
+                    >
+                      Tidak ada kriteria, silahkan tambahkan kriteria baru
+                    </Typography>
+                    : undefined
+                  : undefined
                 }
                 {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, rowIndex) => {

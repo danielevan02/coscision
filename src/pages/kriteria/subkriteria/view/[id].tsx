@@ -33,7 +33,7 @@ const columns: readonly Column[] = [
 const Subkriteria = () => {
   const router = useRouter()
   const id = parseInt(router.query.id as string)
-  const { data, refetch: refreshSubkriteria } = api.kriteria.getSubkriterias.useQuery(id)
+  const { data, refetch: refreshSubkriteria, isFetched } = api.kriteria.getSubkriterias.useQuery(id)
   const { mutateAsync: deleteSubkriteria } = api.kriteria.deleteSubkriteria.useMutation()
   const { data: kriteria } = api.kriteria.getKriteria.useQuery(id)
   const { data: session } = useSession()
@@ -92,21 +92,22 @@ const Subkriteria = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data!.length === 0 ?
-                  <Typography
-                    sx={{
-                      position: 'absolute',
-                      top: '50%',
-                      left: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      fontWeight: 600, color: 'rgba(0, 0, 0, 0.5)',
-                      fontSize: 30
-                    }}
-                  >
-                    Tidak ada subkriteria, silahkan tambahkan subkriteria baru
-                  </Typography>
-                  :
-                  undefined
+                {isFetched ?
+                  data!.length === 0 ?
+                    <Typography
+                      sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        fontWeight: 600, color: 'rgba(0, 0, 0, 0.5)',
+                        fontSize: 30
+                      }}
+                    >
+                      Tidak ada subkriteria, silahkan tambahkan subkriteria baru
+                    </Typography>
+                    : undefined
+                  : undefined
                 }
                 {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, rowIndex) => {
