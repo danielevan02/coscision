@@ -34,9 +34,16 @@ const columns: readonly Column[] = [
 ];
 
 const Hasil = () => {
-  const { data } = api.saw.getSelected.useQuery()
+  const { data } = api.saw.getSelected.useQuery({with_norm: true})
+  console.log(data)
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [nama, setNama] = useState('')
+	const [asal, setAsal] = useState('')
+	const [preferensi, setPreferensi] = useState('')
+	const [list, setList] = useState('')
+	const [link, setLink] = useState('')
+	const [gambar, setGambar] = useState('')
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -116,7 +123,7 @@ const Hasil = () => {
                             { fontSize: 20, fontWeight: 500, p: 0} : undefined
                           }
                         >
-                          0.433
+                          {row.saw.toFixed(3)}
                         </TableCell>
                         <TableCell align='center'>
                           { rowIndex === 0 ? 

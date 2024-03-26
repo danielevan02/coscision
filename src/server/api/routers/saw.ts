@@ -193,7 +193,7 @@ export const sawRouter = createTRPCRouter({
                 },
             },
         });
-
+        
         // kostum[i]!.rvalues[j]!.subkriteria.skvalue
         // kostum[i]!.rvalues[j]!.subkriteria.kriteria.weight
 

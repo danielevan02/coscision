@@ -51,46 +51,11 @@ const columns: readonly Column[] = [
 	},
 ];
 
-interface Data {
-	nama: string;
-	harga: string;
-	kualitas: string;
-	desain: string;
-	fleksibilitas: string;
-	popularitas: string;
-}
-
-function createData(
-	nama: string,
-	harga: string,
-	kualitas: string,
-	desain: string,
-	fleksibilitas: string,
-	popularitas: string
-): Data {
-	return { nama, harga, kualitas, desain, fleksibilitas, popularitas };
-}
-
-const rows = [
-	createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
-	createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
-	createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
-	createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
-	createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
-	createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
-	createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
-	createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
-	createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
-	createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
-	createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
-	createData('Raiden Shogun', '300.001 - 400.000', 'Baik', 'Sangat Menarik', 'Kurang Nyaman Dipakai', 'Sangat Terkenal'),
-];
-
 const Metode = () => {
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
-	const { data } = api.saw.getSelected.useQuery()
-
+	const { data } = api.saw.getSelected.useQuery({ with_norm: true })
+	console.log(data)
 	const handleChangePage = (event: unknown, newPage: number) => {
 		setPage(newPage);
 	};
@@ -146,8 +111,9 @@ const Metode = () => {
 																		<TableCell key={index} align='center'>
 																			{
 																				data === 'nilai keputusan' ? list.subkriteria.name :
-																					data === 'konversi nilai keputusan' ? list.subkriteria.skvalue :
-																						list.subkriteria.skvalue
+																				data === 'konversi nilai keputusan' ? list.subkriteria.skvalue :
+																				data === 'normalisasi matriks' ? list.subkriteria.kriteria.norm_matrix.toFixed(2) :
+																				list.subkriteria.kriteria.norm_weight.toFixed(2)
 																			}
 																		</TableCell>
 																	)
@@ -159,22 +125,28 @@ const Metode = () => {
 												}
 											</TableBody>
 											{item.toLowerCase() === 'konversi nilai keputusan' ?
-												<TableFooter sx={{ background: 'white', border: '1px solid black'}}>
-													<TableRow sx={{ maxHeight: 10 }}>
-														<TableCell colSpan={2} align='center' sx={{p: 0}}>Nilai Max</TableCell>
-														<TableCell align='center' sx={{p: 0}}>1</TableCell>
-														<TableCell align='center' sx={{p: 0}}>1</TableCell>
-														<TableCell align='center' sx={{p: 0}}>1</TableCell>
-														<TableCell align='center' sx={{p: 0}}>1</TableCell>
-														<TableCell align='center' sx={{p: 0}}>1</TableCell>
+												<TableFooter sx={{ background: 'white', border: '1px solid black' }}>
+													<TableRow>
+														<TableCell colSpan={2} align='center' sx={{ p: 0 }}>Nilai Max</TableCell>
+														{data?.map((list, index) => {
+															return (
+																<>
+																	<TableCell key={index} align='center' sx={{ p: 0 }}>{list.rvalues[index]?.subkriteria.kriteria.skmax}</TableCell>
+																</>
+															)
+														})
+														}
 													</TableRow>
 													<TableRow>
-														<TableCell colSpan={2} align='center' sx={{p: 0}}>Nilai Min</TableCell>
-														<TableCell align='center' sx={{p: 0}}>1</TableCell>
-														<TableCell align='center' sx={{p: 0}}>1</TableCell>
-														<TableCell align='center' sx={{p: 0}}>1</TableCell>
-														<TableCell align='center' sx={{p: 0}}>1</TableCell>
-														<TableCell align='center' sx={{p: 0}}>1</TableCell>
+														<TableCell colSpan={2} align='center' sx={{ p: 0 }}>Nilai Min</TableCell>
+														{data?.map((list, index) => {
+															return (
+																<>
+																	<TableCell key={index} align='center' sx={{ p: 0 }}>{list.rvalues[index]?.subkriteria.kriteria.skmin}</TableCell>
+																</>
+															)
+														})
+														}
 													</TableRow>
 												</TableFooter>
 												: undefined
@@ -184,7 +156,7 @@ const Metode = () => {
 									<TablePagination
 										rowsPerPageOptions={[10, 25, 100]}
 										component="div"
-										count={rows.length}
+										count={data ? data.length : 10}
 										rowsPerPage={rowsPerPage}
 										page={page}
 										onPageChange={handleChangePage}
