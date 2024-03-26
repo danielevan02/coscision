@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { User, kostum } from "@prisma/client";
+import type { User, kostum } from "@prisma/client";
 import { db } from "~/server/db";
 import { hash } from "~/server/utils";
 

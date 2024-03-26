@@ -1,4 +1,4 @@
-import { kriteria } from "@prisma/client";
+import type { kriteria } from "@prisma/client";
 import { db } from "~/server/db";
 
 const longDiv = () => console.log("===== ========== ========== ========== ========== =====");

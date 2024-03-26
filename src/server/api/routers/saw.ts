@@ -1,20 +1,60 @@
-import { kriteria, rank_saw } from "@prisma/client";
+import type { kostum, kriteria, rank_saw, rvalues, subkriteria } from "@prisma/client";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+
+export type DictSK = { kid: number; kweight: number; skmin: number; skmax: number; ktype: kriteria["ktype"] };
+export type ExtendedKostum = kostum & {
+    rvalues: (rvalues & {
+        subkriteria: subkriteria & {
+            kriteria: kriteria & {
+                skmin?: number;
+                skmax?: number;
+                norm_matrix?: number;
+                norm_weight?: number;
+            };
+        };
+    })[];
+    saw?: number;
+};
 
 export const sawRouter = createTRPCRouter({
     selectCostum: protectedProcedure.input(z.object({
         kostum_id: z.number(),
         subkriteria_id: z.number(),
-    })).mutation(({ ctx: { db, session: { user: { id: user_id } } }, input: { kostum_id, subkriteria_id } }) => 
-        db.rvalues.create({
+    })).mutation(async ({ ctx: { db, session: { user: { id: user_id } } }, input: { kostum_id, subkriteria_id } }) => {
+        let subkriteria;
+        try {
+            subkriteria = await db.subkriteria.findFirstOrThrow({
+                select: {
+                    kriteria_id: true,
+                },
+                where: {
+                    id: subkriteria_id,
+                },
+            });
+        } catch (e) {
+            throw "subkriteria not exists";
+        }
+
+        const count_same_kriteria = await db.rvalues.count({
+            where: {
+                user_id, 
+                subkriteria: {
+                    kriteria_id: subkriteria.kriteria_id,
+                },
+            },
+        });
+
+        if (count_same_kriteria > 0) throw "kriteria duplicated";
+
+        return await db.rvalues.create({
             data: {
                 user_id,
                 kostum_id,
                 subkriteria_id,
             },
-        }),
-    ),
+        });
+    }),
     deleteSelection: protectedProcedure.input(z.object({
         kostum_id: z.number().optional(),
         subkriteria_ids: z.number().array().optional(),
@@ -32,15 +72,16 @@ export const sawRouter = createTRPCRouter({
     getSelected: protectedProcedure.input(z.object({
         kostum_id: z.number().optional(),
         kriteria_id: z.number().optional(),
-    }).default({})).query(async ({ ctx: { db, session: { user: { id: user_id } } }, input: { kostum_id, kriteria_id } }) => {
+        with_norm: z.boolean().default(false),
+    }).default({})).query(async ({ ctx: { db, session: { user: { id: user_id } } }, input: { kostum_id, kriteria_id, with_norm } }) => {
         // kostum -> kriteria -> subkriteria
         // kostum: kriteria -> subkriteria
         // kriteria: kostum, subkriteria
         // With mock, test `pnpx tsx ./src/server/test/04-findMany-selected.ts`
 
         const pos: Record<number, [number, rank_saw]> = {};
-        const sort = [];
-        const unkn = [];
+        const sort: ExtendedKostum[] = [];
+        const unkn: ExtendedKostum[] = [];
 
         const kostums = await db.kostum.findMany({
             where: {
@@ -79,13 +120,50 @@ export const sawRouter = createTRPCRouter({
             },
         });
 
+        let dictSK: Record<number, DictSK> | null = with_norm ? ((await db.$queryRaw`SELECT k.id AS kid,
+            k.weight AS kweight,
+            k.ktype AS ktype,
+            MIN(sk.skvalue) as skmin,
+            MAX(sk.skvalue) as skmax
+        FROM kriteria k
+        JOIN subkriteria sk ON sk.kriteria_id = k.id
+        GROUP BY k.id`) as DictSK[]).reduce((obj: Record<number, DictSK>, item: DictSK) => Object.assign(obj, { [item.kid]: item }), {}) : null;
+
         // eslint-disable-next-line @typescript-eslint/no-for-in-array
         for ( const i in rsaw )
             pos[rsaw[i]!.kostum_id] = [parseInt(i), rsaw[i]!];
 
-        for (const kostum of kostums) {
-            if ( (pos[kostum.id]?.[0] ?? -1) >= 0 ) {
-                sort[pos[kostum.id]![0]] = {...kostum, saw: pos[kostum.id]![1].saw};
+        for (const kostum of (kostums as unknown as ExtendedKostum[])) {
+            if (with_norm) {
+
+                let saw = 0;
+                for (const rval of kostum.rvalues) {
+                    const tdict = dictSK![rval.subkriteria.kriteria_id]!;
+                    const skval = rval.subkriteria.skvalue;
+
+                    let norm_matrix = 0;
+                    if (tdict.ktype == "Benefit") norm_matrix = skval / tdict.skmax;
+                    else if (tdict.ktype == "Cost") norm_matrix = tdict.skmin / skval;
+
+                    const norm_weight = norm_matrix * tdict.kweight / 100;
+                    saw += norm_weight;
+
+                    rval.subkriteria.kriteria = {
+                        ...rval.subkriteria.kriteria, 
+                        skmin: tdict.skmin, 
+                        skmax: tdict.skmax,
+                        norm_matrix,
+                        norm_weight,
+                    };
+                }
+
+                kostum.saw = saw;
+
+                if ( (pos[kostum.id]?.[0] ?? -1) >= 0 ) sort[pos[kostum.id]![0]] = kostum;
+                else unkn.push(kostum);
+            } else if ( (pos[kostum.id]?.[0] ?? -1) >= 0 ) {
+                sort[pos[kostum.id]![0]] = kostum;
+                sort[pos[kostum.id]![0]]!.saw = pos[kostum.id]![1].saw as unknown as number
             } else unkn.push(kostum);
         }
         
@@ -119,16 +197,14 @@ export const sawRouter = createTRPCRouter({
         // kostum[i]!.rvalues[j]!.subkriteria.skvalue
         // kostum[i]!.rvalues[j]!.subkriteria.kriteria.weight
 
-        type DictSK = { kid: number; kweight: number; skmin: number; skmax: number; ktype: kriteria["ktype"] };
-        let dictSK: DictSK[] | Record<number, DictSK> = (await db.$queryRaw`SELECT k.id AS kid,
+        let dictSK: Record<number, DictSK> = ((await db.$queryRaw`SELECT k.id AS kid,
             k.weight AS kweight,
             k.ktype AS ktype,
             MIN(sk.skvalue) as skmin,
             MAX(sk.skvalue) as skmax
         FROM kriteria k
         JOIN subkriteria sk ON sk.kriteria_id = k.id
-        GROUP BY k.id`);
-        dictSK = (dictSK as DictSK[]).reduce((obj: Record<number, DictSK>, item: DictSK) => Object.assign(obj, { [item.kid]: item }), {});
+        GROUP BY k.id`) as DictSK[]).reduce((obj: Record<number, DictSK>, item: DictSK) => Object.assign(obj, { [item.kid]: item }), {});
 
         const tkostums: Record<number, number | undefined> = {};
 
