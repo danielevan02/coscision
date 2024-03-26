@@ -1,8 +1,21 @@
-import { kriteria, rank_saw } from "@prisma/client";
+import type { kostum, kriteria, rank_saw, rvalues, subkriteria } from "@prisma/client";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
-type DictSK = { kid: number; kweight: number; skmin: number; skmax: number; ktype: kriteria["ktype"] };
+export type DictSK = { kid: number; kweight: number; skmin: number; skmax: number; ktype: kriteria["ktype"] };
+export type ExtendedKostum = kostum & {
+    rvalues: (rvalues & {
+        subkriteria: subkriteria & {
+            kriteria: kriteria & {
+                skmin?: number;
+                skmax?: number;
+                norm_matrix?: number;
+                norm_weight?: number;
+            };
+        };
+    })[];
+    saw?: number;
+};
 
 export const sawRouter = createTRPCRouter({
     selectCostum: protectedProcedure.input(z.object({
@@ -67,8 +80,8 @@ export const sawRouter = createTRPCRouter({
         // With mock, test `pnpx tsx ./src/server/test/04-findMany-selected.ts`
 
         const pos: Record<number, [number, rank_saw]> = {};
-        const sort = [];
-        const unkn = [];
+        const sort: ExtendedKostum[] = [];
+        const unkn: ExtendedKostum[] = [];
 
         const kostums = await db.kostum.findMany({
             where: {
@@ -120,12 +133,11 @@ export const sawRouter = createTRPCRouter({
         for ( const i in rsaw )
             pos[rsaw[i]!.kostum_id] = [parseInt(i), rsaw[i]!];
 
-        for (const kostum of kostums) {
+        for (const kostum of (kostums as unknown as ExtendedKostum[])) {
             if (with_norm) {
-                const kostum_norm = {...kostum, saw: 0};
 
                 let saw = 0;
-                for (const rval of kostum_norm.rvalues) {
+                for (const rval of kostum.rvalues) {
                     const tdict = dictSK![rval.subkriteria.kriteria_id]!;
                     const skval = rval.subkriteria.skvalue;
 
@@ -145,12 +157,13 @@ export const sawRouter = createTRPCRouter({
                     };
                 }
 
-                kostum_norm.saw = saw;
+                kostum.saw = saw;
 
-                if ( (pos[kostum.id]?.[0] ?? -1) >= 0 ) sort[pos[kostum.id]![0]] = kostum_norm;
-                else unkn.push(kostum_norm);
+                if ( (pos[kostum.id]?.[0] ?? -1) >= 0 ) sort[pos[kostum.id]![0]] = kostum;
+                else unkn.push(kostum);
             } else if ( (pos[kostum.id]?.[0] ?? -1) >= 0 ) {
-                sort[pos[kostum.id]![0]] = {...kostum, saw: pos[kostum.id]![1].saw};
+                sort[pos[kostum.id]![0]] = kostum;
+                sort[pos[kostum.id]![0]]!.saw = pos[kostum.id]![1].saw as unknown as number
             } else unkn.push(kostum);
         }
         
