@@ -58,7 +58,7 @@ export const sawRouter = createTRPCRouter({
     deleteSelection: protectedProcedure.input(z.object({
         kostum_id: z.number().optional(),
         subkriteria_ids: z.number().array().optional(),
-    })).mutation(({ ctx: { db, session: { user: { id: user_id } } }, input: { kostum_id, subkriteria_ids } }) =>
+    }).default({})).mutation(({ ctx: { db, session: { user: { id: user_id } } }, input: { kostum_id, subkriteria_ids } }) =>
         db.rvalues.deleteMany({
             where: {
                 user_id,

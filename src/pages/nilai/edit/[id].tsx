@@ -4,52 +4,77 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { type FieldErrors, useForm } from 'react-hook-form'
+import { api } from '~/utils/api'
 
-type  NilaiForm = {
-	nama: string
-	harga: string
-	kualitas: string
-	desain: string
-	fleksibilitas: string
-	popularitas: string
+type NilaiForm = {
+	harga: number
+	kualitas: number
+	desain: number
+	fleksibilitas: number
+	popularitas: number
 }
 
-const UpdateNilai = () => {
+const AddNilai = () => {
 	const router = useRouter()
+	const id = parseInt(router.query.id as string)
+	const deletedContainer: number[]= []
+	const { data: nilai } = api.kriteria.getKriteriasIncludeSub.useQuery()
+	const { data: getName } = api.kostum.getKostum.useQuery(id)
+	const { mutate: deleteSub } = api.saw.deleteSelection.useMutation()
+	const { mutateAsync: addNilai } = api.saw.selectCostum.useMutation()
+	const { data: selected } = api.saw.getSelected.useQuery({ kostum_id: id })
 	const [open, setOpen] = React.useState(false)
-  const { 
-    register, 
-    handleSubmit,
-  } = useForm< NilaiForm>()
+	const {
+		register,
+		handleSubmit,
+		getValues,
+		setValue
+	} = useForm<NilaiForm>()
 
-	const list: { label: string, option: string[], regist: 'nama'|'harga'|'kualitas'|'desain'|'fleksibilitas'|'popularitas'}[] = [
-		{ label: 'Nama Kostum', option: ['Raiden Shogun', 'Zhongli', 'Power', 'Childe'], regist: 'nama' },
-		{ label: 'Harga Sewa', option: ['> 500.000', '400.001 - 500.000', '300.001 - 400.000', '200.001 - 300.000', '100.001 - 200.000'], regist: 'harga' },
-		{ label: 'Kualitas Kostum', option: ['Sangat Baik', 'Baik', 'Cukup', 'Buruk'], regist: 'kualitas'},
-		{ label: 'Desain Kostum', option: ['Sangat Menarik', 'Menarik', 'Biasa Saja', 'Kurang Menarik', 'Tidak Menarik'], regist: 'desain' },
-		{ label: 'Fleksibilitas Kostum', option: ['Sangat Nyaman Dipakai', 'Nyaman Dipakai', 'Netral', 'Kurang Nyaman Dipakai', 'Tidak Nyaman Dipakai'], regist: 'fleksibilitas'},
-		{ label: 'Popularitas Karakter', option: ['Sangat Terkenal', 'Terkenal', 'Biasa Saja', 'Kurang Terkenal', 'Tidak Terkenal'], regist: 'popularitas' },
-	]
+	if (selected) {
+		const list = ['harga', 'desain', 'kualitas', 'fleksibilitas', 'popularitas']
+		for (let i = 0; i < list.length; i++) {
+			if (selected[0]?.rvalues[i]?.subkriteria_id) {
+				setValue(list[i] as 'harga' | 'desain' | 'kualitas' | 'fleksibilitas' | 'popularitas', selected[0].rvalues[i]!.subkriteria_id)
+				deletedContainer.push(selected[0].rvalues[i]!.subkriteria_id)
+			}
+		}
+	}
+	console.log(deletedContainer)
+	const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+		setOpen(false);
+	};
 
-  const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+	const onError = (errors: FieldErrors<NilaiForm>) => {
+		if (errors) {
+			alert("Harap isi semua data dengan benar")
+		}
+	}
 
-    setOpen(false);
-  };
-
-  const onError = (errors: FieldErrors< NilaiForm>) => {
-    if(errors){
-      alert("Harap isi semua data dengan benar")
-    }
-  }
-
-  const onSubmit = async (data:  NilaiForm) => {
-    console.log(data)
-    setOpen(true)
-		await router.push('/nilai')
-  }
+	const onSubmit = async () => {
+		try {
+			deleteSub({
+				kostum_id: id,
+				subkriteria_ids: deletedContainer
+			})
+			const listSub = getValues();
+			for (const [key, val] of Object.entries(listSub)) {
+				if (key === 'nama') continue;
+				await addNilai({
+					kostum_id: id,
+					subkriteria_id: val
+				})
+			}
+			setOpen(true)
+			await router.push('/nilai')
+		} catch (error) {
+			console.log(error)
+			alert("Kostum sudah ada nilai nya, pilih kostum yang belum ada nilai")
+		}
+	}
 
 	return (
 		<>
@@ -58,12 +83,12 @@ const UpdateNilai = () => {
 			</Head>
 			<Box sx={{ px: 5, py: 3 }}>
 				<form style={{ display: 'flex', flexDirection: 'column', gap: 10 }} onSubmit={handleSubmit(onSubmit, onError)}>
-					{list.map((item, index) => {
+					<TextField fullWidth size='small' InputLabelProps={{ shrink: true }} disabled sx={{ background: 'white', borderRadius: 1 }} label={'Nama Kostum'} value={getName?.name} />
+					{nilai?.map((item, index) => {
 						return (
-							<TextField fullWidth key={index} size='small' sx={{ background: 'white', borderRadius: 1}} select label={item.label} {...register(`${item.regist}`, {required: true})}>
-								<MenuItem value=""><em>None</em></MenuItem>
-								{item.option.map((listOption, index) => (
-									<MenuItem key={index} value={listOption.toLowerCase()}>{listOption}</MenuItem>
+							<TextField fullWidth key={index} size='small' sx={{ background: 'white', borderRadius: 1 }} select label={item.name} {...register(item.name.toLowerCase().split(" ")[0] as 'harga' | 'fleksibilitas' | 'desain' | 'popularitas' | 'kualitas', { required: true })}>
+								{item.subkriteria.map((list, index) => (
+									<MenuItem key={index} value={list.id}>{`${list.name} - (${list.skvalue})`}</MenuItem>
 								))}
 							</TextField>
 						)
@@ -87,4 +112,4 @@ const UpdateNilai = () => {
 	)
 }
 
-export default UpdateNilai
+export default AddNilai

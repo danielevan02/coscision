@@ -17,17 +17,16 @@ type KostumForm = {
   gambar: string
 }
 
-const AddKostum = () => {
+const UpdateKostum = () => {
   const router = useRouter()
   const id = parseInt(router.query.id as string)
-  const { data, ...k } = api.kostum.getKostum.useQuery(id)
-  console.log(k)
+  const { data } = api.kostum.getKostum.useQuery(id)
   const { mutate } = api.kostum.updateKostum.useMutation()
   const [file, setFile] = useState('')
   const [preview, setPreview] = useState('')
   const [counter, setCounter] = useState(false)
-
   const [open, setOpen] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -43,7 +42,6 @@ const AddKostum = () => {
     setValue('preferensi', data.preference)
     setValue('set', data.kset)
   }
-
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
@@ -82,15 +80,11 @@ const AddKostum = () => {
         const formData = new FormData()
         formData.append('file', file)
 
-        console.log(getValues('gambar'))
-
         await fetch('/api/upload', {
           method: 'POST',
           body: formData,
         }).then((res) => res.json())
           .then((data) => {
-            console.log(getValues('nama'))
-            console.log(getValues('asal'))
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             setValue('gambar', data.name as string)
             mutate({
@@ -104,7 +98,6 @@ const AddKostum = () => {
             })
           })
       } else {
-        console.log(getValues('gambar'))
         mutate({
           name: getValues('nama'),
           kset: getValues('set'),
@@ -135,7 +128,7 @@ const AddKostum = () => {
             <MenuItem value={"Anime"}>Anime</MenuItem>
             <MenuItem value={"Vtuber"}>Vtuber</MenuItem>
           </TextField>
-          <TextField fullWidth InputLabelProps={{ shrink: true }} label="Set" rows={3} multiline sx={{ background: 'white', borderRadius: 1 }} {...register('set', { required: true })} />
+          <TextField fullWidth InputLabelProps={{ shrink: true }} label="Set" rows={4} multiline sx={{ background: 'white', borderRadius: 1 }} {...register('set', { required: true })} />
           <TextField fullWidth InputLabelProps={{ shrink: true }} label="Link" sx={{ background: 'white', borderRadius: 1 }} {...register('link', { required: true })} />
         </form>
         <Box display={'flex'} flexDirection={'column'} gap={1}>
@@ -171,4 +164,4 @@ const AddKostum = () => {
   )
 }
 
-export default AddKostum
+export default UpdateKostum

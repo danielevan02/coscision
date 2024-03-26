@@ -1,7 +1,8 @@
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
 import Head from 'next/head';
 import React from 'react'
 import Slider from 'react-slick';
+import { api } from '~/utils/api';
 
 interface Column {
 	id: 'nama' | 'harga' | 'kualitas' | 'desain' | 'fleksibilitas' | 'popularitas';
@@ -88,6 +89,7 @@ const rows = [
 const Metode = () => {
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
+	const { data } = api.saw.getSelected.useQuery()
 
 	const handleChangePage = (event: unknown, newPage: number) => {
 		setPage(newPage);
@@ -109,13 +111,13 @@ const Metode = () => {
 				<Slider dots={true} infinite={true} speed={500} slidesToShow={1} slidesToScroll={1}>
 					{list.map((item, index) => {
 						return (
-							<Box key={index} sx={{ display: 'flex', flexDirection: 'column'}}>
+							<Box key={index} sx={{ display: 'flex', flexDirection: 'column' }}>
 								<Box display={'flex'} width={'100%'} mb={1}>
 									<Typography variant='h5' fontWeight={600}>{item.toUpperCase()}</Typography>
 								</Box>
 								{/* Table Kostum */}
 								<Paper sx={{ width: '100%', overflow: 'hidden' }}>
-									<TableContainer sx={{ maxHeight: { mobile: 400, laptop: 310, desktop: 500 } }}>
+									<TableContainer sx={{ maxHeight: { mobile: 400, laptop: 310, desktop: 500 }, height: { mobile: 400, laptop: 310, desktop: 500 } }}>
 										<Table stickyHeader aria-label="sticky table">
 											<TableHead>
 												<TableRow>
@@ -132,24 +134,51 @@ const Metode = () => {
 												</TableRow>
 											</TableHead>
 											<TableBody>
-												{rows
-													.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+												{data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 													.map((row, rowIndex) => {
+														const data = list[index]?.toLowerCase()
 														return (
 															<TableRow hover role="checkbox" tabIndex={-1} key={rowIndex}>
-																{columns.map((column, index) => {
-																	const value = row[column.id];
+																<TableCell align='center'>{rowsPerPage * page + rowIndex + 1}</TableCell>
+																<TableCell align='center'>{row.name}</TableCell>
+																{row.rvalues.map((list, index) => {
 																	return (
-																		<>
-																			{index === 0 ? <TableCell key={index} align='center'>{rowIndex + 1}</TableCell> : undefined}
-																			<TableCell align={column.align}>{value}</TableCell>
-																		</>
-																	);
+																		<TableCell key={index} align='center'>
+																			{
+																				data === 'nilai keputusan' ? list.subkriteria.name :
+																					data === 'konversi nilai keputusan' ? list.subkriteria.skvalue :
+																						list.subkriteria.skvalue
+																			}
+																		</TableCell>
+																	)
 																})}
+
 															</TableRow>
 														);
-													})}
+													})
+												}
 											</TableBody>
+											{item.toLowerCase() === 'konversi nilai keputusan' ?
+												<TableFooter sx={{ background: 'white', border: '1px solid black'}}>
+													<TableRow sx={{ maxHeight: 10 }}>
+														<TableCell colSpan={2} align='center' sx={{p: 0}}>Nilai Max</TableCell>
+														<TableCell align='center' sx={{p: 0}}>1</TableCell>
+														<TableCell align='center' sx={{p: 0}}>1</TableCell>
+														<TableCell align='center' sx={{p: 0}}>1</TableCell>
+														<TableCell align='center' sx={{p: 0}}>1</TableCell>
+														<TableCell align='center' sx={{p: 0}}>1</TableCell>
+													</TableRow>
+													<TableRow>
+														<TableCell colSpan={2} align='center' sx={{p: 0}}>Nilai Min</TableCell>
+														<TableCell align='center' sx={{p: 0}}>1</TableCell>
+														<TableCell align='center' sx={{p: 0}}>1</TableCell>
+														<TableCell align='center' sx={{p: 0}}>1</TableCell>
+														<TableCell align='center' sx={{p: 0}}>1</TableCell>
+														<TableCell align='center' sx={{p: 0}}>1</TableCell>
+													</TableRow>
+												</TableFooter>
+												: undefined
+											}
 										</Table>
 									</TableContainer>
 									<TablePagination
