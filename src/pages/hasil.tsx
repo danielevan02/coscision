@@ -2,6 +2,7 @@ import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, Tab
 import Head from 'next/head'
 import Image from 'next/image';
 import React from 'react'
+import { api } from '~/utils/api';
 
 interface Column {
   id: 'nama' | 'nilai' | 'rank';
@@ -32,35 +33,8 @@ const columns: readonly Column[] = [
   },
 ];
 
-interface Data {
-  nama: string;
-  nilai: number;
-  rank: number | string;
-}
-
-function createData(
-  nama: string,
-  nilai: number,
-  rank: number | string
-): Data {
-  return { nama, nilai, rank };
-}
-
-const rows = [
-  createData('Harga Sewa', 0.0643, 1),
-  createData('Harga Sewa', 0.0643, 2),
-  createData('Harga Sewa', 0.0643, 3),
-  createData('Harga Sewa', 0.0643, 4),
-  createData('Harga Sewa', 0.0643, 5),
-  createData('Harga Sewa', 0.0643, 6),
-  createData('Harga Sewa', 0.0643, 7),
-  createData('Harga Sewa', 0.0643, 8),
-  createData('Harga Sewa', 0.0643, 9),
-  createData('Harga Sewa', 0.0643, 10),
-  createData('Harga Sewa', 0.0643, 10),
-];
-
 const Hasil = () => {
+  const { data } = api.saw.getSelected.useQuery()
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -79,8 +53,8 @@ const Hasil = () => {
         <title>Coscision - Hasil</title>
       </Head>
       <Box sx={{ px: 5, py: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
-        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant='h4' fontWeight={600} sx={{}}>Hasil Analisa</Typography>
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', opacity: 0.5, alignItems: 'center' }}>
+          <Typography variant='h5' mb={2} fontWeight={800} sx={{}}>HASIL ANALISA METODE SAW</Typography>
         </Box>
         {/* Table Kostum */}
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -101,11 +75,84 @@ const Hasil = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                {data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, rowIndex) => {
+                    const numbering = page * rowsPerPage + rowIndex + 1
                     return (
                       <TableRow 
+                        hover={rowIndex >= 0 && rowIndex <= 2 ? false : true} 
+                        key={rowIndex}
+                        sx={
+                          rowIndex === 0 ? 
+                          {background: '#dcaf53', height: 80}:
+                          rowIndex === 1 ?
+                          {background: '#b8b8b8', height: 70}:
+                          rowIndex === 2 ?
+                          {background: '#805334', height: 60}:undefined
+                        }
+                      >
+                        <TableCell align='center'>{numbering}</TableCell>
+                        <TableCell 
+                          align='center'
+                          sx={
+                            rowIndex === 0 ? 
+                            { fontSize: 30, fontWeight: 700, p: 0 } : 
+                            rowIndex === 1 ? 
+                            { fontSize: 25, fontWeight: 600, p: 0 } :
+                            rowIndex === 2 ?
+                            { fontSize: 20, fontWeight: 500, p: 0} : undefined
+                          }
+                        >
+                          {row.name}
+                        </TableCell>
+                        <TableCell 
+                          align='center'
+                          sx={
+                            rowIndex === 0 ? 
+                            { fontSize: 30, fontWeight: 700, p: 0 } : 
+                            rowIndex === 1 ? 
+                            { fontSize: 25, fontWeight: 600, p: 0 } :
+                            rowIndex === 2 ?
+                            { fontSize: 20, fontWeight: 500, p: 0} : undefined
+                          }
+                        >
+                          0.433
+                        </TableCell>
+                        <TableCell align='center'>
+                          { rowIndex === 0 ? 
+                            <Image src={`/assets/rank${numbering}.png`} alt='rank' width={1000} height={1000} style={{ width: '15%', height: 'auto' }} /> : 
+                            rowIndex === 1 ?
+                            <Image src={`/assets/rank${numbering}.png`} alt='rank' width={1000} height={1000} style={{ width: '12%', height: 'auto' }} /> : 
+                            rowIndex === 2 ?
+                            <Image src={`/assets/rank${numbering}.png`} alt='rank' width={1000} height={1000} style={{ width: '10%', height: 'auto' }} /> : 
+                            numbering
+                          }
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={data ? data.length : 10}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </Box>
+    </>
+  )
+}
+
+export default Hasil
+
+/*
+<TableRow 
                         hover={rowIndex >= 0 && rowIndex <= 2 ? false : true} 
                         key={rowIndex}
                         sx={rowIndex === 0 && rowsPerPage*page+rowIndex+1 === 1 ? 
@@ -144,24 +191,4 @@ const Hasil = () => {
                           );
                         })}
                       </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[10, 25, 100]}
-            component="div"
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
-      </Box>
-    </>
-  )
-}
-
-export default Hasil
+*/

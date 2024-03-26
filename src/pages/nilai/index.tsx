@@ -56,6 +56,7 @@ const Nilai = () => {
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const { mutate } = api.saw.processSaw.useMutation()
   const { mutateAsync: deleteTable } = api.saw.deleteSelection.useMutation()
   const { data: listNilai, refetch, isFetched } = api.saw.getSelected.useQuery()
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -84,7 +85,7 @@ const Nilai = () => {
               Add
             </Button>
           </Link>
-          <Button variant='contained' color='success'>process data</Button>
+          <Button variant='contained' color='success' onClick={()=>mutate() }>process data</Button>
           <Button variant='contained' color='error' onClick={()=>setOpen(true)}>delete all</Button>
           <Modal open={open} onClose={()=>setOpen(false)}>
             <Box 

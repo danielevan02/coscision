@@ -40,6 +40,17 @@ const theme = createTheme({
     primary: {
       main: '#774eec'
     }
+  },
+  components: {
+    MuiTableFooter: {
+      styleOverrides: {
+        root: {
+          position: 'sticky',
+          left: 0,
+          bottom: 0,
+        }
+      }
+    }
   }
 });
 
