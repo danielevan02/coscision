@@ -137,7 +137,7 @@ const Kostum = () => {
 		],
 		renderTopToolbarCustomActions: () => (
 			<>
-				<Link href={'/kostum/add/addKostum'} style={{ textDecoration: 'none' }}>
+				<Link href={'/kostum/add'} style={{ textDecoration: 'none' }}>
 					<Button variant='contained' sx={{ display: author === 'admin' ? 'flex' : 'none', gap: 1 }}>
 						<Add />
 						Add
@@ -145,7 +145,13 @@ const Kostum = () => {
 				</Link>
 				<Typography variant='h5' fontWeight={100} sx={{ display: author === 'user' ? 'flex' : 'none', position: 'absolute', left: 10 }}>TABEL KOSTUM</Typography>
 			</>
-		)
+		),
+		muiTableBodyCellProps: {
+      align: 'center'
+    },
+    muiTableHeadCellProps: {
+      align: 'center'
+    }
 	});
 
 	return (
