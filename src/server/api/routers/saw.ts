@@ -235,7 +235,7 @@ export const sawRouter = createTRPCRouter({
             data: [
                 ...(Object.entries(tkostums).map(([kostum_id, saw]) => ({
                     user_id,
-                    kostum_id: kostum_id as unknown as number,
+                    kostum_id: parseInt(kostum_id),
                     saw: saw!,
                 }))),
             ],
