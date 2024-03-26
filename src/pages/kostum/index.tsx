@@ -86,7 +86,7 @@ const Kostum = () => {
 		data: kostums ? kostums : [],
 		muiTableContainerProps: {
 			sx: {
-				maxHeight: 320
+				maxHeight: {mobile: '55vh', laptop: 320, desktop: 500}
 			}
 		},
 		enableColumnFilterModes: true,
@@ -143,7 +143,7 @@ const Kostum = () => {
 						Add
 					</Button>
 				</Link>
-				<Typography variant='h5' fontWeight={100} sx={{ display: author === 'user' ? 'flex' : 'none' }}>TABEL KOSTUM</Typography>
+				<Typography variant='h5' fontWeight={100} sx={{ display: author === 'user' ? 'flex' : 'none', position: 'absolute', left: 10 }}>TABEL KOSTUM</Typography>
 			</>
 		)
 	});
