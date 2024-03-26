@@ -1,7 +1,7 @@
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
 import Head from 'next/head'
 import Image from 'next/image';
-import React from 'react'
+import React, { useState } from 'react'
 import { api } from '~/utils/api';
 
 interface Column {
@@ -35,15 +35,8 @@ const columns: readonly Column[] = [
 
 const Hasil = () => {
   const { data } = api.saw.getSelected.useQuery({with_norm: true})
-  console.log(data)
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [nama, setNama] = useState('')
-	const [asal, setAsal] = useState('')
-	const [preferensi, setPreferensi] = useState('')
-	const [list, setList] = useState('')
-	const [link, setLink] = useState('')
-	const [gambar, setGambar] = useState('')
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
