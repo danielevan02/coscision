@@ -122,20 +122,30 @@ export const sawRouter = createTRPCRouter({
 
         for (const kostum of kostums) {
             if (with_norm) {
-                const kostum_norm = {...kostum};
+                const kostum_norm = {...kostum, saw: 0};
 
+                let saw = 0;
                 for (const rval of kostum_norm.rvalues) {
                     const tdict = dictSK![rval.subkriteria.kriteria_id]!;
                     const skval = rval.subkriteria.skvalue;
+
+                    let norm_matrix = 0;
+                    if (tdict.ktype == "Benefit") norm_matrix = skval / tdict.skmax;
+                    else if (tdict.ktype == "Cost") norm_matrix = tdict.skmin / skval;
+
+                    const norm_weight = norm_matrix * tdict.kweight / 100;
+                    saw += norm_weight;
 
                     rval.subkriteria.kriteria = {
                         ...rval.subkriteria.kriteria, 
                         skmin: tdict.skmin, 
                         skmax: tdict.skmax,
-                        norm_weight: null,
-                        norm_max: null,
+                        norm_matrix,
+                        norm_weight,
                     };
                 }
+
+                kostum_norm.saw = saw;
 
                 if ( (pos[kostum.id]?.[0] ?? -1) >= 0 ) sort[pos[kostum.id]![0]] = kostum_norm;
                 else unkn.push(kostum_norm);
@@ -219,20 +229,5 @@ export const sawRouter = createTRPCRouter({
         });
 
         return true;
-    }),
-    getSawNorm: protectedProcedure.query(async ({ ctx: { db } }) => {
-        let dictSK: Record<number, DictSK> = ((await db.$queryRaw`SELECT k.id AS kid,
-            k.weight AS kweight,
-            k.ktype AS ktype,
-            MIN(sk.skvalue) as skmin,
-            MAX(sk.skvalue) as skmax
-        FROM kriteria k
-        JOIN subkriteria sk ON sk.kriteria_id = k.id
-        GROUP BY k.id`) as DictSK[]).reduce((obj: Record<number, DictSK>, item: DictSK) => Object.assign(obj, { [item.kid]: item }), {});
-
-        return {
-            norm_weight: {},
-            norm_matrix: {},
-        };
     }),
 });
