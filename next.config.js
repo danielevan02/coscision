@@ -46,18 +46,18 @@ const config = {
         port: '443',
         pathname:  '/upload/**'
       },
-      {
-        protocol: 'http',
-        hostname: '',
-        port: '',
-        pathname:  '**'
-      },
-      {
-        protocol: 'https',
-        hostname: '',
-        port: '',
-        pathname:  '**'
-      },
+      // {
+      //   protocol: 'http',
+      //   hostname: '',
+      //   port: '',
+      //   pathname:  '**'
+      // },
+      // {
+      //   protocol: 'https',
+      //   hostname: '',
+      //   port: '',
+      //   pathname:  '**'
+      // },
       {
         protocol: image_url.protocol?.slice(0, -1) ?? 'http',
         hostname: image_url.hostname ?? 'localhost',
