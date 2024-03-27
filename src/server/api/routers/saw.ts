@@ -39,6 +39,7 @@ export const sawRouter = createTRPCRouter({
         const count_same_kriteria = await db.rvalues.count({
             where: {
                 user_id, 
+                kostum_id,
                 subkriteria: {
                     kriteria_id: subkriteria.kriteria_id,
                 },
