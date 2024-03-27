@@ -11,13 +11,13 @@ import { put } from '@vercel/blob';
  * upload to a file field name `file`.
  */
 export default async function handler (req: NextApiRequest, res: NextApiResponse) {
-    if (req.method.toLowerCase() != "POST".toLowerCase()) return res.status(405);
+    // if (req.method.toLowerCase() != "POST".toLowerCase()) return res.status(405);
 
     const ret: Record<string, unknown> = {};
 
     const form = formidable({
-        // uploadDir: env.UPLOAD_STORAGE == "vercel-storage" ? os.tmpdir() : join(process.cwd(), `public/upload/temp`),
-        uploadDir: join(process.cwd(), `public/upload/temp`),
+        uploadDir: env.UPLOAD_STORAGE == "vercel-storage" ? os.tmpdir() : join(process.cwd(), `public/upload/temp`),
+        // uploadDir: join(process.cwd(), `public/upload/temp`),
     });
     const [, files] = await form.parse(req);
 
