@@ -31,7 +31,7 @@ const config = {
       {
         protocol: image_url.protocol?.slice(0, -1) ?? 'http',
         hostname: image_url.hostname ?? 'localhost',
-        port: image_url.port ?? '3000',
+        port: (image_url.port ?? '80').length > 0 ? (image_url.port ?? '80') : '443',
         pathname:  image_url.pathname + '**'
       }
     ]
@@ -43,5 +43,7 @@ const config = {
     ignoreBuildErrors: true,
   },
 };
+
+console.log(config.images?.remotePatterns)
 
 export default config;
