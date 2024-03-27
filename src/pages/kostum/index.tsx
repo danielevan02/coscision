@@ -72,6 +72,7 @@ const Kostum = () => {
 				header: 'Gambar',
 				Cell: ({ row }) => (
 					<Image priority src={`${env.NEXT_PUBLIC_UPLOAD_BASE}${row.original.image}`} alt='gambar' width={500} height={500} style={{ width: 100, height: 'auto', borderRadius: 10 }} />
+					// <img src={`${env.NEXT_PUBLIC_UPLOAD_BASE}${row.original.image}`} alt='gambar' width={500} height={500} style={{ width: 100, height: 'auto', borderRadius: 10 }} />
 				),
 				enableGlobalFilter: false,
 				enableSorting: false,
