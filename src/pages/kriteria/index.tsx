@@ -4,7 +4,7 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from 'material-react-table';
-import { Box, Button, ListItemIcon, MenuItem, Typography } from '@mui/material';
+import { Box, Button, ListItemIcon, MenuItem, Skeleton, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { api } from '~/utils/api';
 import { Add, Delete, Edit } from '@mui/icons-material';
@@ -131,9 +131,12 @@ const Kriteria = () => {
       <Head>
         <title>Coscision - Kostum</title>
       </Head>
-      <Box p={1}>
-        <MaterialReactTable table={table} />
-      </Box>
+      {kriteria ?
+				<Box p={1}>
+					<MaterialReactTable table={table} />
+				</Box>:
+				<Skeleton variant='rounded' animation='wave' sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '90vw', height: '50vh'}} />
+			}
     </>
   );
 };

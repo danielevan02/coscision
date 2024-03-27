@@ -4,7 +4,7 @@ import {
 	useMaterialReactTable,
 	type MRT_ColumnDef,
 } from 'material-react-table';
-import { Backdrop, Box, Button, Fade, IconButton, ListItemIcon, MenuItem, Modal, Typography } from '@mui/material';
+import { Backdrop, Box, Button, Fade, IconButton, ListItemIcon, MenuItem, Modal, Skeleton, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { api } from '~/utils/api';
 import Image from 'next/image';
@@ -87,7 +87,7 @@ const Kostum = () => {
 		data: kostums ? kostums : [],
 		muiTableContainerProps: {
 			sx: {
-				maxHeight: {mobile: '55vh', laptop: 320, desktop: 500}
+				maxHeight: { mobile: '55vh', laptop: 320, desktop: 500 }
 			}
 		},
 		enableColumnFilterModes: true,
@@ -129,7 +129,7 @@ const Kostum = () => {
 			<MenuItem
 				key={0}
 				onMouseEnter={() => setId(row.original.id)}
-				onClick={ async () => {
+				onClick={async () => {
 					await deleteKostum(row.original.id).then(() => refetch())
 					closeMenu()
 				}}
@@ -151,11 +151,11 @@ const Kostum = () => {
 			</>
 		),
 		muiTableBodyCellProps: {
-      align: 'center'
-    },
-    muiTableHeadCellProps: {
-      align: 'center'
-    }
+			align: 'center'
+		},
+		muiTableHeadCellProps: {
+			align: 'center'
+		}
 	});
 
 	return (
@@ -163,9 +163,12 @@ const Kostum = () => {
 			<Head>
 				<title>Coscision - Kostum</title>
 			</Head>
-			<Box p={1}>
-				<MaterialReactTable table={table} />
-			</Box>
+			{kostums ?
+				<Box p={1}>
+					<MaterialReactTable table={table} />
+				</Box>:
+				<Skeleton variant='rounded' animation='wave' sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '90vw', height: '50vh'}} />
+			}
 			<Modal
 				aria-labelledby="transition-modal-title"
 				aria-describedby="transition-modal-description"

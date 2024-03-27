@@ -1,4 +1,4 @@
-import { Box, Container, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, Typography } from '@mui/material'
+import { Box, Container, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, Skeleton, Typography } from '@mui/material'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -8,8 +8,8 @@ import { AppRegistration, AssignmentTurnedIn, Checkroom, Home, Info, Science, Sc
 import { useSession } from 'next-auth/react'
 
 const Navbar = () => {
-	const { data: session} = useSession()
-	const author = session?.user.level === "Admin" ? 'admin':'user'
+	const { data: session } = useSession()
+	const author = session?.user.level === "Admin" ? 'admin' : 'user'
 	const router = useRouter()
 	const [state, setState] = React.useState({
 		left: false,
@@ -77,34 +77,45 @@ const Navbar = () => {
 					<Link href={'/'}>
 						<Image priority src={'/assets/coscision-logo.png'} width={2000} height={2000} alt='logo' style={{ width: 80, height: 80 }} />
 					</Link>
-					<Box width={'50%'} sx={{ display: { mobile: 'none', laptop: 'flex' }, justifyContent: author === 'admin' ? 'center' : 'space-between', alignItems: 'center', gap: author === 'admin' ? 5 : 0 }}>
-						{(author === 'admin' ? menuAdmin : menuUser).map((item, index) => {
-							const href = item.name === 'HOME' ? '/' : `/${item.name.toLocaleLowerCase()}`
-							const active = router.route === href ? 'active' : 'nav-link'
-							return (
-								<Link href={href} className={active} key={index}>{item.name}</Link>
-							)
-						})}
-					</Box>
-					<Box sx={{ display: { mobile: 'flex', laptop: 'none' }, alignItems: 'center' }}>
-						<IconButton onClick={toggleDrawer('left', true)}>
-							<Menu />
-						</IconButton>
-						<Drawer
-							anchor={'left'}
-							open={state.left}
-							onClose={toggleDrawer('left', false)}
-							sx={{ padding: 0 }}
-						>
-							{list('left')}
-						</Drawer>
-					</Box>
+					{session ?
+						<>
+							<Box width={'50%'} sx={{ display: { mobile: 'none', laptop: 'flex' }, justifyContent: author === 'admin' ? 'center' : 'space-between', alignItems: 'center', gap: author === 'admin' ? 5 : 0 }}>
+								{(author === 'admin' ? menuAdmin : menuUser).map((item, index) => {
+									const href = item.name === 'HOME' ? '/' : `/${item.name.toLocaleLowerCase()}`
+									const active = router.route === href ? 'active' : 'nav-link'
+									return (
+										<Link href={href} className={active} key={index}>{item.name}</Link>
+									)
+								})}
+							</Box>
+							<Box sx={{ display: { mobile: 'flex', laptop: 'none' }, alignItems: 'center' }}>
+								<IconButton onClick={toggleDrawer('left', true)}>
+									<Menu />
+								</IconButton>
+								<Drawer
+									anchor={'left'}
+									open={state.left}
+									onClose={toggleDrawer('left', false)}
+									sx={{ padding: 0 }}
+								>
+									{list('left')}
+								</Drawer>
+							</Box>
+						</> :
+						<Skeleton variant='text' width={'50%'} />
+					}
 					<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0cfcf', height: '30%', my: 'auto', py: 1, px: 2, borderRadius: 10 }}>
-						<Box sx={{ display: { mobile: 'none', tablet: 'flex' }, flexDirection: 'column' }}>
-							<Typography sx={{ fontSize: '12px' }}>Welcome back,</Typography>
-							<Typography sx={{ fontSize: '12px' }}>{session?.user.name}</Typography>
-						</Box>
-						<AccountAvatar />
+						{session ?
+							<>
+								<Box sx={{ display: { mobile: 'none', tablet: 'flex' }, flexDirection: 'column' }}>
+									<Typography sx={{ fontSize: '12px' }}>Welcome back,</Typography>
+									<Typography sx={{ fontSize: '12px' }}>{session?.user.name}</Typography>
+								</Box>
+								<AccountAvatar />
+							</>
+							:
+							<Skeleton variant='rounded' width={100} height={40}/>
+						}
 					</Box>
 				</Container>
 			</Box>
