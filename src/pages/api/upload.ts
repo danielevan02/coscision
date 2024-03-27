@@ -16,7 +16,8 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     const ret: Record<string, unknown> = {};
 
     const form = formidable({
-        uploadDir: env.UPLOAD_STORAGE == "vercel-storage" ? os.tmpdir() : join(process.cwd(), `public/upload/temp`)
+        // uploadDir: env.UPLOAD_STORAGE == "vercel-storage" ? os.tmpdir() : join(process.cwd(), `public/upload/temp`),
+        uploadDir: join(process.cwd(), `public/upload/temp`),
     });
     const [, files] = await form.parse(req);
 
