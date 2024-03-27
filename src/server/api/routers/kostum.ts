@@ -34,11 +34,13 @@ export const kostumRouter = createTRPCRouter({
 		if (env.UPLOAD_STORAGE.startsWith("local-")) {
 			await rename(join(process.cwd(), "public/upload/temp", input.image), join(process.cwd(), "public/upload", input.image))
 		} else if (env.UPLOAD_STORAGE == "vercel-storage") {
-			const file = await copy(env.NEXT_PUBLIC_UPLOAD_BASE + "temp/" + input.image, "public/upload/" + input.image, {
+			const urlTemp = env.NEXT_PUBLIC_UPLOAD_BASE + "temp/" + input.image;
+			const file = await copy(urlTemp, "upload/" + input.image, {
 				access: "public",
 			});
 			const url = new URL(file.url);
         	input.image = basename(url.pathname);
+			await del(urlTemp);
 		}
 
 		return await db.kostum.create({
