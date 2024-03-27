@@ -11,7 +11,7 @@ import { put } from '@vercel/blob';
  * upload to a file field name `file`.
  */
 export default async function handler (req: NextApiRequest, res: NextApiResponse) {
-    if (req.method != "POST") return res.status(405);
+    if (req.method.toLowerCase() != "POST".toLowerCase()) return res.status(405);
 
     const ret: Record<string, unknown> = {};
 
