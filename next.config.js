@@ -2,7 +2,16 @@
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
  * for Docker builds.
  */
-await import("./src/env.js");
+const env = await import("./src/env.js");
+
+let image_url
+try {
+  image_url = new URL(env.env.NEXT_PUBLIC_UPLOAD_BASE);
+} catch (e) {
+  image_url = {
+    pathname: env.env.NEXT_PUBLIC_UPLOAD_BASE,
+  }
+}
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -20,10 +29,10 @@ const config = {
   images: {
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '3000',
-        pathname:  '/upload/**'
+        protocol: image_url.protocol?.slice(0, -1) ?? 'http',
+        hostname: image_url.hostname ?? 'localhost',
+        port: image_url.port ?? '3000',
+        pathname:  image_url.pathname + '**'
       }
     ]
   },
