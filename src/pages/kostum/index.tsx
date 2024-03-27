@@ -129,7 +129,10 @@ const Kostum = () => {
 			<MenuItem
 				key={0}
 				onMouseEnter={() => setId(row.original.id)}
-				onClick={() => deleteKostum(row.original.id).then(() => refetch())}
+				onClick={ async () => {
+					await deleteKostum(row.original.id).then(() => refetch())
+					closeMenu()
+				}}
 				sx={{ display: author === 'admin' ? undefined : 'none' }}
 			>
 				<ListItemIcon><Delete /></ListItemIcon>
