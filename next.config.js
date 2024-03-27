@@ -29,6 +29,36 @@ const config = {
   images: {
     remotePatterns: [
       {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+        pathname:  '/upload/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'hfgjqu51hy01xqh3.public.blob.vercel-storage.com',
+        port: '',
+        pathname:  '/upload/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'hfgjqu51hy01xqh3.public.blob.vercel-storage.com',
+        port: '443',
+        pathname:  '/upload/**'
+      },
+      {
+        protocol: 'http',
+        hostname: '',
+        port: '',
+        pathname:  '**'
+      },
+      {
+        protocol: 'https',
+        hostname: '',
+        port: '',
+        pathname:  '**'
+      },
+      {
         protocol: image_url.protocol?.slice(0, -1) ?? 'http',
         hostname: image_url.hostname ?? 'localhost',
         port: (image_url.port ?? '80').length > 0 ? (image_url.port ?? '80') : '443',
