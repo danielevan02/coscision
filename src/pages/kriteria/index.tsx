@@ -43,6 +43,7 @@ const Kriteria = () => {
       {
         accessorKey: 'id',
         header: 'Subkriteria',
+        //UNTUK TOMBOL LIHAT
         Cell: ({ row }) => (
           <Link href={`/kriteria/subkriteria/view/${row.original.id}`}>
             <Button variant='contained'>

@@ -6,6 +6,7 @@ import { env } from "~/env";
 import { copy, del, head } from '@vercel/blob';
 
 export const kostumRouter = createTRPCRouter({
+	//UNTUK ADD KOSTUM
 	addKostum: adminProcedure.input(z.object({
 		name: z.string(),
 		image: z.string().refine(async (image) => {
@@ -49,6 +50,7 @@ export const kostumRouter = createTRPCRouter({
 			},
 		});
 	}),
+	//UNTUK UPDATE KOSTUM
 	updateKostum: adminProcedure.input(z.object({
 		id: z.number(),
 		name: z.string().optional(),
@@ -78,14 +80,17 @@ export const kostumRouter = createTRPCRouter({
                 },
             })
         }),
+		//UNTUK DELETE KOSTUM
     deleteKostum: adminProcedure.input(z.number())
         .mutation(({ ctx: { db }, input }) => db.kostum.delete({
             where: { id: input, },
         })),
+		//UNTUK MENGAMBIL DATA 1 KOSTUM BERDASARKAN ID
     getKostum: publicProcedure.input(z.number())
         .query(({ ctx: { db }, input }) => db.kostum.findFirstOrThrow({
             where: { id: input, },
         })),
+		//UNTUK MENGAMBIL DATA SEMUA KOSTUM
     getKostums: publicProcedure.input(z.object({
             rank: z.boolean().default(false),
             name: z.string().optional(),

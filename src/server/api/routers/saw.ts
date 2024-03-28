@@ -120,7 +120,6 @@ export const sawRouter = createTRPCRouter({
                 saw: "desc"
             },
         });
-
         let dictSK: Record<number, DictSK> | null = with_norm ? ((await db.$queryRaw`SELECT k.id AS kid,
             k.weight AS kweight,
             k.ktype AS ktype,
@@ -141,11 +140,11 @@ export const sawRouter = createTRPCRouter({
                 for (const rval of kostum.rvalues) {
                     const tdict = dictSK![rval.subkriteria.kriteria_id]!;
                     const skval = rval.subkriteria.skvalue;
-
+                    //normalisasi matrix
                     let norm_matrix = 0;
                     if (tdict.ktype == "Benefit") norm_matrix = skval / tdict.skmax;
                     else if (tdict.ktype == "Cost") norm_matrix = tdict.skmin / skval;
-
+                    //normalisasi bobot
                     const norm_weight = norm_matrix * tdict.kweight / 100;
                     saw += norm_weight;
 

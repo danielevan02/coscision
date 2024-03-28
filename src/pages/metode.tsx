@@ -109,6 +109,7 @@ const Metode = () => {
 																{row.rvalues.map((list, index) => {
 																	return (
 																		<TableCell key={index} align='center'>
+																			{/* logic untuk memasukkan data sesuai dengan table */}
 																			{
 																				data === 'nilai keputusan' ? list.subkriteria.name :
 																				data === 'konversi nilai keputusan' ? list.subkriteria.skvalue :
@@ -124,6 +125,7 @@ const Metode = () => {
 													})
 												}
 											</TableBody>
+											{/* UNTUK TABLE KONVERSI NILAI KEPUTUSAN UNTUK BAGIAN MIN DAN MAX NYA */}
 											{item.toLowerCase() === 'konversi nilai keputusan' ?
 												<TableFooter sx={{ background: 'white', border: '1px solid black' }}>
 													<TableRow>

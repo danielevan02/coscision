@@ -27,6 +27,7 @@ const AddKostum = () => {
     getValues
   } = useForm<KostumForm>()
 
+  // UNTUK HANDLE GAMBAR
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const image = e.target.files[0]

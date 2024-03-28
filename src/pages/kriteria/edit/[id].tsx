@@ -11,7 +11,7 @@ type KriteriaForm = {
 	bobot: number
 	tipe: 'Cost' | 'Benefit'
 }
-
+//UNTUK PAGE EDIT SAMA SEPERTI ADD
 const UpdateKriteria = () => {
 	const router = useRouter()
   const id = parseInt(router.query.id as unknown as string)
@@ -27,6 +27,7 @@ const UpdateKriteria = () => {
 		watch
 	} = useForm<KriteriaForm>()
 
+	// UNTUK SET FIELD TIPE
 	useEffect(() => {
     const sub = watch((val, { name }) => {
       if (name == "tipe") setTipe(val.tipe!);
@@ -34,6 +35,7 @@ const UpdateKriteria = () => {
     return () => sub.unsubscribe();
   }, [watch]);
 
+	//UNTUK SET FIELD NAMA DAN BOBOT
   if(data){
     setValue('nama', data.name)
     setValue('bobot', data.weight as unknown as number)
@@ -52,7 +54,7 @@ const UpdateKriteria = () => {
 			alert("Harap isi semua data dengan benar")
 		}
 	}
-
+	//YANG DILAKUKAN KETIKA SUBMIT
 	const onSubmit = async () => {
 		try {
 			mutate({

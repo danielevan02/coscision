@@ -56,6 +56,7 @@ const AddSubkriteria = () => {
 			</Head>
 			<Box sx={{ px: 5, py: 3 }}>
 				<form style={{ display: 'flex', flexDirection: 'column', gap: 6 }} onSubmit={handleSubmit(onSubmit, onError)}>
+					{/* UNTUK MELIHAT FIELD, LIHAT LABEL DARI TEXTFIELD */}
 					<TextField fullWidth label="Nama Subkriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('nama', {required: true})} />
 					<TextField fullWidth type='number' label="Nilai" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('nilai', {required: true})} />
 					<Box display={'flex'} gap={1} justifyContent={'end'} mt={3}>

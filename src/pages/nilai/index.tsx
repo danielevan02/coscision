@@ -99,8 +99,11 @@ const Nilai = () => {
               Add
             </Button>
           </Link>
+          {/* TOMBOL UNTUK PROCESS NILAI */}
           <Button variant='contained' color='success' onClick={handleClick}>process data</Button>
+          {/* TOMBOL UNTUK DELETE SEMUA NILAI */}
           <Button variant='contained' color='error' onClick={()=>setOpen(true)}>delete all</Button>
+          {/* MODAL UNTUK KONFIRMASI DELETE ALL */}
           <Modal open={open} onClose={()=>setOpen(false)}>
             <Box 
               sx={{

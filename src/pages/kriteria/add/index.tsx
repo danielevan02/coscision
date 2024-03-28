@@ -35,7 +35,7 @@ const AddKriteria = () => {
 			alert("Harap isi semua data dengan benar")
 		}
 	}
-
+	// YANG AKAN DILAKUKAN KETIKA KLIK TOMBOL SUBMIT
 	const onSubmit = async () => {
 		try {
 			mutate({
@@ -57,8 +57,11 @@ const AddKriteria = () => {
 			</Head>
 			<Box sx={{ px: 5, py: 3 }}>
 				<form style={{ display: 'flex', flexDirection: 'column', gap: 5 }} onSubmit={handleSubmit(onSubmit, onError)}>
+					{/* FIELD NAMA KRITERIA */}
 					<TextField fullWidth label="Nama Kriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('nama', { required: true })} />
+					{/* FIELD BOBOT KRITERIA */}
 					<TextField type='number' fullWidth label="Bobot Kriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} {...register('bobot', { required: true })} />
+					{/* TIPE KRITERIA */}
 					<TextField fullWidth label="Tipe Kriteria" id="fullWidth" sx={{ background: 'white', borderRadius: 1 }} select {...register('tipe', { required: true })}>
 						<MenuItem value="">
 							<em>None</em>

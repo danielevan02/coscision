@@ -33,7 +33,8 @@ const UpdateKostum = () => {
     getValues,
     setValue,
   } = useForm<KostumForm>()
-
+  
+  //UNTUK SET DATA YANG SUDAH ADA DIMASUKKAN KE TIAP FIELD
   if (data) {
     setValue('asal', data.origin)
     setValue('gambar', data.image)
@@ -42,7 +43,7 @@ const UpdateKostum = () => {
     setValue('preferensi', data.preference)
     setValue('set', data.kset)
   }
-
+  // UNTUK HANDLE GAMBAR
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
     e.stopPropagation()
@@ -69,7 +70,7 @@ const UpdateKostum = () => {
       alert("Harap isi semua data dengan benar")
     }
   }
-
+  // YANG DILAKUKAN KETIKA SUBMIT
   const onSubmit = async () => {
     try {
       if (counter) {
@@ -120,17 +121,23 @@ const UpdateKostum = () => {
       </Head>
       <Box sx={{ px: 5, py: 3 }}>
         <form id='formKostum' onSubmit={handleSubmit(onSubmit, onError)} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {/* FIELD NAMA KOSTUM */}
           <TextField fullWidth InputLabelProps={{ shrink: true }} label="Nama Kostum" sx={{ background: 'white', borderRadius: 1 }} {...register('nama', { required: true })} />
+          {/* FIELD ASAL */}
           <TextField fullWidth InputLabelProps={{ shrink: true }} label="Asal" sx={{ background: 'white', borderRadius: 1 }} {...register('asal', { required: true })} />
+          {/* FIELD PREFERENSI */}
           <TextField fullWidth InputLabelProps={{ shrink: true }} value={getValues('preferensi')} label="Preferensi" sx={{ background: 'white', borderRadius: 1 }} {...register('preferensi', { required: true })} select>
             <MenuItem value={""}><em>None</em></MenuItem>
             <MenuItem value={"Game"}>Game</MenuItem>
             <MenuItem value={"Anime"}>Anime</MenuItem>
             <MenuItem value={"Vtuber"}>Vtuber</MenuItem>
           </TextField>
+          {/* FIELD SET KOSTUM */}
           <TextField fullWidth InputLabelProps={{ shrink: true }} label="Set" rows={4} multiline sx={{ background: 'white', borderRadius: 1 }} {...register('set', { required: true })} />
+          {/* FIELD LINK */}
           <TextField fullWidth InputLabelProps={{ shrink: true }} label="Link" sx={{ background: 'white', borderRadius: 1 }} {...register('link', { required: true })} />
         </form>
+        {/* FIELD GAMBAR */}
         <Box display={'flex'} flexDirection={'column'} gap={1}>
           <label style={{ color: 'rgba(0, 0, 0, 0.8)', fontWeight: 600, marginTop: 10, marginBottom: 5 }}>Gambar Kostum</label>
           <Box sx={{ display: 'flex', flexDirection: { mobile: 'column', laptop: 'row' } }}>

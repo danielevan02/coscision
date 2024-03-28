@@ -2,6 +2,7 @@ import { z } from "zod";
 import { adminProcedure, createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const kriteriaRouter = createTRPCRouter({
+    //UNTUK ADD KRITERIA
     addKriteria: adminProcedure.input(z.object({
         name: z.string(),
         weight: z.number(),
@@ -11,6 +12,7 @@ export const kriteriaRouter = createTRPCRouter({
             ...input
         }
     })),
+    //UNTUK UPDATE KRITERIA
     updateKriteria: adminProcedure.input(z.object({
         id: z.number(),
         name: z.string().optional(),
@@ -22,11 +24,12 @@ export const kriteriaRouter = createTRPCRouter({
             ...input
         }
     })),
+    //UNTUK DELETE KRITERIA
     deleteKriteria: adminProcedure.input(z.number())
         .mutation(({ ctx: { db }, input }) => db.kriteria.delete({
             where: { id: input, },
         })),
-
+    //UNTUK ADD KRITERIA
     addSubkriteria: adminProcedure.input(z.object({
         kriteria_id: z.number(),
         name: z.string(),
@@ -38,7 +41,10 @@ export const kriteriaRouter = createTRPCRouter({
     })),
     /**
      * cannot update kriteria_id. It should be deleted and add new subkriteria.
+     *  
+     * SEMUA BACKEND BISA DIPAHAMI DENGAN MEMBACA NAMA AWAL NYA
      */
+    //UNTUK UPDATE SUBKRITERIA
     updateSubkriteria: adminProcedure.input(z.object({
         id: z.number(),
         name: z.string().optional(),

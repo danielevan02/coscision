@@ -23,6 +23,8 @@ type Kostum = {
 	origin: string
 };
 
+//PAGE UNTUK VIEW TABLE KOSTUM
+
 const Kostum = () => {
 	const { data: session } = useSession()
 	const author = session?.user.level === "Admin" ? 'admin' : 'user'
@@ -30,7 +32,7 @@ const Kostum = () => {
 	const { data: kostum } = api.kostum.getKostum.useQuery(id)
 	const { data: kostums, refetch } = api.kostum.getKostums.useQuery()
 	const { mutateAsync: deleteKostum } = api.kostum.deleteKostum.useMutation()
-
+	//INI UNTUK ISI DI MODAL NANTI
 	const [nama, setNama] = useState('')
 	const [asal, setAsal] = useState('')
 	const [preferensi, setPreferensi] = useState('')
@@ -39,6 +41,7 @@ const Kostum = () => {
 	const [gambar, setGambar] = useState('')
 	const [open, setOpen] = useState(false);
 
+	// UNTUK MODAL MENAMPILKAN INFORMASI KOSTUM
 	const handleOpen = () => {
 		if (kostum) {
 			setNama(kostum.name)
@@ -72,7 +75,6 @@ const Kostum = () => {
 				header: 'Gambar',
 				Cell: ({ row }) => (
 					<Image priority src={`${env.NEXT_PUBLIC_UPLOAD_BASE}${row.original.image}`} alt='gambar' width={500} height={500} style={{ width: 100, height: 'auto', borderRadius: 10 }} />
-					// <img src={`${env.NEXT_PUBLIC_UPLOAD_BASE}${row.original.image}`} alt='gambar' width={500} height={500} style={{ width: 100, height: 'auto', borderRadius: 10 }} />
 				),
 				enableGlobalFilter: false,
 				enableSorting: false,
@@ -104,6 +106,7 @@ const Kostum = () => {
 				right: ['mrt-row-actions'],
 			},
 		},
+		//INI ADALAH TOMBOL2 DI TABLE UNTUK DELETE, EDIT UNTUK ADMIN DAN INFO UNTUK USER
 		renderRowActionMenuItems: ({ closeMenu, row }) => [
 			<MenuItem
 				key={0}
@@ -139,6 +142,7 @@ const Kostum = () => {
 				DELETE
 			</MenuItem>,
 		],
+		//INI TOMBOL UNTUK ADD KOSTUM
 		renderTopToolbarCustomActions: () => (
 			<>
 				<Link href={'/kostum/add'} style={{ textDecoration: 'none' }}>
@@ -163,12 +167,14 @@ const Kostum = () => {
 			<Head>
 				<title>Coscision - Kostum</title>
 			</Head>
+			{/* INI TABLE DARI KOSTUM NYA */}
 			{kostums ?
 				<Box p={1}>
 					<MaterialReactTable table={table} />
 				</Box>:
 				<Skeleton variant='rounded' animation='wave' sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '90vw', height: '50vh'}} />
 			}
+			{/* INI UNTUK BAGIAN USER KETIKA USER INGIN MELIHAT INFORMASI KOSTUM MAKA AKAN MUNCUL MODAL YANG BERISIKAN INFO */}
 			<Modal
 				aria-labelledby="transition-modal-title"
 				aria-describedby="transition-modal-description"
