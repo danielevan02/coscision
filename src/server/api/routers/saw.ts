@@ -59,8 +59,8 @@ export const sawRouter = createTRPCRouter({
     deleteSelection: protectedProcedure.input(z.object({
         kostum_id: z.number().optional(),
         subkriteria_ids: z.number().array().optional(),
-    }).default({})).mutation(({ ctx: { db, session: { user: { id: user_id } } }, input: { kostum_id, subkriteria_ids } }) =>
-        db.rvalues.deleteMany({
+    }).default({})).mutation(async ({ ctx: { db, session: { user: { id: user_id } } }, input: { kostum_id, subkriteria_ids } }) => {
+        await db.rvalues.deleteMany({
             where: {
                 user_id,
                 kostum_id,
@@ -68,8 +68,25 @@ export const sawRouter = createTRPCRouter({
                     in: subkriteria_ids,
                 },
             }
-        }),
-    ),
+        });
+        if (!Number.isFinite(kostum_id)) return true;
+
+        const count = await db.rvalues.count({
+            where: {
+                user_id,
+                kostum_id,
+            },
+        });
+        if (count <= 0) await db.rank_saw.delete({
+            where: {
+                user_id_kostum_id: {
+                    user_id,
+                    kostum_id: kostum_id!,
+                },
+            }
+        });
+        return true;
+    }),
     getSelected: protectedProcedure.input(z.object({
         kostum_id: z.number().optional(),
         kriteria_id: z.number().optional(),
@@ -131,10 +148,18 @@ export const sawRouter = createTRPCRouter({
 
         // eslint-disable-next-line @typescript-eslint/no-for-in-array
         for ( const i in rsaw )
+        {
+            // console.log(i, parseInt(rsaw[i]!.kostum_id as unknown as string));
             pos[rsaw[i]!.kostum_id] = [parseInt(i), rsaw[i]!];
+        }
+
+        // console.log({user_id, kostum_id, kriteria_id, with_norm});
 
         for (const kostum of (kostums as unknown as ExtendedKostum[])) {
+            console.log(kostum.id, pos[kostum.id]?.[0]);
+
             if (with_norm) {
+                // return null;
 
                 let saw = 0;
                 for (const rval of kostum.rvalues) {
