@@ -15,7 +15,7 @@ const About = () => {
 						{/* WHAT IS COSCISION */}
 						<Typography variant='h5' sx={{ fontWeight: '600', textAlign: { mobile: 'center', laptop: 'start' } }}>What is Conscision?</Typography>
 						<Typography sx={{ textAlign: { mobile: 'center', laptop: 'start' } }}>
-							Lorem ipsum dolor sit amet consectetur adipisicing elit. At blanditiis consequuntur ducimus aut ullam minima iure doloremque quo vero nihil ad cum voluptas itaque quam animi atque, voluptates, dolores rem! Tenetur error magnam fugit sequi nobis eaque veritatis, illo, non aliquid aspernatur facere impedit? Ad quae, aliquam placeat voluptatum consequatur asperiores expedita odit fugit voluptatem numquam, corrupti recusandae architecto, aut veritatis aperiam dolorem sequi id iure beatae. Magnam reprehenderit est deserunt asperiores maxime neque, accusamus, enim ex nemo esse aut.
+							Coscision merupakan sebuah sistem dalam bentuk website yang akan merekomendasikan kostum sesuai dengan keinginan dan kebutuhan cosplayer. Kostum yang direkomendasikan ini akan diurutkan berdasarkan kebutuhan cosplayer dalam memilih kostum.
 						</Typography>
 					</Box>
 					<Box sx={{ width: { mobile: '60%', laptop: '15%' }, margin: 'auto' }}>
@@ -30,7 +30,7 @@ const About = () => {
 						{/* WHAT WILL YOU DO */}
 						<Typography variant='h5' sx={{ fontWeight: '600', textAlign: { mobile: 'center', laptop: 'right' } }}>What will you get?</Typography>
 						<Typography sx={{ textAlign: { mobile: 'center', laptop: 'right' } }}>
-							Lorem ipsum dolor sit amet consectetur adipisicing elit. At blanditiis consequuntur ducimus aut ullam minima iure doloremque quo vero nihil ad cum voluptas itaque quam animi atque, voluptates, dolores rem! Tenetur error magnam fugit sequi nobis eaque veritatis, illo, non aliquid aspernatur facere impedit? Ad quae, aliquam placeat voluptatum consequatur asperiores expedita odit fugit voluptatem numquam, corrupti recusandae architecto, aut veritatis aperiam dolorem sequi id iure beatae. Magnam reprehenderit est deserunt asperiores maxime neque, accusamus, enim ex nemo esse aut.
+							Sistem ini akan mewajibkan pengguna untuk mengisi nilai kostum berdasarkan kriteria yang telah disediakan. Pada setiap kriteria, pengguna memasukkan nilai sesuai dengan kondisi kostum yang dibutuhkan. Setelah pengguna memberikan penilaian, maka data akan diproses kemudian hasil rekomendasi akan diurutkan dari nilai tertinggi sebagai kostum yang sangat direkomendasikan.
 						</Typography>
 					</Box>
 				</Box>
@@ -39,7 +39,7 @@ const About = () => {
 						{/* ABOUT SAW */}
 						<Typography variant='h5' sx={{ fontWeight: '600', textAlign: { mobile: 'center', laptop: 'start' } }}>About SAW Method</Typography>
 						<Typography sx={{ textAlign: { mobile: 'center', laptop: 'start' } }}>
-							Lorem ipsum dolor sit amet consectetur adipisicing elit. At blanditiis consequuntur ducimus aut ullam minima iure doloremque quo vero nihil ad cum voluptas itaque quam animi atque, voluptates, dolores rem! Tenetur error magnam fugit sequi nobis eaque veritatis, illo, non aliquid aspernatur facere impedit? Ad quae, aliquam placeat voluptatum consequatur asperiores expedita odit fugit voluptatem numquam, corrupti recusandae architecto, aut veritatis aperiam dolorem sequi id iure beatae. Magnam reprehenderit est deserunt asperiores maxime neque, accusamus, enim ex nemo esse aut.
+							Metode Simple Additive Weighting (SAW) merupakan salah satu metode yang digunakan dalam proses pengambilan suatu keputusan. Metode ini membantu pengguna untuk membuat keputusan saat pengguna memiliki beberapa pilihan dan banyak faktor yang perlu dipertimbangkan. Metode SAW membantu pengguna dalam mengurutkan pilihan-pilihan berdasarkan pada faktor-faktor yang telah ditetapkan, dengan mempertimbangkan seberapa penting setiap faktor tersebut. Sebagai contoh, pengguna menilai setiap pilihan (misalnya, setiap smartphone) berdasarkan faktor-faktor seperti harga, kualitas kamera, dan lain - lain. Misalnya, untuk smartphone A, harganya rendah, tetapi kualitas kameranya tidak sebaik yang diinginkan. Setelah semua pilihan dinilai, maka dilakukan perhitungan nilai - nilai untuk setiap faktor yang memengaruhi. 
 						</Typography>
 					</Box>
 					<Box sx={{ width: { mobile: '60%', laptop: '15%' }, margin: 'auto' }}>
