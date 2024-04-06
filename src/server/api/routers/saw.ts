@@ -146,6 +146,12 @@ export const sawRouter = createTRPCRouter({
         JOIN subkriteria sk ON sk.kriteria_id = k.id
         GROUP BY k.id`) as DictSK[]).reduce((obj: Record<number, DictSK>, item: DictSK) => Object.assign(obj, { [item.kid]: item }), {}) : null;
 
+        const sumKWeight = (await db.kriteria.aggregate({
+            _sum: {
+                weight: true,
+            }
+        }))._sum.weight!.toNumber();
+
         // eslint-disable-next-line @typescript-eslint/no-for-in-array
         for ( const i in rsaw )
         {
@@ -170,7 +176,7 @@ export const sawRouter = createTRPCRouter({
                     if (tdict.ktype == "Benefit") norm_matrix = skval / tdict.skmax;
                     else if (tdict.ktype == "Cost") norm_matrix = tdict.skmin / skval;
                     //normalisasi bobot
-                    const norm_weight = norm_matrix * tdict.kweight / 100;
+                    const norm_weight = norm_matrix * tdict.kweight / sumKWeight;
                     saw += norm_weight;
 
                     rval.subkriteria.kriteria = {
@@ -231,6 +237,12 @@ export const sawRouter = createTRPCRouter({
         JOIN subkriteria sk ON sk.kriteria_id = k.id
         GROUP BY k.id`) as DictSK[]).reduce((obj: Record<number, DictSK>, item: DictSK) => Object.assign(obj, { [item.kid]: item }), {});
 
+        const sumKWeight = (await db.kriteria.aggregate({
+            _sum: {
+                weight: true,
+            }
+        }))._sum.weight!.toNumber();
+
         const tkostums: Record<number, number | undefined> = {};
 
         for (const kostum of kostums) {
@@ -245,7 +257,7 @@ export const sawRouter = createTRPCRouter({
                 if (tdict.ktype == "Benefit") val = skval / tdict.skmax;
                 else if (tdict.ktype == "Cost") val = tdict.skmin / skval;
 
-                val = val * tdict.kweight / 100;
+                val = val * tdict.kweight / sumKWeight;
                 tkostums[kostum.id] ??= 0;
                 tkostums[kostum.id]! += val;
             }
