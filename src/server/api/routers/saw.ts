@@ -69,19 +69,21 @@ export const sawRouter = createTRPCRouter({
                 },
             }
         });
-        if (!Number.isFinite(kostum_id)) return true;
 
-        const count = await db.rvalues.count({
+        const rvalues = await db.rvalues.findMany({
+            select: {
+                kostum_id: true,
+            },
             where: {
                 user_id,
-                kostum_id,
             },
         });
-        if (count <= 0) await db.rank_saw.delete({
+
+        await db.rank_saw.deleteMany({
             where: {
-                user_id_kostum_id: {
-                    user_id,
-                    kostum_id: kostum_id!,
+                user_id,
+                kostum_id: {
+                    notIn: rvalues.map(rv => rv.kostum_id),
                 },
             }
         });
