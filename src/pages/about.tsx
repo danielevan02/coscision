@@ -13,7 +13,7 @@ const About = () => {
 				<Box sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: { mobile: 'column-reverse', laptop: 'row' } }}>
 					<Box sx={{ display: 'flex', flexDirection: 'column', width: { mobile: '100%', laptop: '70%' } }}>
 						{/* WHAT IS COSCISION */}
-						<Typography variant='h5' sx={{ fontWeight: '600', textAlign: { mobile: 'center', laptop: 'start' } }}>What is Conscision?</Typography>
+						<Typography variant='h5' sx={{ fontWeight: '600', textAlign: { mobile: 'center', laptop: 'start' } }}>What is Coscision?</Typography>
 						<Typography sx={{ textAlign: { mobile: 'center', laptop: 'start' } }}>
 							Coscision merupakan sebuah sistem dalam bentuk website yang akan merekomendasikan kostum sesuai dengan keinginan dan kebutuhan cosplayer. Kostum yang direkomendasikan ini akan diurutkan berdasarkan kebutuhan cosplayer dalam memilih kostum.
 						</Typography>
