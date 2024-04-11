@@ -114,11 +114,12 @@ export const sawRouter = createTRPCRouter({
             },
             include: {
                 rvalues: {
-                    where: kriteria_id ? {
-                        subkriteria: {
+                    where: {
+                        subkriteria: kriteria_id ? {
                             kriteria_id,
-                        },
-                    } : undefined,
+                        } : undefined,
+                        user_id,
+                    },
                     include: {
                         subkriteria: {
                             include: {
@@ -214,6 +215,9 @@ export const sawRouter = createTRPCRouter({
             select: {
                 id: true,
                 rvalues: {
+                    where: {
+                        user_id,
+                    },
                     select: {
                         subkriteria: {
                             select: {
