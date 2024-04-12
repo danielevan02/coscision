@@ -147,6 +147,8 @@ export const sawRouter = createTRPCRouter({
             MAX(sk.skvalue) as skmax
         FROM kriteria k
         JOIN subkriteria sk ON sk.kriteria_id = k.id
+        JOIN rvalues rv ON rv.subkriteria_id = sk.id
+        WHERE rv.user_id = ${ user_id }
         GROUP BY k.id`) as DictSK[]).reduce((obj: Record<number, DictSK>, item: DictSK) => Object.assign(obj, { [item.kid]: item }), {}) : null;
 
         const sumKWeight = (await db.kriteria.aggregate({
@@ -241,6 +243,8 @@ export const sawRouter = createTRPCRouter({
             MAX(sk.skvalue) as skmax
         FROM kriteria k
         JOIN subkriteria sk ON sk.kriteria_id = k.id
+        JOIN rvalues rv ON rv.subkriteria_id = sk.id
+        WHERE rv.user_id = ${ user_id }
         GROUP BY k.id`) as DictSK[]).reduce((obj: Record<number, DictSK>, item: DictSK) => Object.assign(obj, { [item.kid]: item }), {});
 
         const sumKWeight = (await db.kriteria.aggregate({
